@@ -1,41 +1,9 @@
 import { TokenTag } from '../TokenTag'
-
-function getRelativeLuminance(hex: string): number {
-  const bare = hex.replace(/^#/, '')
-  const r = parseInt(bare.slice(0, 2), 16) / 255
-  const g = parseInt(bare.slice(2, 4), 16) / 255
-  const b = parseInt(bare.slice(4, 6), 16) / 255
-  const toLinear = (c: number) => c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4)
-  return 0.2126 * toLinear(r) + 0.7152 * toLinear(g) + 0.0722 * toLinear(b)
-}
-
-function getAccessibleTextColor(hex: string): string {
-  return getRelativeLuminance(hex) > 0.179 ? '#000000' : '#ffffff'
-}
+import { relativeLuminance, accessibleTextColor, isNearWhite } from '../../lib/contrast'
 
 function getGradientTextColor(hexTop: string, hexBottom: string): string {
-  const avg = (getRelativeLuminance(hexTop) + getRelativeLuminance(hexBottom)) / 2
+  const avg = (relativeLuminance(hexTop) + relativeLuminance(hexBottom)) / 2
   return avg > 0.179 ? '#000000' : '#ffffff'
-}
-
-/** Brillo (L de HSL) del color, en 0–100, calculado desde el HEX. */
-function getHslLightness(hex: string): number {
-  const bare = hex.replace(/^#/, '')
-  if (bare.length < 6) return NaN
-  const r = parseInt(bare.slice(0, 2), 16) / 255
-  const g = parseInt(bare.slice(2, 4), 16) / 255
-  const b = parseInt(bare.slice(4, 6), 16) / 255
-  return ((Math.max(r, g, b) + Math.min(r, g, b)) / 2) * 100
-}
-
-/**
- * Tonos casi blancos (brillo/L entre 98 y 100) necesitan un stroke sutil de 1px
- * (#DADCDE) para separarse del fondo blanco de la página. Se calcula desde el
- * color, no depende de que se pase `hsl` (los brand colors nacen de estos tonos).
- */
-function needsLightStroke(hex: string): boolean {
-  const l = getHslLightness(hex)
-  return !Number.isNaN(l) && l >= 98 && l <= 100
 }
 
 export interface ColorCardProps {
@@ -96,8 +64,8 @@ export function ColorCard({
   className = '',
 }: ColorCardProps) {
   const bareHex = hex.replace(/^#/, '')
-  const textColor = getAccessibleTextColor(hex)
-  const autoStroke = needsLightStroke(bareHex || color) ? 'border border-[#DADCDE]' : ''
+  const textColor = accessibleTextColor(hex)
+  const autoStroke = isNearWhite(bareHex || color) ? 'border border-[#DADCDE]' : ''
 
   /* ─── Gradient ─── */
   if (variant === 'gradient') {

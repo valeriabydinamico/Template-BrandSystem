@@ -1,91 +1,200 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
+import { PageHeader } from './PageHeader'
+import { ModuleBadge } from './ModuleBadge'
+import { Badge } from './Badge'
+import { GovernanceRule } from './GovernanceRule'
+import { TokenTag } from './TokenTag'
 import { ColorCard } from './ColorCard'
+import { SemanticColorCard } from './SemanticColorCard'
 
-type Tab = 'componentes' | 'modulos'
+/* ────────────────────────────────────────────────────────────────────────────
+ * Handbook de componentes propios del design system.
+ * Cada sección muestra el componente en vivo para poder revisarlo y ajustarlo.
+ * ────────────────────────────────────────────────────────────────────────── */
 
-interface NavItem {
+function Section({
+  id,
+  name,
+  description,
+  children,
+}: {
   id: string
-  label: string
+  name: string
+  description: string
+  children: React.ReactNode
+}) {
+  return (
+    <section id={id} className="flex flex-col gap-[20px] scroll-mt-[24px]">
+      <div className="flex flex-col gap-[4px] border-b border-[#e3e7ee] pb-[12px]">
+        <h2 className="font-bold text-[22px] leading-[28px] text-[#16181d]">{name}</h2>
+        <p className="font-normal text-[14px] leading-[20px] text-[#5f6b78]">{description}</p>
+      </div>
+      {children}
+    </section>
+  )
 }
 
-const componentesNav: NavItem[] = [
-  { id: 'color-cards', label: 'Color cards' },
-]
-
-const modulosNav: NavItem[] = [
-  // Se agregan aquí los módulos conforme lleguen de Figma
-]
-
-function SectionHeader({ title, description }: { title: string; description?: string }) {
+function Example({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="flex flex-col gap-xs pb-lg border-b border-border-primary">
-      <h2 className="text-heading text-text-primary">{title}</h2>
-      {description && (
-        <p className="text-label-sm text-text-secondary">{description}</p>
-      )}
+    <div className="flex flex-col gap-[10px]">
+      <p className="font-mono text-[12px] uppercase tracking-[0.6px] text-[#8a94a8]">{label}</p>
+      <div className="flex flex-wrap items-start gap-[16px] rounded-[12px] border border-[#e3e7ee] bg-[#f7f8fa] p-[20px]">
+        {children}
+      </div>
     </div>
   )
 }
 
-function SubSidebar({
-  items,
-  activeId,
-  onSelect,
-}: {
-  items: NavItem[]
-  activeId: string
-  onSelect: (id: string) => void
-}) {
-  if (items.length === 0) return null
+/** Ancho fijo para previsualizar cards (mismo formato que en las páginas reales). */
+function CardSlot({ children, width = 300 }: { children: React.ReactNode; width?: number }) {
   return (
-    <aside className="w-[180px] shrink-0 sticky top-0 self-start flex flex-col gap-[2px]">
-      {items.map(item => (
-        <button
-          key={item.id}
-          onClick={() => onSelect(item.id)}
-          className={`text-left px-lg py-md rounded-corner-md text-label-sm transition-colors w-full cursor-pointer ${
-            activeId === item.id
-              ? 'bg-brand-tertiary text-brand-primary font-semibold'
-              : 'text-text-secondary hover:bg-bg-hover hover:text-text-primary'
-          }`}
-        >
-          {item.label}
-        </button>
-      ))}
-    </aside>
+    <div style={{ width }} className="max-w-full">
+      {children}
+    </div>
   )
 }
 
-function ComponentesContent({
-  sectionRefs,
-}: {
-  sectionRefs: React.MutableRefObject<Record<string, HTMLElement | null>>
-}) {
+const SECTIONS = [
+  { id: 'page-header', name: 'PageHeader' },
+  { id: 'module-badge', name: 'ModuleBadge' },
+  { id: 'badge', name: 'Badge' },
+  { id: 'governance-rule', name: 'GovernanceRule' },
+  { id: 'token-tag', name: 'TokenTag' },
+  { id: 'color-card', name: 'ColorCard' },
+  { id: 'semantic-color-card', name: 'SemanticColorCard' },
+]
+
+export function MisComponentesPage() {
+  const [active, setActive] = useState('')
+
+  function go(id: string) {
+    setActive(id)
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   return (
-    <div className="flex flex-col gap-3xl flex-1 min-w-0">
+    <div className="flex w-full flex-col items-start bg-white">
+      <PageHeader
+        module="Handbook"
+        title="Mis componentes"
+        paragraphs={[
+          'Catálogo vivo de los componentes propios que vamos creando para documentar el design system.',
+          'Sirve para visualizar cómo se ve cada uno, revisar su comportamiento y decidir ajustes antes de usarlos en las páginas.',
+        ]}
+      />
 
-      {/* Color cards */}
-      <section
-        ref={el => { sectionRefs.current['color-cards'] = el }}
-        className="flex flex-col gap-xl"
-      >
-        <SectionHeader
-          title="Color cards"
-          description="Tarjetas para representar tonos de color individuales dentro de una paleta. Muestran nombre, token, HEX, RGB, CMYK, Pantone y nivel de accesibilidad WCAG."
-        />
+      <div className="flex w-full flex-col gap-[48px] px-[40px] pb-[80px] pt-[16px]">
+        {/* Índice */}
+        <nav className="flex flex-wrap gap-[8px]">
+          {SECTIONS.map((s) => (
+            <button
+              key={s.id}
+              onClick={() => go(s.id)}
+              className={`rounded-[8px] border px-[12px] py-[6px] font-medium text-[13px] transition-colors ${
+                active === s.id
+                  ? 'border-[#004c97] bg-[#e6f2ff] text-[#004c97]'
+                  : 'border-[#e3e7ee] bg-white text-[#5f6b78] hover:border-[#b9c3ce]'
+              }`}
+            >
+              {s.name}
+            </button>
+          ))}
+        </nav>
 
-        {/* Primary */}
-        <div className="bg-surface-bg rounded-corner-lg p-xl">
-          <h2 className="text-label text-text-primary font-semibold mb-lg">
-            Color card — Primary
-          </h2>
-          <div className="flex flex-wrap gap-lg items-start">
-            <div className="w-[280px]">
+        <Section
+          id="page-header"
+          name="PageHeader"
+          description="Encabezado de página: eyebrow de módulo + título + copy. Lo usan Global Colors, Brand Colors y esta página."
+        >
+          <Example label="module + title + paragraphs (con línea en blanco)">
+            <div className="w-full max-w-[720px] rounded-[12px] border border-[#e3e7ee] bg-white">
+              <PageHeader
+                module="Color System"
+                title="01 Global Colors"
+                paragraphs={[
+                  'Escalas primitivas de color que forman la base del sistema.',
+                  null,
+                  'HEX es la fuente de verdad; RGB y HSL se mantienen como referencia técnica.',
+                ]}
+              />
+            </div>
+          </Example>
+        </Section>
+
+        <Section
+          id="module-badge"
+          name="ModuleBadge"
+          description="Eyebrow con icono que identifica el módulo del sistema al que pertenece una página."
+        >
+          <Example label="label + icono por defecto (Color System)">
+            <ModuleBadge label="Color System" />
+            <ModuleBadge label="Handbook" />
+          </Example>
+        </Section>
+
+        <Section
+          id="badge"
+          name="Badge"
+          description="Píldora de etiqueta de uso. Se usa en listas para enumerar los casos de uso de un rol cromático."
+        >
+          <Example label="varias etiquetas">
+            <Badge>CTA's</Badge>
+            <Badge>Headers</Badge>
+            <Badge>Hero surfaces</Badge>
+            <Badge>Backgrounds</Badge>
+            <Badge>Bloques secundarios de contenido</Badge>
+          </Example>
+        </Section>
+
+        <Section
+          id="governance-rule"
+          name="GovernanceRule"
+          description="Fila numerada para los bloques de “Gobernanza” al pie de las páginas de color."
+        >
+          <Example label="number + texto">
+            <div className="flex w-full max-w-[720px] flex-col gap-[12px]">
+              <GovernanceRule number={1}>
+                Los roles de Brand Colors deben construirse siempre a partir de primitives existentes;
+                no se deben crear valores HEX aislados directamente en esta capa.
+              </GovernanceRule>
+              <GovernanceRule number={2}>
+                Primary debe mantener la mayor jerarquía de marca. Secondary y Accent funcionan como
+                apoyo.
+              </GovernanceRule>
+            </div>
+          </Example>
+        </Section>
+
+        <Section
+          id="token-tag"
+          name="TokenTag"
+          description="Píldora gris de ruta/token. Si el texto no entra, se recorta con “…” y muestra el texto completo en un tooltip al pasar el cursor."
+        >
+          <Example label="tone default / plain">
+            <div className="flex w-[240px] flex-col gap-[8px]">
+              <TokenTag>color/primitive/blue/500</TokenTag>
+              <TokenTag tone="plain">color/primitive/blue/500</TokenTag>
+            </div>
+          </Example>
+          <Example label="texto que excede el ancho → recorte + tooltip">
+            <div className="w-[200px]">
+              <TokenTag>color/primitive/very-long-namespace/blue/subtone/900</TokenTag>
+            </div>
+          </Example>
+        </Section>
+
+        <Section
+          id="color-card"
+          name="ColorCard"
+          description="Documenta un tono de color individual (primitive). 4 variantes: primary, secondary, tertiary y gradient."
+        >
+          <Example label="primary — badges en los extremos">
+            <CardSlot>
               <ColorCard
                 variant="primary"
                 color="#004C97"
-                name="BG Blue"
-                description="Brand Default: BG Blue 700"
+                name="Primary"
+                description="Color Reference: Blue 700"
                 hex="004C97"
                 rgb={{ r: 0, g: 76, b: 151 }}
                 cmyk={{ c: 100, m: 50, y: 0, k: 41 }}
@@ -93,22 +202,15 @@ function ComponentesContent({
                 accessibilityRating="AAA"
                 contrastRatio="8.47:1"
               />
-            </div>
-          </div>
-        </div>
-
-        {/* Secondary */}
-        <div className="bg-surface-bg rounded-corner-lg p-xl">
-          <h2 className="text-label text-text-primary font-semibold mb-lg">
-            Color card — Secondary
-          </h2>
-          <div className="flex flex-wrap gap-lg items-start">
-            <div className="w-[280px]">
+            </CardSlot>
+          </Example>
+          <Example label="secondary — badges agrupados a la izquierda">
+            <CardSlot>
               <ColorCard
                 variant="secondary"
                 color="#00A3E1"
-                name="BG Light Blue"
-                description="Brand Default: BG Light Blue 600"
+                name="Secondary"
+                description="Color Reference: Light Blue 600"
                 hex="00A3E1"
                 rgb={{ r: 0, g: 163, b: 225 }}
                 cmyk={{ c: 100, m: 28, y: 0, k: 12 }}
@@ -116,152 +218,136 @@ function ComponentesContent({
                 accessibilityRating="AA"
                 contrastRatio="4.73:1"
               />
-            </div>
-          </div>
-        </div>
-
-        {/* Tertiary */}
-        <div className="bg-surface-bg rounded-corner-lg p-xl">
-          <h2 className="text-label text-text-primary font-semibold mb-lg">
-            Color card — Tertiary
-          </h2>
-          <div className="flex flex-col gap-lg items-start">
-            <ColorCard
-              variant="tertiary"
-              color="#FCE8E8"
-              name="50"
-              hex="FCE8E8"
-              rgb={{ r: 252, g: 232, b: 232 }}
-              hsl={{ h: "0°", s: "77%", l: "95%" }}
-              token="color/illustration/red/50"
-            />
-          </div>
-        </div>
-
-        {/* Gradient */}
-        <div className="bg-surface-bg rounded-corner-lg p-xl">
-          <h2 className="text-label text-text-primary font-semibold mb-lg">
-            Color card — Gradient
-          </h2>
-          <div className="flex flex-wrap gap-lg items-start">
-            <div className="w-[280px] h-[320px]">
+            </CardSlot>
+          </Example>
+          <Example label="tertiary — swatch compacto de escala (stroke auto si es casi blanco)">
+            <CardSlot width={460}>
+              <div className="flex flex-col gap-[16px]">
+                <ColorCard
+                  variant="tertiary"
+                  color="#1677D8"
+                  name="500"
+                  hex="1677D8"
+                  rgb={{ r: 22, g: 119, b: 216 }}
+                  hsl={{ h: '210°', s: '82%', l: '47%' }}
+                  token="color/primitive/blue/500"
+                />
+                <ColorCard
+                  variant="tertiary"
+                  color="#FFFFFF"
+                  name="50"
+                  hex="FFFFFF"
+                  rgb={{ r: 255, g: 255, b: 255 }}
+                  hsl={{ h: '0°', s: '0%', l: '100%' }}
+                  token="color/primitive/gray/50"
+                />
+              </div>
+            </CardSlot>
+          </Example>
+          <Example label="gradient">
+            <CardSlot>
               <ColorCard
                 variant="gradient"
-                color="linear-gradient(180deg, #00A3E1 0%, #004C97 100%)"
-                name="BG Blue Gradient"
+                color="linear-gradient(to left, #00A3E1, #004C97)"
+                name="Gradiente 01"
                 colorTop="00A3E1"
                 colorBottom="004C97"
                 angle="180°"
-                description="Fondos principales y elementos destacados de marca"
+                token="style/gradient/01"
               />
-            </div>
-          </div>
-        </div>
+            </CardSlot>
+          </Example>
+        </Section>
 
-      </section>
-
-    </div>
-  )
-}
-
-function ModulosContent({
-  sectionRefs,
-}: {
-  sectionRefs: React.MutableRefObject<Record<string, HTMLElement | null>>
-}) {
-  if (modulosNav.length === 0) {
-    return (
-      <div className="flex-1 flex items-center justify-center min-h-[320px]">
-        <p className="text-label-sm text-text-tertiary">
-          Los módulos se agregarán aquí conforme lleguen de Figma.
-        </p>
-      </div>
-    )
-  }
-
-  return (
-    <div className="flex flex-col gap-3xl flex-1 min-w-0">
-      {modulosNav.map(({ id, label }) => (
-        <section
-          key={id}
-          ref={el => { sectionRefs.current[id] = el }}
-          className="flex flex-col gap-xl"
+        <Section
+          id="semantic-color-card"
+          name="SemanticColorCard"
+          description="Documenta un token de color semántico. 4 variantes: text, border, background y background + border. Las pastillas de contraste se calculan solas; si la ruta del token contiene “disabled” se muestra “N/A”."
         >
-          <SectionHeader title={label} />
-          {/* Contenido del módulo se inserta aquí */}
-        </section>
-      ))}
-    </div>
-  )
-}
-
-export function MisComponentesPage() {
-  const [activeTab, setActiveTab] = useState<Tab>('componentes')
-  const [activeSection, setActiveSection] = useState('color-cards')
-  const sectionRefs = useRef<Record<string, HTMLElement | null>>({})
-
-  const navItems = activeTab === 'componentes' ? componentesNav : modulosNav
-
-  function handleNavSelect(id: string) {
-    setActiveSection(id)
-    sectionRefs.current[id]?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
-  // Reset active section when switching tabs
-  useEffect(() => {
-    if (activeTab === 'componentes' && componentesNav.length > 0) {
-      setActiveSection(componentesNav[0].id)
-    } else if (activeTab === 'modulos' && modulosNav.length > 0) {
-      setActiveSection(modulosNav[0].id)
-    }
-  }, [activeTab])
-
-  const tabs: { id: Tab; label: string }[] = [
-    { id: 'componentes', label: 'Componentes' },
-    { id: 'modulos', label: 'Módulos' },
-  ]
-
-  return (
-    <div className="flex flex-col gap-xl">
-
-      {/* Page header */}
-      <div className="flex flex-col gap-xs">
-        <h1 className="text-title text-text-primary">Mis componentes</h1>
-        <p className="text-label-sm text-text-secondary">
-          Componentes personalizados organizados por categoría
-        </p>
+          <Example label="text — el color se muestra escrito como texto">
+            <CardSlot>
+              <SemanticColorCard
+                variant="text"
+                role="Brand Primary"
+                color="#004C97"
+                token="color/text/brand-primary"
+                reference="color/primitive/blue/700"
+              />
+            </CardSlot>
+            <CardSlot>
+              <SemanticColorCard
+                variant="text"
+                role="Interactive On Dark"
+                color="#9AE3FF"
+                token="color/text/brand-interactive-on-dark"
+                reference="color/primitive/light-blue/200"
+              />
+            </CardSlot>
+          </Example>
+          <Example label="border — el color como contorno (panel se oscurece si es casi blanco)">
+            <CardSlot>
+              <SemanticColorCard
+                variant="border"
+                role="Border Default"
+                color="#C4C9D4"
+                token="color/ui/border/default"
+                reference="color/primitive/ink/200"
+              />
+            </CardSlot>
+            <CardSlot>
+              <SemanticColorCard
+                variant="border"
+                role="Icon Inverse"
+                color="#FFFFFF"
+                token="color/ui/icon/inverse"
+                reference="color/primitive/gray/50"
+              />
+            </CardSlot>
+          </Example>
+          <Example label="background — el color como relleno (card se tiñe si es blanco puro)">
+            <CardSlot>
+              <SemanticColorCard
+                variant="background"
+                role="Primary"
+                color="#004C97"
+                token="color/background/brand-primary"
+                reference="color/primitive/blue/700"
+              />
+            </CardSlot>
+            <CardSlot>
+              <SemanticColorCard
+                variant="background"
+                role="Default"
+                color="#FFFFFF"
+                token="color/background/default"
+                reference="color/primitive/gray/50"
+              />
+            </CardSlot>
+          </Example>
+          <Example label="background + border — fondo suave + contorno del mismo color">
+            <CardSlot>
+              <SemanticColorCard
+                variant="background-border"
+                role="Error"
+                color="#DC2626"
+                token="color/ui/border/error"
+                reference="color/primitive/red/default"
+              />
+            </CardSlot>
+          </Example>
+          <Example label="N/A — token disabled">
+            <CardSlot>
+              <SemanticColorCard
+                variant="background"
+                role="Primary Disabled"
+                color="#E3E4EA"
+                token="color/surface/cta/primary/disabled"
+                reference="color/primitive/ink/100"
+              />
+            </CardSlot>
+          </Example>
+        </Section>
       </div>
-
-      {/* Tabs */}
-      <div className="flex border-b border-border-primary gap-xs">
-        {tabs.map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`px-lg pb-md text-label cursor-pointer transition-colors border-b-2 -mb-px ${
-              activeTab === tab.id
-                ? 'border-brand-primary text-brand-primary font-semibold'
-                : 'border-transparent text-text-secondary hover:text-text-primary'
-            }`}
-          >
-            {tab.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Body: sub-sidebar + content */}
-      <div className="flex gap-2xl items-start">
-        <SubSidebar
-          items={navItems}
-          activeId={activeSection}
-          onSelect={handleNavSelect}
-        />
-        {activeTab === 'componentes'
-          ? <ComponentesContent sectionRefs={sectionRefs} />
-          : <ModulosContent sectionRefs={sectionRefs} />
-        }
-      </div>
-
     </div>
   )
 }

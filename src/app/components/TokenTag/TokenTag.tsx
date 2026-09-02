@@ -3,6 +3,8 @@ import { useLayoutEffect, useRef, useState } from 'react'
 export interface TokenTagProps {
   /** Ruta o token a mostrar (texto mono) */
   children: string
+  /** Fondo de la píldora: `default` (#e6eef8) o `plain` (blanco) */
+  tone?: 'default' | 'plain'
   className?: string
 }
 
@@ -16,7 +18,7 @@ export interface TokenTagProps {
  * Medidas: fondo #e6eef8 · radio 6 · padding 8/12 · alto 38 · sin sombra ·
  * texto Inter mono 12/14 #16181d.
  */
-export function TokenTag({ children, className = '' }: TokenTagProps) {
+export function TokenTag({ children, tone = 'default', className = '' }: TokenTagProps) {
   const textRef = useRef<HTMLParagraphElement>(null)
   const [isTruncated, setIsTruncated] = useState(false)
 
@@ -32,7 +34,9 @@ export function TokenTag({ children, className = '' }: TokenTagProps) {
 
   return (
     <div
-      className={`flex h-[38px] w-full shrink-0 flex-col items-start justify-center rounded-[6px] bg-[#e6eef8] px-[8px] py-[12px] ${className}`}
+      className={`flex h-[38px] w-full shrink-0 flex-col items-start justify-center rounded-[6px] px-[8px] py-[12px] ${
+        tone === 'plain' ? 'bg-white' : 'bg-[#e6eef8]'
+      } ${className}`}
     >
       <p
         ref={textRef}

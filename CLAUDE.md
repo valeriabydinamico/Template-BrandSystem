@@ -43,16 +43,25 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
   - `BrandColorsPage` — documenta "02 Brand Colors" de Figma con Tailwind +
     componentes propios (hecho, sin Astra)
   - `SemanticColorsPage` — placeholder, pendiente de contenido
-  - `MisComponentesPage` — showcase de componentes propios (Color cards, módulos)
+  - `MisComponentesPage` — **handbook**: catálogo vivo de todos los componentes
+    propios (uno rendereado por sección) para revisarlos y ajustarlos
   - `components/demo/` — demos por categoría (Buttons, Inputs, Media, Feedback,
     Navigation, Toolbar, PromptChat). Nota: hoy `App.tsx` no las enruta.
   - `components/PageHeader/` — encabezado de página (IntroCard: eyebrow de
     módulo + título + copy). Lo usan `GlobalColorsPage` y `BrandColorsPage`.
-  - `components/ColorCard/` — tarjeta de color (variantes primary/secondary/
-    tertiary/gradient)
+  - `components/ColorCard/` — documenta un **primitive** (variantes primary/
+    secondary/tertiary/gradient)
+  - `components/SemanticColorCard/` — documenta un **token semántico**
+    (`color/text/*`, `color/ui/border/*`, `color/background/*`…). Variantes
+    `text` / `border` / `background` / `background-border`. Ratios y nivel WCAG
+    se calculan solos; ruta con `disabled` → pastilla `N/A`.
   - `components/Badge/` — píldora de etiqueta de uso
   - `components/TokenTag/` — píldora gris de ruta/token; recorta con "…" +
-    tooltip con el texto completo si no entra. Usar siempre para ese tipo de etiqueta.
+    tooltip con el texto completo si no entra. Usar siempre para ese tipo de
+    etiqueta. Prop `tone`: `default` (#e6eef8) / `plain` (blanco).
+- `src/app/lib/contrast.ts` — helpers de contraste/accesibilidad WCAG
+  compartidos (`relativeLuminance`, `accessibleTextColor`, `contrastRatio`,
+  `wcagLevel`, `isNearWhite`, …). Los usan `ColorCard` y `SemanticColorCard`.
   - `components/ModuleBadge/` — eyebrow con icono del módulo
   - `components/GovernanceRule/` — fila numerada de regla de gobernanza
 - `src/imports/` — **código generado por Figma Make**. Frames, SVGs (`svg-*.ts`) e
