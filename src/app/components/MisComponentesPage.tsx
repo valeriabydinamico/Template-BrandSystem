@@ -4,6 +4,7 @@ import { ModuleBadge } from './ModuleBadge'
 import { Badge } from './Badge'
 import { GovernanceRule } from './GovernanceRule'
 import { GovernanceFooter } from './GovernanceFooter'
+import { MetaFooter } from './MetaFooter'
 import { TokenTag } from './TokenTag'
 import { Note } from './Note'
 import { ColorCard } from './ColorCard'
@@ -62,6 +63,7 @@ const SECTIONS = [
   { id: 'badge', name: 'Badge' },
   { id: 'governance-rule', name: 'GovernanceRule' },
   { id: 'governance-footer', name: 'GovernanceFooter' },
+  { id: 'meta-footer', name: 'MetaFooter' },
   { id: 'token-tag', name: 'TokenTag' },
   { id: 'note', name: 'Note' },
   { id: 'color-card', name: 'ColorCard' },
@@ -184,6 +186,18 @@ export function MisComponentesPage() {
                   'Cada rol debe conservar una relación trazable con Global Colors mediante una referencia, no por duplicación del valor.',
                 ]}
               />
+            </div>
+          </Example>
+        </Section>
+
+        <Section
+          id="meta-footer"
+          name="MetaFooter"
+          description="Barra final de las páginas del Color System: metadato de versión + pastilla de estado. Recibe `label` y `status` (por defecto “Master”)."
+        >
+          <Example label="label + status">
+            <div className="w-full max-w-[860px] overflow-hidden rounded-[12px] border border-[#e3e7ee]">
+              <MetaFooter label="v1 · 03 Semantic Colors · Master Template" />
             </div>
           </Example>
         </Section>

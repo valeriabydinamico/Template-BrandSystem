@@ -2,6 +2,7 @@ import { ColorCard } from './ColorCard'
 import { Badge } from './Badge'
 import { PageHeader } from './PageHeader'
 import { GovernanceFooter } from './GovernanceFooter'
+import { MetaFooter } from './MetaFooter'
 
 /* ────────────────────────────────────────────────────────────────────────────
  * Datos — Brand Colors (Figma · F01 Color System · "02 Brand Colors")
@@ -270,15 +271,7 @@ export function BrandColorsPage() {
 
       <GovernanceFooter title="Gobernanza del color de marca" rules={GOVERNANCE_RULES} />
 
-      {/* MetaFooter */}
-      <div className="flex h-[72px] w-full items-center justify-between border-t border-[#c6d0da] bg-[#44515f] px-[80px]">
-        <p className="whitespace-nowrap font-medium text-[13px] text-white opacity-[0.72]">
-          v1 · 02 Brand Colors · Master Template
-        </p>
-        <div className="rounded-[999px] border border-[#b9c3ce] bg-white px-[16px] py-[8px]">
-          <p className="whitespace-nowrap font-semibold text-[12px] text-[#44515f]">Master</p>
-        </div>
-      </div>
+      <MetaFooter label="v1 · 02 Brand Colors · Master Template" />
     </div>
   )
 }

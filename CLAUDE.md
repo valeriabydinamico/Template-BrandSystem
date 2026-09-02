@@ -67,6 +67,9 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
   - `components/GovernanceFooter/` — bloque completo de "Gobernanza" (header +
     reglas). Props `title` + `rules: string[]`. Lo usan `BrandColorsPage` y
     `SemanticColorsPage`.
+  - `components/MetaFooter/` — barra final (metadato de versión + pastilla de
+    estado). Props `label` + `status`. Lo usan `BrandColorsPage` y
+    `SemanticColorsPage`.
   - `components/Note/` — nota informativa (fondo crema + borde e icono naranja
     `#ad5301`, texto regular 14/20, padding 12, gap 8) bajo las grillas de tokens
     del Color System. El icono se alinea a la 1ª línea (centrado si es 1 línea).
