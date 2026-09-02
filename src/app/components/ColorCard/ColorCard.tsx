@@ -16,13 +16,23 @@ function getGradientTextColor(hexTop: string, hexBottom: string): string {
   return avg > 0.179 ? '#000000' : '#ffffff'
 }
 
+/** Brillo (L de HSL) del color, en 0–100, calculado desde el HEX. */
+function getHslLightness(hex: string): number {
+  const bare = hex.replace(/^#/, '')
+  if (bare.length < 6) return NaN
+  const r = parseInt(bare.slice(0, 2), 16) / 255
+  const g = parseInt(bare.slice(2, 4), 16) / 255
+  const b = parseInt(bare.slice(4, 6), 16) / 255
+  return ((Math.max(r, g, b) + Math.min(r, g, b)) / 2) * 100
+}
+
 /**
- * Tonos casi blancos (brillo/L de HSL entre 98 y 100) necesitan un stroke sutil
- * de 1px (#F2F2F2) para separarse del fondo blanco de la página.
+ * Tonos casi blancos (brillo/L entre 98 y 100) necesitan un stroke sutil de 1px
+ * (#F2F2F2) para separarse del fondo blanco de la página. Se calcula desde el
+ * color, no depende de que se pase `hsl` (los brand colors nacen de estos tonos).
  */
-function needsLightStroke(hsl?: { l: string }): boolean {
-  if (!hsl) return false
-  const l = parseFloat(hsl.l)
+function needsLightStroke(hex: string): boolean {
+  const l = getHslLightness(hex)
   return !Number.isNaN(l) && l >= 98 && l <= 100
 }
 
@@ -85,7 +95,7 @@ export function ColorCard({
 }: ColorCardProps) {
   const bareHex = hex.replace(/^#/, '')
   const textColor = getAccessibleTextColor(hex)
-  const autoStroke = needsLightStroke(hsl) ? 'border border-[#F2F2F2]' : ''
+  const autoStroke = needsLightStroke(bareHex || color) ? 'border border-[#F2F2F2]' : ''
 
   /* ─── Gradient ─── */
   if (variant === 'gradient') {

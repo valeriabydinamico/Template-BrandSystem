@@ -46,7 +46,7 @@ const SECONDARY: BrandColor[] = [
     pantone: 'Paper White / Digital White',
     accessibilityRating: 'AAA',
     contrastRatio: '13.56:1',
-    bordered: true,
+    // El stroke lo agrega ColorCard automáticamente (tono casi blanco).
   },
   {
     color: '#00a3e1',
