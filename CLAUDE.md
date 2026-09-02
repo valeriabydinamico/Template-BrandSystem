@@ -46,6 +46,8 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
   - `MisComponentesPage` — showcase de componentes propios (Color cards, módulos)
   - `components/demo/` — demos por categoría (Buttons, Inputs, Media, Feedback,
     Navigation, Toolbar, PromptChat). Nota: hoy `App.tsx` no las enruta.
+  - `components/PageHeader/` — encabezado de página (IntroCard: eyebrow de
+    módulo + título + copy). Lo usan `GlobalColorsPage` y `BrandColorsPage`.
   - `components/ColorCard/` — tarjeta de color (variantes primary/secondary/
     tertiary/gradient)
   - `components/Badge/` — píldora de etiqueta de uso
