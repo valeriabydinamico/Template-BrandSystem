@@ -1,8 +1,7 @@
 import { ColorCard } from './ColorCard'
 import { Badge } from './Badge'
 import { PageHeader } from './PageHeader'
-import { GovernanceRule } from './GovernanceRule'
-import governanceIcon from '@/assets/governance-icon.svg'
+import { GovernanceFooter } from './GovernanceFooter'
 
 /* ────────────────────────────────────────────────────────────────────────────
  * Datos — Brand Colors (Figma · F01 Color System · "02 Brand Colors")
@@ -269,33 +268,7 @@ export function BrandColorsPage() {
         />
       </div>
 
-      {/* governance-footer */}
-      <div className="flex w-full flex-col items-start bg-[#d2d8e1] px-[40px] py-[48px]">
-        <div className="w-full rounded-[24px] border border-[#b9c3ce] bg-[#fafbfc]">
-          <div className="flex flex-col items-start gap-[18px] p-[32px]">
-            {/* governance-header */}
-            <div className="flex w-full items-center gap-[14px] border-b border-[rgba(170,182,194,0.35)] pb-[29px]">
-              <div className="flex size-[40px] shrink-0 items-center justify-center rounded-[10px] border-[1.5px] border-[#596879] bg-[#e8edf2]">
-                <img src={governanceIcon} alt="" className="block size-[20px]" />
-              </div>
-              <div className="flex flex-col items-start gap-[2px]">
-                <p className="font-medium text-[14px] uppercase leading-[19.5px] tracking-[0.65px] text-[#596879]">
-                  Guías de uso
-                </p>
-                <p className="font-bold text-[24px] leading-[26.4px] text-[#2f3945]">
-                  Gobernanza del color de marca
-                </p>
-              </div>
-            </div>
-
-            {GOVERNANCE_RULES.map((rule, i) => (
-              <GovernanceRule key={i} number={i + 1}>
-                {rule}
-              </GovernanceRule>
-            ))}
-          </div>
-        </div>
-      </div>
+      <GovernanceFooter title="Gobernanza del color de marca" rules={GOVERNANCE_RULES} />
 
       {/* MetaFooter */}
       <div className="flex h-[72px] w-full items-center justify-between border-t border-[#c6d0da] bg-[#44515f] px-[80px]">

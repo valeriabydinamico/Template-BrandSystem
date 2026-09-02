@@ -1,5 +1,6 @@
 import { Note } from './Note'
 import { PageHeader } from './PageHeader'
+import { GovernanceFooter } from './GovernanceFooter'
 import { SemanticColorCard } from './SemanticColorCard'
 import type { SemanticColorVariant } from './SemanticColorCard'
 
@@ -441,6 +442,17 @@ function SectionPrinciples() {
   )
 }
 
+/* ─── Sección · Gobernanza ─── */
+
+const GOVERNANCE_RULES = [
+  'Los roles de Brand Colors deben construirse siempre a partir de primitives existentes; no se deben crear valores HEX aislados directamente en esta capa.',
+  'Primary debe mantener la mayor jerarquía de marca. Secondary y Accent funcionan como apoyo y no deben competir sistemáticamente con el rol principal.',
+  'Evitar el uso simultáneo de múltiples terciarios dentro de una misma pieza, salvo storytelling editorial o visualizaciones.',
+  'Cada rol debe documentar su referencia de color y conservar una relación trazable con Global Colors. Si cambia la primitive referenciada, el rol debe actualizarse mediante una referencia y no mediante duplicación manual del valor.',
+  'Los equivalentes RGB, CMYK y referencias Pantone funcionan como guía de implementación editorial, impresión y alineación cross-team con producto.',
+  'Los tokens de texto no deben redefinirse por canal.',
+]
+
 /* ─── Página ─── */
 
 export function SemanticColorsPage() {
@@ -469,6 +481,8 @@ export function SemanticColorsPage() {
         <Divider />
         <SectionPrinciples />
       </div>
+
+      <GovernanceFooter title="Gobernanza del color de marca" rules={GOVERNANCE_RULES} />
     </div>
   )
 }

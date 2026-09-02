@@ -3,6 +3,7 @@ import { PageHeader } from './PageHeader'
 import { ModuleBadge } from './ModuleBadge'
 import { Badge } from './Badge'
 import { GovernanceRule } from './GovernanceRule'
+import { GovernanceFooter } from './GovernanceFooter'
 import { TokenTag } from './TokenTag'
 import { Note } from './Note'
 import { ColorCard } from './ColorCard'
@@ -60,6 +61,7 @@ const SECTIONS = [
   { id: 'module-badge', name: 'ModuleBadge' },
   { id: 'badge', name: 'Badge' },
   { id: 'governance-rule', name: 'GovernanceRule' },
+  { id: 'governance-footer', name: 'GovernanceFooter' },
   { id: 'token-tag', name: 'TokenTag' },
   { id: 'note', name: 'Note' },
   { id: 'color-card', name: 'ColorCard' },
@@ -163,6 +165,25 @@ export function MisComponentesPage() {
                 Primary debe mantener la mayor jerarquía de marca. Secondary y Accent funcionan como
                 apoyo.
               </GovernanceRule>
+            </div>
+          </Example>
+        </Section>
+
+        <Section
+          id="governance-footer"
+          name="GovernanceFooter"
+          description="Bloque completo de “Gobernanza” al pie de las páginas del Color System: encabezado (icono + eyebrow + título) + lista de reglas numeradas. Recibe `title` y `rules: string[]`."
+        >
+          <Example label="title + rules">
+            <div className="w-full max-w-[860px] overflow-hidden rounded-[12px] border border-[#e3e7ee]">
+              <GovernanceFooter
+                title="Gobernanza del color de marca"
+                rules={[
+                  'Los roles deben construirse siempre a partir de primitives existentes; no se deben crear valores HEX aislados directamente en esta capa.',
+                  'Primary debe mantener la mayor jerarquía de marca. Secondary y Accent funcionan como apoyo.',
+                  'Cada rol debe conservar una relación trazable con Global Colors mediante una referencia, no por duplicación del valor.',
+                ]}
+              />
             </div>
           </Example>
         </Section>
