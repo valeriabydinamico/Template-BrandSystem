@@ -28,7 +28,7 @@ function getHslLightness(hex: string): number {
 
 /**
  * Tonos casi blancos (brillo/L entre 98 y 100) necesitan un stroke sutil de 1px
- * (#F2F2F2) para separarse del fondo blanco de la página. Se calcula desde el
+ * (#DADCDE) para separarse del fondo blanco de la página. Se calcula desde el
  * color, no depende de que se pase `hsl` (los brand colors nacen de estos tonos).
  */
 function needsLightStroke(hex: string): boolean {
@@ -95,7 +95,7 @@ export function ColorCard({
 }: ColorCardProps) {
   const bareHex = hex.replace(/^#/, '')
   const textColor = getAccessibleTextColor(hex)
-  const autoStroke = needsLightStroke(bareHex || color) ? 'border border-[#F2F2F2]' : ''
+  const autoStroke = needsLightStroke(bareHex || color) ? 'border border-[#DADCDE]' : ''
 
   /* ─── Gradient ─── */
   if (variant === 'gradient') {
