@@ -42,10 +42,15 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
   - `GlobalColorsPage` — renderiza `src/imports/01GlobalColors-1` (generado por Figma)
   - `BrandColorsPage` — documenta "02 Brand Colors" de Figma con Tailwind +
     componentes propios (hecho, sin Astra)
-  - `SemanticColorsPage` — placeholder, pendiente de contenido
-  - `TypographyPage` — placeholder (solo `PageHeader`, módulo "Type System").
-    Pendiente de traer la escala/familias/estilos desde Figma. Ítem propio en el
-    sidebar (icono `Type`), icono de módulo en `src/assets/type-badge-icon.svg`.
+  - `SemanticColorsPage` — documentada (secciones + gobernanza + meta-footer)
+  - `TypographyFoundationsPage` / `TypographySystemPage` — grupo "Typography" del
+    sidebar (icono `Type`). Traídas de Figma (nodos 196:6664 / 154:8196).
+    Documentan la **configuración de ejemplo** del Type System (Manrope /
+    Source Serif 4 / Inter). Reutilizan `PageHeader`, `GovernanceFooter`,
+    `MetaFooter`, `TokenTag`. Helpers compartidos en `components/typography/shared.tsx`
+    (`FONT`, `SectionHeader`, `TypePreview`, `MetaRow`, `QANote`). Icono de módulo
+    en `src/assets/type-badge-icon.svg`. Responsive con breakpoint 1600 (+ la
+    tabla de jerarquía colapsa a cards por debajo de 1180).
   - `MisComponentesPage` — **handbook**: catálogo vivo de todos los componentes
     propios (uno rendereado por sección) para revisarlos y ajustarlos. Se entra
     por el icon button (Layers) del pie del sidebar.
@@ -144,9 +149,10 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
 
 ## Trabajo en curso
 
-- `SemanticColorsPage` ya está documentada (secciones + gobernanza + meta-footer).
-- `TypographyPage` es placeholder — falta traer escala/familias/estilos desde Figma.
+- `SemanticColorsPage` y las dos páginas de `Typography` ya están documentadas.
 - `AjustesPage` es placeholder vacío.
+- Fuentes de ejemplo del Type System (Manrope / Source Serif 4 / JetBrains Mono)
+  se cargan en `src/styles/fonts.css`; vars `--font-brand` / `--font-brand-editorial`.
 - `MisComponentesPage`: sección "Módulos" vacía, se irá llenando conforme lleguen
   de Figma.
 - Pendiente (opcional): migrar el shell (`App.tsx`) y las páginas restantes fuera

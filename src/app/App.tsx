@@ -26,7 +26,8 @@ import { IntroduccionPage } from './components/IntroduccionPage'
 import { GlobalColorsPage } from './components/GlobalColorsPage'
 import { BrandColorsPage } from './components/BrandColorsPage'
 import { SemanticColorsPage } from './components/SemanticColorsPage'
-import { TypographyPage } from './components/TypographyPage'
+import { TypographyFoundationsPage } from './components/TypographyFoundationsPage'
+import { TypographySystemPage } from './components/TypographySystemPage'
 import { AjustesPage } from './components/AjustesPage'
 import brandMarkIcon from '@/assets/color-system-badge-icon.svg'
 
@@ -41,6 +42,7 @@ type SidebarPage =
   | 'typography'
   | 'color'
 type ColorPage = 'global-colors' | 'brand-colors' | 'semantic-colors'
+type TypographyPageId = 'foundations' | 'system'
 type DemoSection =
   | 'buttons'
   | 'inputs'
@@ -54,6 +56,11 @@ const colorPages: { id: ColorPage; label: string }[] = [
   { id: 'global-colors', label: 'Global colors' },
   { id: 'brand-colors', label: 'Brand colors' },
   { id: 'semantic-colors', label: 'Semantic colors' },
+]
+
+const typographyPages: { id: TypographyPageId; label: string }[] = [
+  { id: 'foundations', label: 'Foundations' },
+  { id: 'system', label: 'System' },
 ]
 
 const sections: { id: DemoSection; label: string; icon: React.ReactNode }[] = [
@@ -163,6 +170,83 @@ function NavItem({
   )
 }
 
+/** Grupo colapsable de la navegación (Color system, Typography…). */
+function NavGroup({
+  Icon,
+  label,
+  groupActive,
+  open,
+  onToggle,
+  collapsed,
+  children,
+}: {
+  Icon: LucideIcon
+  label: string
+  groupActive: boolean
+  open: boolean
+  onToggle: () => void
+  collapsed: boolean
+  children: React.ReactNode
+}) {
+  if (collapsed) {
+    return (
+      <IconButton label={label} active={groupActive} onClick={onToggle}>
+        <Icon className="size-[18px]" strokeWidth={1.75} />
+      </IconButton>
+    )
+  }
+  return (
+    <>
+      <button
+        onClick={onToggle}
+        className={`${NAV_ITEM} ${
+          groupActive && !open
+            ? 'bg-[#e1f0ff] font-semibold text-[#004c97]'
+            : groupActive
+              ? 'font-semibold text-[#004c97] hover:bg-[#eef2f8]'
+              : 'font-medium text-[#576175] hover:bg-[#eef2f8]'
+        }`}
+      >
+        <Icon className="size-[18px] shrink-0" strokeWidth={1.75} />
+        <span className="flex-1 whitespace-nowrap">{label}</span>
+        <ChevronDown
+          className={`size-[14px] shrink-0 text-[#8a94a8] transition-transform duration-200 ${
+            open ? 'rotate-180' : ''
+          }`}
+        />
+      </button>
+      {open && (
+        <div className="my-[2px] ml-[27px] flex flex-col gap-[1px] border-l border-[#e3e7ee] pl-[11px]">
+          {children}
+        </div>
+      )}
+    </>
+  )
+}
+
+function NavSubItem({
+  label,
+  active,
+  onClick,
+}: {
+  label: string
+  active: boolean
+  onClick: () => void
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`w-full cursor-pointer rounded-[8px] px-[12px] py-[7px] text-left text-[13px] leading-[18px] transition-colors ${
+        active
+          ? 'bg-[#e1f0ff] font-semibold text-[#004c97]'
+          : 'font-medium text-[#576175] hover:bg-[#eef2f8]'
+      }`}
+    >
+      {label}
+    </button>
+  )
+}
+
 function Sidebar({
   activePage,
   setActivePage,
@@ -170,6 +254,10 @@ function Sidebar({
   setActiveColorPage,
   colorOpen,
   setColorOpen,
+  activeTypographyPage,
+  setActiveTypographyPage,
+  typographyOpen,
+  setTypographyOpen,
   collapsed,
   setCollapsed,
 }: {
@@ -179,20 +267,23 @@ function Sidebar({
   setActiveColorPage: (p: ColorPage) => void
   colorOpen: boolean
   setColorOpen: (fn: (o: boolean) => boolean) => void
+  activeTypographyPage: TypographyPageId
+  setActiveTypographyPage: (p: TypographyPageId) => void
+  typographyOpen: boolean
+  setTypographyOpen: (fn: (o: boolean) => boolean) => void
   collapsed: boolean
   setCollapsed: (fn: (c: boolean) => boolean) => void
 }) {
-  const colorGroupActive = activePage === 'color'
-
-  // En modo comprimido, tocar "Color system" primero expande el sidebar.
-  const onColorGroup = () => {
-    if (collapsed) {
-      setCollapsed(() => false)
-      setColorOpen(() => true)
-    } else {
-      setColorOpen((o) => !o)
+  // En modo comprimido, tocar un grupo primero expande el sidebar.
+  const toggleGroup =
+    (setOpen: (fn: (o: boolean) => boolean) => void) => () => {
+      if (collapsed) {
+        setCollapsed(() => false)
+        setOpen(() => true)
+      } else {
+        setOpen((o) => !o)
+      }
     }
-  }
 
   return (
     <aside
@@ -237,65 +328,51 @@ function Sidebar({
           collapsed={collapsed}
         />
 
-        {/* Grupo Color system */}
-        {collapsed ? (
-          <IconButton label="Color system" active={colorGroupActive} onClick={onColorGroup}>
-            <Palette className="size-[18px]" strokeWidth={1.75} />
-          </IconButton>
-        ) : (
-          <button
-            onClick={onColorGroup}
-            className={`${NAV_ITEM} ${
-              colorGroupActive && !colorOpen
-                ? 'bg-[#e1f0ff] font-semibold text-[#004c97]'
-                : colorGroupActive
-                  ? 'font-semibold text-[#004c97] hover:bg-[#eef2f8]'
-                  : 'font-medium text-[#576175] hover:bg-[#eef2f8]'
-            }`}
-          >
-            <Palette className="size-[18px] shrink-0" strokeWidth={1.75} />
-            <span className="flex-1 whitespace-nowrap">Color system</span>
-            <ChevronDown
-              className={`size-[14px] shrink-0 text-[#8a94a8] transition-transform duration-200 ${
-                colorOpen ? 'rotate-180' : ''
-              }`}
+        <NavGroup
+          Icon={Palette}
+          label="Color system"
+          groupActive={activePage === 'color'}
+          open={colorOpen}
+          onToggle={toggleGroup(setColorOpen)}
+          collapsed={collapsed}
+        >
+          {colorPages.map((p) => (
+            <NavSubItem
+              key={p.id}
+              label={p.label}
+              active={activePage === 'color' && activeColorPage === p.id}
+              onClick={() =>
+                startTransition(() => {
+                  setActivePage('color')
+                  setActiveColorPage(p.id)
+                })
+              }
             />
-          </button>
-        )}
+          ))}
+        </NavGroup>
 
-        {!collapsed && colorOpen && (
-          <div className="my-[2px] ml-[27px] flex flex-col gap-[1px] border-l border-[#e3e7ee] pl-[11px]">
-            {colorPages.map((p) => {
-              const isActive = activePage === 'color' && activeColorPage === p.id
-              return (
-                <button
-                  key={p.id}
-                  onClick={() =>
-                    startTransition(() => {
-                      setActivePage('color')
-                      setActiveColorPage(p.id)
-                    })
-                  }
-                  className={`w-full cursor-pointer rounded-[8px] px-[12px] py-[7px] text-left text-[13px] leading-[18px] transition-colors ${
-                    isActive
-                      ? 'bg-[#e1f0ff] font-semibold text-[#004c97]'
-                      : 'font-medium text-[#576175] hover:bg-[#eef2f8]'
-                  }`}
-                >
-                  {p.label}
-                </button>
-              )
-            })}
-          </div>
-        )}
-
-        <NavItem
+        <NavGroup
           Icon={Type}
           label="Typography"
-          active={activePage === 'typography'}
-          onClick={() => setActivePage('typography')}
+          groupActive={activePage === 'typography'}
+          open={typographyOpen}
+          onToggle={toggleGroup(setTypographyOpen)}
           collapsed={collapsed}
-        />
+        >
+          {typographyPages.map((p) => (
+            <NavSubItem
+              key={p.id}
+              label={p.label}
+              active={activePage === 'typography' && activeTypographyPage === p.id}
+              onClick={() =>
+                startTransition(() => {
+                  setActivePage('typography')
+                  setActiveTypographyPage(p.id)
+                })
+              }
+            />
+          ))}
+        </NavGroup>
       </nav>
 
       {/* Utilidades */}
@@ -340,6 +417,8 @@ function AppShell() {
   const [activeSection, setActiveSection] = useState<DemoSection>('buttons')
   const [activeColorPage, setActiveColorPage] = useState<ColorPage>('global-colors')
   const [colorOpen, setColorOpen] = useState(true)
+  const [activeTypographyPage, setActiveTypographyPage] = useState<TypographyPageId>('foundations')
+  const [typographyOpen, setTypographyOpen] = useState(true)
   const [collapsed, setCollapsed] = useState(() => {
     try {
       return localStorage.getItem('sidebar-collapsed') === '1'
@@ -368,6 +447,10 @@ function AppShell() {
         setActiveColorPage={setActiveColorPage}
         colorOpen={colorOpen}
         setColorOpen={setColorOpen}
+        activeTypographyPage={activeTypographyPage}
+        setActiveTypographyPage={setActiveTypographyPage}
+        typographyOpen={typographyOpen}
+        setTypographyOpen={setTypographyOpen}
         collapsed={collapsed}
         setCollapsed={setCollapsed}
       />
@@ -381,7 +464,10 @@ function AppShell() {
         ) : activePage === 'ajustes' ? (
           <AjustesPage />
         ) : activePage === 'typography' ? (
-          <TypographyPage />
+          <div className="flex flex-col gap-xs">
+            {activeTypographyPage === 'foundations' && <TypographyFoundationsPage />}
+            {activeTypographyPage === 'system' && <TypographySystemPage />}
+          </div>
         ) : activePage === 'color' ? (
           <div className="flex flex-col gap-xs">
             {activeColorPage === 'global-colors' && <GlobalColorsPage />}
