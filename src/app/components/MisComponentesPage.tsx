@@ -4,6 +4,7 @@ import { ModuleBadge } from './ModuleBadge'
 import { Badge } from './Badge'
 import { GovernanceRule } from './GovernanceRule'
 import { TokenTag } from './TokenTag'
+import { Note } from './Note'
 import { ColorCard } from './ColorCard'
 import { SemanticColorCard } from './SemanticColorCard'
 
@@ -60,6 +61,7 @@ const SECTIONS = [
   { id: 'badge', name: 'Badge' },
   { id: 'governance-rule', name: 'GovernanceRule' },
   { id: 'token-tag', name: 'TokenTag' },
+  { id: 'note', name: 'Note' },
   { id: 'color-card', name: 'ColorCard' },
   { id: 'semantic-color-card', name: 'SemanticColorCard' },
 ]
@@ -179,6 +181,26 @@ export function MisComponentesPage() {
           <Example label="texto que excede el ancho → recorte + tooltip">
             <div className="w-[200px]">
               <TokenTag>color/primitive/very-long-namespace/blue/subtone/900</TokenTag>
+            </div>
+          </Example>
+        </Section>
+
+        <Section
+          id="note"
+          name="Note"
+          description="Nota informativa que aparece bajo las grillas de tokens del Color System para aclarar decisiones de diseño (qué puede cambiar por proyecto, cómo se comporta un estado…)."
+        >
+          <Example label="icono + texto">
+            <div className="flex w-full max-w-[720px] flex-col gap-[12px]">
+              <Note>
+                El rol de acción principal debe apuntar al color de marca configurado para cada
+                proyecto. Su valor puede cambiar sin alterar el nombre ni la intención del token
+                semántico.
+              </Note>
+              <Note>
+                En esta propuesta, el estado pressed aumenta la profundidad del color para reforzar
+                feedback táctil y diferenciarlo del estado default.
+              </Note>
             </div>
           </Example>
         </Section>

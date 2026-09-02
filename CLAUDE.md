@@ -64,6 +64,8 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
   `wcagLevel`, `isNearWhite`, …). Los usan `ColorCard` y `SemanticColorCard`.
   - `components/ModuleBadge/` — eyebrow con icono del módulo
   - `components/GovernanceRule/` — fila numerada de regla de gobernanza
+  - `components/Note/` — nota informativa (fondo crema + borde e icono naranja
+    `#ad5301`) bajo las grillas de tokens del Color System. Traído 1:1 de Figma.
 - `src/imports/` — **código generado por Figma Make**. Frames, SVGs (`svg-*.ts`) e
   imágenes. No editar a mano salvo necesidad puntual; se re-genera desde Figma.
 - `src/assets/` — assets propios / exportados de Figma (SVGs, imágenes)

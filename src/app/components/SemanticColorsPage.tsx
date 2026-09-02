@@ -1,4 +1,4 @@
-import { Info } from 'lucide-react'
+import { Note } from './Note'
 import { PageHeader } from './PageHeader'
 import { SemanticColorCard } from './SemanticColorCard'
 import type { SemanticColorVariant } from './SemanticColorCard'
@@ -102,15 +102,6 @@ function CardGrid({ rows, maxCols = 4 }: { rows: TokenRow[]; maxCols?: 3 | 4 }) 
           reference={r.reference}
         />
       ))}
-    </div>
-  )
-}
-
-function Note({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex w-full items-start gap-[12px] rounded-[12px] bg-[#e6eef8] px-[20px] py-[16px]">
-      <Info size={18} className="mt-[1px] shrink-0 text-[#004c97]" strokeWidth={2} />
-      <p className="font-normal text-[14px] leading-[20px] text-[#465463]">{children}</p>
     </div>
   )
 }
