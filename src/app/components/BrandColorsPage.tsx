@@ -109,30 +109,62 @@ const GOVERNANCE_RULES = [
 
 /* ────────────────────────────────────────────────────────────────────────────
  * Sub-componentes de página
+ *
+ * Responsive — breakpoint único en 1919px de ancho de viewport:
+ *   < 1919px  → apilado: contenido arriba, grilla de cards abajo
+ *   ≥ 1919px  → horizontal: contenido a la izquierda (600), cards a la derecha
+ * En ambos casos la grilla agrupa máximo 2 cards por fila.
+ * (max-[1919px] / min-[1919px] son mutuamente excluyentes a propósito: evitan
+ *  el problema de orden en la cascada entre `flex-col` y el variant responsive.)
  * ────────────────────────────────────────────────────────────────────────── */
 
-/** Tarjeta de color con las medidas de grilla del diseño (min 300 / max 500, flexible) */
-function BrandColorCard({ data }: { data: BrandColor }) {
+function BrandCard({ data }: { data: BrandColor }) {
   return (
-    <div className="min-w-[300px] max-w-[500px] flex-[1_0_0]">
-      <ColorCard
-        variant={data.name === 'Primary' ? 'primary' : 'secondary'}
-        color={data.color}
-        name={data.name}
-        description={data.description}
-        hex={data.hex}
-        rgb={data.rgb}
-        cmyk={data.cmyk}
-        pantone={data.pantone}
-        accessibilityRating={data.accessibilityRating}
-        contrastRatio={data.contrastRatio}
-        className={data.bordered ? 'border border-[#dadcde]' : ''}
-      />
+    <ColorCard
+      variant={data.name === 'Primary' ? 'primary' : 'secondary'}
+      color={data.color}
+      name={data.name}
+      description={data.description}
+      hex={data.hex}
+      rgb={data.rgb}
+      cmyk={data.cmyk}
+      pantone={data.pantone}
+      accessibilityRating={data.accessibilityRating}
+      contrastRatio={data.contrastRatio}
+      className={data.bordered ? 'border border-[#dadcde]' : ''}
+    />
+  )
+}
+
+/**
+ * Grilla de color cards.
+ * - 1 card: ancho máx 500. Alineada a la izquierda en apilado; pegada a la
+ *   derecha de su columna en ≥1919 (caso Primary).
+ * - 2+ cards: 2 por fila, cada una `(100% − 16px) / 2`; el resto pasa a filas
+ *   siguientes conservando ese ancho (la card suelta no se estira — caso Accent).
+ */
+function CardGrid({ cards }: { cards: BrandColor[] }) {
+  if (cards.length === 1) {
+    return (
+      <div className="flex w-full min-[1919px]:justify-end">
+        <div className="w-full max-w-[500px]">
+          <BrandCard data={cards[0]} />
+        </div>
+      </div>
+    )
+  }
+  return (
+    <div className="flex w-full flex-wrap gap-[16px]">
+      {cards.map((c) => (
+        <div key={c.name} className="w-[calc(50%_-_8px)] min-w-[280px] max-w-[500px]">
+          <BrandCard data={c} />
+        </div>
+      ))}
     </div>
   )
 }
 
-/** Sección de rol cromático: encabezado + lista de uso a la izquierda, cards a la derecha */
+/** Sección de rol cromático: encabezado + lista de uso, y grilla de cards. */
 function BrandSection({
   title,
   paragraphs,
@@ -145,9 +177,9 @@ function BrandSection({
   cards: BrandColor[]
 }) {
   return (
-    <section className="flex w-full max-lg:flex-col items-start gap-[72px] lg:flex-row">
+    <section className="flex w-full items-start gap-[72px] max-[1919px]:flex-col min-[1919px]:flex-row">
       {/* section-header */}
-      <div className="flex flex-[1_0_0] flex-col items-start gap-[24px]">
+      <div className="flex flex-col items-start gap-[24px] max-[1919px]:w-full min-[1919px]:w-[600px] min-[1919px]:shrink-0">
         <h3 className="w-full font-bold text-[40px] leading-[44px] text-[#16181d]">{title}</h3>
         <div className="w-full font-normal text-[16px] leading-[24px] text-[#576175]">
           {paragraphs.map((p, i) => (
@@ -165,10 +197,8 @@ function BrandSection({
       </div>
 
       {/* color-card-grid */}
-      <div className="flex flex-[1_0_0] flex-wrap content-center items-stretch gap-[16px]">
-        {cards.map((c) => (
-          <BrandColorCard key={c.name} data={c} />
-        ))}
+      <div className="max-[1919px]:w-full min-[1919px]:flex-1 min-[1919px]:min-w-0">
+        <CardGrid cards={cards} />
       </div>
     </section>
   )
