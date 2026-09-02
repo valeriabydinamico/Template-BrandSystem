@@ -184,7 +184,7 @@ export function SemanticColorCard(props: SemanticColorCardProps) {
 
   return (
     <div
-      className={`flex w-full flex-col gap-[8px] rounded-[16px] p-[8px] ${className}`}
+      className={`flex w-full min-w-[280px] flex-col gap-[8px] rounded-[16px] p-[8px] ${className}`}
       style={r.cardStyle}
     >
       {/* color-panel */}
