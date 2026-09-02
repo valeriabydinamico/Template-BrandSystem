@@ -1,6 +1,6 @@
 import { ColorCard } from './ColorCard'
 import { Badge } from './Badge'
-import { ModuleBadge } from './ModuleBadge'
+import { PageHeader } from './PageHeader'
 import { GovernanceRule } from './GovernanceRule'
 import governanceIcon from '@/assets/governance-icon.svg'
 
@@ -185,35 +185,16 @@ function Divider() {
 export function BrandColorsPage() {
   return (
     <div className="flex w-full flex-col items-start bg-white">
-      {/* Container */}
-      <div className="w-full p-[24px]">
-        {/* IntroCard */}
-        <div className="flex w-full flex-col items-start gap-[32px] rounded-[40px] bg-[#d2d8e1] px-[40px] py-[48px]">
-          <ModuleBadge label="Color System" />
-
-          {/* IntroCopy */}
-          <div className="flex w-full flex-col items-start gap-[24px]">
-            <p className="font-bold text-[48px] leading-[48px] tracking-[-0.4px] text-[#2f3945]">
-              02 Brand Colors
-            </p>
-            <div className="w-full font-normal text-[16px] leading-[24px] text-[#4d5965]">
-              <p className="mb-0">
-                Roles cromáticos de marca construidos a partir de las primitives definidas en Global
-                Colors.
-              </p>
-              <p className="mb-0">
-                Este board traduce familias cromáticas en decisiones de identidad como Primary,
-                Secondary, Neutral y Accent sin duplicar valores base.
-              </p>
-              <p className="mb-0">&#8203;</p>
-              <p>
-                Cada rol debe mantener una referencia de color clara hacia su primitive para
-                facilitar consistencia, mantenimiento e implementación.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <PageHeader
+        module="Color System"
+        title="02 Brand Colors"
+        paragraphs={[
+          'Roles cromáticos de marca construidos a partir de las primitives definidas en Global Colors.',
+          'Este board traduce familias cromáticas en decisiones de identidad como Primary, Secondary, Neutral y Accent sin duplicar valores base.',
+          null,
+          'Cada rol debe mantener una referencia de color clara hacia su primitive para facilitar consistencia, mantenimiento e implementación.',
+        ]}
+      />
 
       {/* Secciones de roles */}
       <div className="flex w-full flex-col items-start gap-[64px] px-[40px] py-[80px]">
