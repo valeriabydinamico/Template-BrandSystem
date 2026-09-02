@@ -38,7 +38,10 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
 - `src/app/App.tsx` — shell: sidebar + área de contenido. La navegación entre
   páginas es `useState`, no URLs.
 - `src/app/components/` — páginas:
-  - `IntroduccionPage` — home (placeholder)
+  - `IntroduccionPage` — home: `PageHeader` con sinopsis del sitio + "Cómo leer
+    este sistema" (principios) + "Cómo está organizado" (4 module cards
+    clicables → `onNavigate` cablea a color / typography / visual-styles / grids).
+    En Tailwind puro. Icono en `src/assets/brand-system-badge-icon.svg`.
   - `GlobalColorsPage` — renderiza `src/imports/01GlobalColors-1` (generado por Figma)
   - `BrandColorsPage` — documenta "02 Brand Colors" de Figma con Tailwind +
     componentes propios (hecho, sin Astra)

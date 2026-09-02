@@ -24,7 +24,7 @@ import {
 } from 'lucide-react'
 
 import { MisComponentesPage } from './components/MisComponentesPage'
-import { IntroduccionPage } from './components/IntroduccionPage'
+import { IntroduccionPage, type IntroTarget } from './components/IntroduccionPage'
 import { GlobalColorsPage } from './components/GlobalColorsPage'
 import { BrandColorsPage } from './components/BrandColorsPage'
 import { SemanticColorsPage } from './components/SemanticColorsPage'
@@ -491,6 +491,23 @@ function AppShell() {
 
   const current = sections.find(s => s.id === activeSection)!
 
+  function goToArea(target: IntroTarget) {
+    startTransition(() => {
+      if (target === 'color') {
+        setActivePage('color')
+        setColorOpen(() => true)
+      } else if (target === 'typography') {
+        setActivePage('typography')
+        setTypographyOpen(() => true)
+      } else if (target === 'grids') {
+        setActivePage('grids')
+        setGridsOpen(() => true)
+      } else {
+        setActivePage('visual-styles')
+      }
+    })
+  }
+
   return (
     <div className="flex h-screen overflow-hidden bg-[#f1f4f7]">
 
@@ -516,7 +533,7 @@ function AppShell() {
       {/* Main content */}
       <main className="min-w-0 flex-1 overflow-y-auto overflow-x-hidden bg-white">
         {activePage === 'introduccion' ? (
-          <IntroduccionPage />
+          <IntroduccionPage onNavigate={goToArea} />
         ) : activePage === 'mis-componentes' ? (
           <MisComponentesPage />
         ) : activePage === 'ajustes' ? (
