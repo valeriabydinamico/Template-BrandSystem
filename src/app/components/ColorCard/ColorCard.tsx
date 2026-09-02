@@ -146,11 +146,17 @@ export function ColorCard({
 
   const badgeRowLayout = isPrimary
     ? 'flex items-start justify-between w-full'
-    : 'flex items-start gap-[10px]'
+    : 'flex items-start gap-[8px]'
 
-  // Badge bg is the inverse of the computed text color for max contrast
-  const badgeBg = textColor === '#ffffff' ? 'rgba(255,255,255,1)' : 'rgba(0,0,0,1)'
-  const badgeTextColor = textColor === '#ffffff' ? '#000000' : '#ffffff'
+  // Pastillas de contraste — mismo estilo que en SemanticColorCard:
+  // rating (nivel) = suave · ratio = sólida · colores según la luminancia del color.
+  const panelIsDark = textColor === '#ffffff'
+  const badgeBase =
+    'flex items-center justify-center rounded-[20px] px-[12px] py-[8px] font-semibold text-[12px] leading-[16px] whitespace-nowrap'
+  const softBadge = panelIsDark
+    ? 'bg-[rgba(255,255,255,0.5)] text-[#16181d]'
+    : 'bg-[rgba(22,24,29,0.1)] text-[#16181d]'
+  const solidBadge = panelIsDark ? 'bg-white text-[#16181d]' : 'bg-[#16181d] text-white'
 
   return (
     <div
@@ -160,22 +166,11 @@ export function ColorCard({
       {/* Badge row */}
       <div className={`shrink-0 ${badgeRowLayout}`}>
         {accessibilityRating ? (
-          <div className="flex items-center justify-center gap-[10px] px-[14px] py-[10px] rounded-[28px]" style={{ backgroundColor: badgeBg }}>
-            <span className="font-semibold leading-none text-[16px] whitespace-nowrap" style={{ color: badgeTextColor }}>
-              {accessibilityRating}
-            </span>
-          </div>
-        ) : <span />}
-        {contrastRatio && (
-          <div
-            className="flex items-center justify-center gap-[10px] px-[14px] py-[10px] rounded-[28px]"
-            style={{ backgroundColor: badgeBg }}
-          >
-            <span className="font-semibold leading-none text-[16px] whitespace-nowrap" style={{ color: badgeTextColor }}>
-              {contrastRatio}
-            </span>
-          </div>
+          <span className={`${badgeBase} ${softBadge}`}>{accessibilityRating}</span>
+        ) : (
+          <span />
         )}
+        {contrastRatio && <span className={`${badgeBase} ${solidBadge}`}>{contrastRatio}</span>}
       </div>
 
       {/* Color info */}
