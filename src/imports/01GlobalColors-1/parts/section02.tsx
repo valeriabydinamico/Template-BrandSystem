@@ -26,7 +26,7 @@ function Card01LightBlue() {
   return (
     <div className="bg-white content-stretch flex flex-col gap-[24px] items-start overflow-clip relative shrink-0 max-w-[500px] w-full" data-name="card-01-light-blue">
       <CardHeader9 />
-      <div className="flex flex-col gap-[24px] w-full">
+      <div className="flex flex-col gap-[16px] w-full">
         {lightBlueTones.map(({ tone, hex, rgb, hsl, token }) => (
           <ColorCard key={tone} variant="tertiary" color={`#${hex}`} name={tone} hex={hex} rgb={rgb} hsl={hsl} token={token} />
         ))}

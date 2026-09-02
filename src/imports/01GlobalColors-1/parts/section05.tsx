@@ -64,7 +64,7 @@ function CardFunctionalGreen() {
   return (
     <div className="bg-white content-stretch relative w-full grid row-span-2 [grid-template-rows:subgrid]" data-name="card-functional-green">
       <CardHeader />
-      <div className="flex flex-col gap-[24px]">
+      <div className="flex flex-col gap-[16px]">
         {greenTones.map(({ tone, hex, rgb, hsl, token }) => (
           <ColorCard key={tone} variant="tertiary" color={`#${hex}`} name={tone} hex={hex} rgb={rgb} hsl={hsl} token={token} />
         ))}
@@ -77,7 +77,7 @@ function CardFunctionalAmber() {
   return (
     <div className="bg-white content-stretch relative w-full grid row-span-2 [grid-template-rows:subgrid]" data-name="card-functional-amber">
       <CardHeader1 />
-      <div className="flex flex-col gap-[24px]">
+      <div className="flex flex-col gap-[16px]">
         {amberTones.map(({ tone, hex, rgb, hsl, token }) => (
           <ColorCard key={tone} variant="tertiary" color={`#${hex}`} name={tone} hex={hex} rgb={rgb} hsl={hsl} token={token} />
         ))}
@@ -90,7 +90,7 @@ function CardFunctionalRed() {
   return (
     <div className="bg-white content-stretch relative w-full grid row-span-2 [grid-template-rows:subgrid]" data-name="card-functional-red">
       <CardHeader2 />
-      <div className="flex flex-col gap-[24px]">
+      <div className="flex flex-col gap-[16px]">
         {redTones.map(({ tone, hex, rgb, hsl, token }) => (
           <ColorCard key={tone} variant="tertiary" color={`#${hex}`} name={tone} hex={hex} rgb={rgb} hsl={hsl} token={token} />
         ))}
@@ -103,7 +103,7 @@ function CardFunctionalBlue() {
   return (
     <div className="bg-white content-stretch relative w-full grid row-span-2 [grid-template-rows:subgrid]" data-name="card-functional-blue">
       <CardHeader3 />
-      <div className="flex flex-col gap-[24px]">
+      <div className="flex flex-col gap-[16px]">
         {blueTones.map(({ tone, hex, rgb, hsl, token }) => (
           <ColorCard key={tone} variant="tertiary" color={`#${hex}`} name={tone} hex={hex} rgb={rgb} hsl={hsl} token={token} />
         ))}

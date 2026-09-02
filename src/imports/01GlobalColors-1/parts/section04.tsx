@@ -48,7 +48,7 @@ function Card01Ink() {
   return (
     <div className="bg-white content-stretch relative w-full grid row-span-2 [grid-template-rows:subgrid]" data-name="card-01-ink">
       <CardHeader4 />
-      <div className="flex flex-col gap-[24px]">
+      <div className="flex flex-col gap-[16px]">
         {inkTones.map(({ tone, hex, rgb, hsl, token }) => (
           <ColorCard key={tone} variant="tertiary" color={`#${hex}`} name={tone} hex={hex} rgb={rgb} hsl={hsl} token={token} />
         ))}
@@ -61,7 +61,7 @@ function Card02Gray() {
   return (
     <div className="bg-white content-stretch relative w-full grid row-span-2 [grid-template-rows:subgrid]" data-name="card-02-gray">
       <CardHeader5 />
-      <div className="flex flex-col gap-[24px]">
+      <div className="flex flex-col gap-[16px]">
         {grayTones.map(({ tone, hex, rgb, hsl, token }) => (
           <ColorCard key={tone} variant="tertiary" color={`#${hex}`} name={tone} hex={hex} rgb={rgb} hsl={hsl} token={token} />
         ))}

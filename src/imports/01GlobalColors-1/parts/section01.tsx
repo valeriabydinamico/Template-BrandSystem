@@ -26,7 +26,7 @@ function InputForm() {
   return (
     <div className="content-stretch flex flex-col gap-[24px] items-start overflow-clip relative w-full max-w-[500px]" data-name="Input form">
       <ParagraphContainer />
-      <div className="flex flex-col gap-[24px] w-full">
+      <div className="flex flex-col gap-[16px] w-full">
         {blueScaleTones.map(({ tone, hex, rgb, hsl, token }) => (
           <ColorCard
             key={tone}
