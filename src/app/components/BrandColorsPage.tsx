@@ -19,8 +19,6 @@ interface BrandColor {
   pantone: string
   accessibilityRating: string
   contrastRatio: string
-  /** Cards claras que necesitan borde para separarse del fondo */
-  bordered?: boolean
 }
 
 const PRIMARY: BrandColor = {
@@ -46,7 +44,6 @@ const SECONDARY: BrandColor[] = [
     pantone: 'Paper White / Digital White',
     accessibilityRating: 'AAA',
     contrastRatio: '13.56:1',
-    // El stroke lo agrega ColorCard automáticamente (tono casi blanco).
   },
   {
     color: '#00a3e1',
@@ -94,7 +91,6 @@ const ACCENTS: BrandColor[] = [
     pantone: 'Pantone 376 C',
     accessibilityRating: 'AAA',
     contrastRatio: '7.18:1',
-    bordered: true,
   },
 ]
 
@@ -131,7 +127,6 @@ function BrandCard({ data }: { data: BrandColor }) {
       pantone={data.pantone}
       accessibilityRating={data.accessibilityRating}
       contrastRatio={data.contrastRatio}
-      className={data.bordered ? 'border border-[#dadcde]' : ''}
     />
   )
 }
