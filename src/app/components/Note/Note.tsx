@@ -11,9 +11,8 @@ export interface NoteProps {
  * para aclarar decisiones de diseño: qué puede cambiar por proyecto, cómo se
  * comporta un estado, etc.).
  *
- * Medidas exactas del diseño (Figma · 03 Semantic Colors · `nota-01-*`):
- * fondo #fdf6f0 · borde rgba(173,83,1,0.5) · radio 10 · padding 15/19 ·
- * icono 16 · gap 16 · texto Inter Regular 14/20 #ad5301.
+ * fondo #fdf6f0 · borde rgba(173,83,1,0.5) · radio 10 · padding 12 ·
+ * icono 16 · gap 8 · texto Inter Regular 14/20 #ad5301.
  *
  * El icono se alinea a la primera línea del texto: va dentro de una caja de
  * `leading` (20px) centrada, y el contenedor usa `items-start`. Con una sola
@@ -22,9 +21,9 @@ export interface NoteProps {
 export function Note({ children, className = '' }: NoteProps) {
   return (
     <div
-      className={`flex w-full items-start justify-between rounded-[10px] border border-[rgba(173,83,1,0.5)] bg-[#fdf6f0] px-[19px] py-[15px] ${className}`}
+      className={`flex w-full items-start justify-between rounded-[10px] border border-[rgba(173,83,1,0.5)] bg-[#fdf6f0] p-[12px] ${className}`}
     >
-      <div className="flex min-w-0 flex-1 items-start gap-[16px]">
+      <div className="flex min-w-0 flex-1 items-start gap-[8px]">
         <span className="flex h-[20px] shrink-0 items-center">
           <img src={noteIcon} alt="" className="block size-[16px]" />
         </span>
