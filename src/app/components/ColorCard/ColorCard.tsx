@@ -180,7 +180,11 @@ export function ColorCard({
 
           <div className="flex w-full flex-col gap-[6px] font-bold">
             <p className="text-[24px] leading-[28px]">{name}</p>
-            {description && <p className="text-[16px] leading-[24px]">{description}</p>}
+            {/* Altura reservada para 2 líneas (24px × 2) para que las cards
+                queden alineadas aunque la descripción sea de 1 sola línea. */}
+            {description && (
+              <p className="min-h-[48px] text-[16px] leading-[24px]">{description}</p>
+            )}
           </div>
         </div>
 
