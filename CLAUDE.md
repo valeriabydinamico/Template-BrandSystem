@@ -16,8 +16,9 @@ https://www.figma.com/design/i8FTndoqsyBd5GyaRme2nR/Template---BrandSystem
 
 - React 18 + TypeScript
 - Vite 6 (`@vitejs/plugin-react` + `@tailwindcss/vite`)
-- Tailwind CSS v4 (config en CSS, no `tailwind.config.js`)
-- Design system: **`@figma/astraui`** + **`@figma/astraui-kit`** (paquetes de Figma)
+- Tailwind CSS v4 (config en CSS, no `tailwind.config.js`) — **es la base de estilado**
+- `@figma/astraui` + `@figma/astraui-kit` (paquetes de Figma) — instalados y usados
+  por el shell (`App.tsx`), pero **ya no son obligatorios** (ver "Estilado")
 - `lucide-react` para iconos, `motion`, `recharts`
 
 ## Cómo levantar la página
@@ -39,34 +40,61 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
 - `src/app/components/` — páginas:
   - `IntroduccionPage` — home (placeholder)
   - `GlobalColorsPage` — renderiza `src/imports/01GlobalColors-1` (generado por Figma)
-  - `BrandColorsPage`, `SemanticColorsPage` — placeholders, pendientes de contenido
+  - `BrandColorsPage` — documenta "02 Brand Colors" de Figma con Tailwind +
+    componentes propios (hecho, sin Astra)
+  - `SemanticColorsPage` — placeholder, pendiente de contenido
   - `MisComponentesPage` — showcase de componentes propios (Color cards, módulos)
   - `components/demo/` — demos por categoría (Buttons, Inputs, Media, Feedback,
     Navigation, Toolbar, PromptChat). Nota: hoy `App.tsx` no las enruta.
-  - `components/ColorCard/` — componente propio
+  - `components/ColorCard/` — tarjeta de color (variantes primary/secondary/
+    tertiary/gradient)
+  - `components/Badge/` — píldora de etiqueta de uso
+  - `components/ModuleBadge/` — eyebrow con icono del módulo
+  - `components/GovernanceRule/` — fila numerada de regla de gobernanza
 - `src/imports/` — **código generado por Figma Make**. Frames, SVGs (`svg-*.ts`) e
   imágenes. No editar a mano salvo necesidad puntual; se re-genera desde Figma.
+- `src/assets/` — assets propios / exportados de Figma (SVGs, imágenes)
 - `src/styles/`:
   - `index.css` — importa `fonts.css`, `tailwind.css`, `@figma/astraui/styles.css`
+    (este último se puede quitar cuando se migre el shell)
   - `tailwind.css` — `@import 'tailwindcss'` + `@source '../**/*.{js,ts,jsx,tsx}'`
   - `theme.css` — variables CSS (paleta shadcn base, oklch)
   - `fonts.css` — Inter desde Google Fonts, override de `--font-sans`
   - `globals.css` — vacío
 
-## Reglas del design system (de astraui-kit/guidelines)
+## Estilado y design system
 
-- `@figma/astraui` y `@figma/astraui-kit` van como dependencias directas en
-  `package.json` (ya están).
-- La app va envuelta en `<ThemeProvider>` de `@figma/astraui` (ver `App.tsx`).
-  Actualmente `ForceLightTheme` fuerza tema claro al montar.
-- Usar **tokens de Astra vía clases Tailwind** (`bg-brand-tertiary`, `gap-xl`,
-  `text-text-primary`, `rounded-corner-md`, `py-lg`…), **no** valores arbitrarios
-  ni hex sueltos.
-- NO agregar reglas `@source` para `@figma/astraui` en la config de Tailwind: el
-  paquete ya trae el CSS pre-compilado.
-- Antes de escribir código nuevo con el kit, leer por ruta exacta:
-  `node_modules/@figma/astraui-kit/guidelines/Guidelines.md` y `setup.md`
-  (pnpm/symlinks: no usar `find`/glob, usar `ls`, `cat`, lectura por ruta).
+**Decisión (2026-09): Tailwind es la base. Astra deja de ser determinante.**
+
+- **Diseñar con Tailwind + los componentes propios** (`ColorCard`, `Badge`,
+  `ModuleBadge`, `GovernanceRule`, …). Está OK usar valores px/hex exactos cuando
+  se traduce un diseño de Figma con fidelidad (`text-[48px]`, `gap-[72px]`,
+  `bg-[#004c97]`); no es obligatorio pasar por tokens de Astra.
+- **Astra sigue disponible** como base opcional: los paquetes están instalados y
+  el shell (`App.tsx`) todavía usa `ThemeProvider`, `AstraLogo`, `Avatar`,
+  `useTheme`, y su CSS (`@figma/astraui/styles.css`) sigue importado en
+  `index.css`. No romper eso sin migrarlo. Si un componente de Astra resuelve
+  bien un caso, se puede usar — pero no es el camino por defecto.
+- `ForceLightTheme` fuerza tema claro al montar (vía `useTheme`).
+- Si en algún momento se quiere sacar Astra del todo: hay que reescribir `App.tsx`
+  en Tailwind puro, quitar el import de `@figma/astraui/styles.css`, y migrar
+  `IntroduccionPage`, `SemanticColorsPage`, `MisComponentesPage` y los 7
+  `components/demo/` (todos usan clases de tokens de Astra: `bg-brand-*`,
+  `text-text-*`, `gap-xl`, `rounded-corner-md`…). Los demos hoy no se enrutan.
+- NO agregar reglas `@source` para `@figma/astraui` en Tailwind: su CSS ya viene
+  pre-compilado.
+- Para leer archivos dentro de `node_modules/@figma/*` (pnpm/symlinks): no usar
+  `find`/glob, usar `ls`, `cat`, lectura por ruta exacta.
+
+### Traer diseños de Figma
+
+- MCP local **Figma Dev Mode** (`figma-dev-mode`, `http://127.0.0.1:3845/mcp`)
+  conectado. Requiere la app de escritorio de Figma abierta con el archivo.
+- Flujo: seleccionar el nodo en Figma (o pasar link) → `get_design_context` /
+  `get_metadata` / `get_variable_defs` / `get_screenshot` → adaptar a Tailwind +
+  componentes propios (no pegar el código crudo) → verificar en el navegador.
+- Assets (iconos/imágenes) exportados de Figma se descargan y commitean en
+  `src/assets/` (las URLs `localhost:3845/assets/...` expiran en ~7 días).
 
 ## Git / flujo de trabajo
 
@@ -81,7 +109,10 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
 
 ## Trabajo en curso
 
-- `BrandColorsPage` y `SemanticColorsPage` son placeholders — falta traer su
-  contenido (probablemente desde Figma).
+- `SemanticColorsPage` es placeholder — falta traer su contenido desde Figma
+  (misma estructura que `BrandColorsPage`).
 - `MisComponentesPage`: sección "Módulos" vacía, se irá llenando conforme lleguen
   de Figma.
+- Pendiente (opcional): migrar el shell (`App.tsx`) y las páginas restantes fuera
+  de Astra hacia Tailwind puro.
+- `AGENTS.md` (para Codex) duplica esta guía; mantener ambos en sync si se edita.
