@@ -51,6 +51,8 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
   - `components/ColorCard/` — tarjeta de color (variantes primary/secondary/
     tertiary/gradient)
   - `components/Badge/` — píldora de etiqueta de uso
+  - `components/TokenTag/` — píldora gris de ruta/token; recorta con "…" +
+    tooltip con el texto completo si no entra. Usar siempre para ese tipo de etiqueta.
   - `components/ModuleBadge/` — eyebrow con icono del módulo
   - `components/GovernanceRule/` — fila numerada de regla de gobernanza
 - `src/imports/` — **código generado por Figma Make**. Frames, SVGs (`svg-*.ts`) e
