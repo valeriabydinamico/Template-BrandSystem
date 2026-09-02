@@ -13,6 +13,7 @@ import {
   MessageSquare,
   Layers,
   Palette,
+  Type,
   BookOpen,
   ChevronDown,
   PanelLeftClose,
@@ -25,6 +26,7 @@ import { IntroduccionPage } from './components/IntroduccionPage'
 import { GlobalColorsPage } from './components/GlobalColorsPage'
 import { BrandColorsPage } from './components/BrandColorsPage'
 import { SemanticColorsPage } from './components/SemanticColorsPage'
+import { TypographyPage } from './components/TypographyPage'
 import { AjustesPage } from './components/AjustesPage'
 import brandMarkIcon from '@/assets/color-system-badge-icon.svg'
 
@@ -36,6 +38,7 @@ type SidebarPage =
   | 'folder'
   | 'mis-componentes'
   | 'ajustes'
+  | 'typography'
   | 'color'
 type ColorPage = 'global-colors' | 'brand-colors' | 'semantic-colors'
 type DemoSection =
@@ -285,6 +288,14 @@ function Sidebar({
             })}
           </div>
         )}
+
+        <NavItem
+          Icon={Type}
+          label="Typography"
+          active={activePage === 'typography'}
+          onClick={() => setActivePage('typography')}
+          collapsed={collapsed}
+        />
       </nav>
 
       {/* Utilidades */}
@@ -369,6 +380,8 @@ function AppShell() {
           <MisComponentesPage />
         ) : activePage === 'ajustes' ? (
           <AjustesPage />
+        ) : activePage === 'typography' ? (
+          <TypographyPage />
         ) : activePage === 'color' ? (
           <div className="flex flex-col gap-xs">
             {activeColorPage === 'global-colors' && <GlobalColorsPage />}

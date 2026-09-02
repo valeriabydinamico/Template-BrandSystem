@@ -43,6 +43,9 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
   - `BrandColorsPage` — documenta "02 Brand Colors" de Figma con Tailwind +
     componentes propios (hecho, sin Astra)
   - `SemanticColorsPage` — placeholder, pendiente de contenido
+  - `TypographyPage` — placeholder (solo `PageHeader`, módulo "Type System").
+    Pendiente de traer la escala/familias/estilos desde Figma. Ítem propio en el
+    sidebar (icono `Type`), icono de módulo en `src/assets/type-badge-icon.svg`.
   - `MisComponentesPage` — **handbook**: catálogo vivo de todos los componentes
     propios (uno rendereado por sección) para revisarlos y ajustarlos. Se entra
     por el icon button (Layers) del pie del sidebar.
@@ -141,8 +144,9 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
 
 ## Trabajo en curso
 
-- `SemanticColorsPage` es placeholder — falta traer su contenido desde Figma
-  (misma estructura que `BrandColorsPage`).
+- `SemanticColorsPage` ya está documentada (secciones + gobernanza + meta-footer).
+- `TypographyPage` es placeholder — falta traer escala/familias/estilos desde Figma.
+- `AjustesPage` es placeholder vacío.
 - `MisComponentesPage`: sección "Módulos" vacía, se irá llenando conforme lleguen
   de Figma.
 - Pendiente (opcional): migrar el shell (`App.tsx`) y las páginas restantes fuera
