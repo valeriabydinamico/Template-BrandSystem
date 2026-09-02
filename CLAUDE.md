@@ -104,8 +104,9 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
 - **El sidebar (`Sidebar` en `App.tsx`) ya está en Tailwind puro**, alineado con
   la UI de la documentación (superficie `#fafbfc`, borde `#e3e7ee`, caja de icono
   `#596879`, activo = pastilla `#e1f0ff` / texto `#004c97`). `main` es `bg-white`.
-  El pie del sidebar son dos icon buttons: "Mis componentes" (Layers) y "Ajustes"
-  (cog).
+  El pie del sidebar son icon buttons: "Mis componentes" (Layers), "Ajustes"
+  (cog) y comprimir/expandir (`PanelLeftClose`/`Open`). Comprimido = rail de
+  64px (solo iconos); el estado se guarda en `localStorage` (`sidebar-collapsed`).
 - Si en algún momento se quiere sacar Astra del todo: falta reescribir el
   `ThemeProvider`/`ForceLightTheme` y la rama de demos de `App.tsx`, quitar el
   import de `@figma/astraui/styles.css`, y migrar

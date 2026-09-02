@@ -15,34 +15,10 @@ import {
   Palette,
   BookOpen,
   ChevronDown,
+  PanelLeftClose,
+  PanelLeftOpen,
+  type LucideIcon,
 } from 'lucide-react'
-
-const IconButton = ({
-  label,
-  active,
-  onClick,
-  children,
-}: {
-  label: string
-  active: boolean
-  onClick: () => void
-  children: React.ReactNode
-}) => (
-  <button
-    type="button"
-    onClick={onClick}
-    title={label}
-    aria-label={label}
-    aria-pressed={active}
-    className={`flex size-[34px] shrink-0 items-center justify-center rounded-[10px] transition-colors ${
-      active
-        ? 'bg-[#e1f0ff] text-[#004c97]'
-        : 'text-[#8a94a8] hover:bg-[#eef2f8] hover:text-[#576175]'
-    }`}
-  >
-    {children}
-  </button>
-)
 
 import { MisComponentesPage } from './components/MisComponentesPage'
 import { IntroduccionPage } from './components/IntroduccionPage'
@@ -117,6 +93,37 @@ function navItemClass(active: boolean) {
   }`
 }
 
+function IconButton({
+  label,
+  active,
+  onClick,
+  className = '',
+  children,
+}: {
+  label: string
+  active: boolean
+  onClick: () => void
+  className?: string
+  children: React.ReactNode
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      title={label}
+      aria-label={label}
+      aria-pressed={active}
+      className={`flex size-[34px] shrink-0 items-center justify-center rounded-[10px] transition-colors ${
+        active
+          ? 'bg-[#e1f0ff] text-[#004c97]'
+          : 'text-[#8a94a8] hover:bg-[#eef2f8] hover:text-[#576175]'
+      } ${className}`}
+    >
+      {children}
+    </button>
+  )
+}
+
 function NavEyebrow({ children }: { children: React.ReactNode }) {
   return (
     <p className="px-[12px] pb-[4px] pt-[6px] font-semibold text-[11px] uppercase leading-[14px] tracking-[0.6px] text-[#8a94a8]">
@@ -126,19 +133,28 @@ function NavEyebrow({ children }: { children: React.ReactNode }) {
 }
 
 function NavItem({
-  icon,
+  Icon,
   label,
   active,
   onClick,
+  collapsed,
 }: {
-  icon: React.ReactNode
+  Icon: LucideIcon
   label: string
   active: boolean
   onClick: () => void
+  collapsed: boolean
 }) {
+  if (collapsed) {
+    return (
+      <IconButton label={label} active={active} onClick={onClick}>
+        <Icon className="size-[18px]" strokeWidth={1.75} />
+      </IconButton>
+    )
+  }
   return (
     <button onClick={onClick} className={navItemClass(active)}>
-      <span className="grid size-[18px] shrink-0 place-items-center">{icon}</span>
+      <Icon className="size-[18px] shrink-0" strokeWidth={1.75} />
       <span className="flex-1 whitespace-nowrap">{label}</span>
     </button>
   )
@@ -151,6 +167,8 @@ function Sidebar({
   setActiveColorPage,
   colorOpen,
   setColorOpen,
+  collapsed,
+  setCollapsed,
 }: {
   activePage: SidebarPage
   setActivePage: (p: SidebarPage) => void
@@ -158,60 +176,91 @@ function Sidebar({
   setActiveColorPage: (p: ColorPage) => void
   colorOpen: boolean
   setColorOpen: (fn: (o: boolean) => boolean) => void
+  collapsed: boolean
+  setCollapsed: (fn: (c: boolean) => boolean) => void
 }) {
   const colorGroupActive = activePage === 'color'
 
+  // En modo comprimido, tocar "Color system" primero expande el sidebar.
+  const onColorGroup = () => {
+    if (collapsed) {
+      setCollapsed(() => false)
+      setColorOpen(() => true)
+    } else {
+      setColorOpen((o) => !o)
+    }
+  }
+
   return (
-    <aside className="flex w-[264px] shrink-0 flex-col border-r border-[#e3e7ee] bg-[#fafbfc]">
+    <aside
+      className={`flex shrink-0 flex-col border-r border-[#e3e7ee] bg-[#fafbfc] transition-[width] duration-200 ${
+        collapsed ? 'w-[64px]' : 'w-[264px]'
+      }`}
+    >
       {/* Marca */}
-      <div className="flex shrink-0 items-center gap-[12px] border-b border-[#eef2f8] px-[20px] py-[20px]">
+      <div
+        className={`flex shrink-0 items-center border-b border-[#eef2f8] py-[20px] ${
+          collapsed ? 'justify-center px-0' : 'gap-[12px] px-[20px]'
+        }`}
+      >
         <div className="flex size-[36px] shrink-0 items-center justify-center rounded-[10px] bg-[#596879]">
           <img src={brandMarkIcon} alt="" className="block size-[20px]" />
         </div>
-        <div className="flex min-w-0 flex-col">
-          <span className="font-semibold text-[11px] uppercase leading-[14px] tracking-[0.6px] text-[#8a94a8]">
-            Design System
-          </span>
-          <span className="truncate font-bold text-[15px] leading-[20px] text-[#2f3945]">
-            BrandSystem
-          </span>
-        </div>
+        {!collapsed && (
+          <div className="flex min-w-0 flex-col">
+            <span className="font-semibold text-[11px] uppercase leading-[14px] tracking-[0.6px] text-[#8a94a8]">
+              Design System
+            </span>
+            <span className="truncate font-bold text-[15px] leading-[20px] text-[#2f3945]">
+              BrandSystem
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Navegación */}
-      <nav className="flex flex-1 flex-col gap-[2px] overflow-y-auto px-[12px] py-[16px]">
-        <NavEyebrow>Contenido</NavEyebrow>
+      <nav
+        className={`flex flex-1 flex-col gap-[2px] overflow-y-auto px-[12px] py-[16px] ${
+          collapsed ? 'items-center' : ''
+        }`}
+      >
+        {!collapsed && <NavEyebrow>Contenido</NavEyebrow>}
 
         <NavItem
-          icon={<Home className="size-full" strokeWidth={1.75} />}
+          Icon={Home}
           label="Introducción"
           active={activePage === 'introduccion'}
           onClick={() => setActivePage('introduccion')}
+          collapsed={collapsed}
         />
 
         {/* Grupo Color system */}
-        <button
-          onClick={() => setColorOpen((o) => !o)}
-          className={`${NAV_ITEM} ${
-            colorGroupActive && !colorOpen
-              ? 'bg-[#e1f0ff] font-semibold text-[#004c97]'
-              : colorGroupActive
-                ? 'font-semibold text-[#004c97] hover:bg-[#eef2f8]'
-                : 'font-medium text-[#576175] hover:bg-[#eef2f8]'
-          }`}
-        >
-          <span className="grid size-[18px] shrink-0 place-items-center">
-            <Palette className="size-full" strokeWidth={1.75} />
-          </span>
-          <span className="flex-1 whitespace-nowrap">Color system</span>
-          <ChevronDown
-            className={`size-[14px] shrink-0 text-[#8a94a8] transition-transform duration-200 ${
-              colorOpen ? 'rotate-180' : ''
+        {collapsed ? (
+          <IconButton label="Color system" active={colorGroupActive} onClick={onColorGroup}>
+            <Palette className="size-[18px]" strokeWidth={1.75} />
+          </IconButton>
+        ) : (
+          <button
+            onClick={onColorGroup}
+            className={`${NAV_ITEM} ${
+              colorGroupActive && !colorOpen
+                ? 'bg-[#e1f0ff] font-semibold text-[#004c97]'
+                : colorGroupActive
+                  ? 'font-semibold text-[#004c97] hover:bg-[#eef2f8]'
+                  : 'font-medium text-[#576175] hover:bg-[#eef2f8]'
             }`}
-          />
-        </button>
+          >
+            <Palette className="size-[18px] shrink-0" strokeWidth={1.75} />
+            <span className="flex-1 whitespace-nowrap">Color system</span>
+            <ChevronDown
+              className={`size-[14px] shrink-0 text-[#8a94a8] transition-transform duration-200 ${
+                colorOpen ? 'rotate-180' : ''
+              }`}
+            />
+          </button>
+        )}
 
-        {colorOpen && (
+        {!collapsed && colorOpen && (
           <div className="my-[2px] ml-[27px] flex flex-col gap-[1px] border-l border-[#e3e7ee] pl-[11px]">
             {colorPages.map((p) => {
               const isActive = activePage === 'color' && activeColorPage === p.id
@@ -236,11 +285,14 @@ function Sidebar({
             })}
           </div>
         )}
-
       </nav>
 
       {/* Utilidades */}
-      <div className="flex shrink-0 items-center gap-[4px] border-t border-[#eef2f8] px-[16px] py-[12px]">
+      <div
+        className={`flex shrink-0 gap-[4px] border-t border-[#eef2f8] px-[12px] py-[12px] ${
+          collapsed ? 'flex-col items-center' : 'items-center'
+        }`}
+      >
         <IconButton
           label="Mis componentes"
           active={activePage === 'mis-componentes'}
@@ -255,6 +307,18 @@ function Sidebar({
         >
           <Settings className="size-[18px]" strokeWidth={1.75} />
         </IconButton>
+        <IconButton
+          label={collapsed ? 'Expandir menú' : 'Comprimir menú'}
+          active={false}
+          onClick={() => setCollapsed((c) => !c)}
+          className={collapsed ? '' : 'ml-auto'}
+        >
+          {collapsed ? (
+            <PanelLeftOpen className="size-[18px]" strokeWidth={1.75} />
+          ) : (
+            <PanelLeftClose className="size-[18px]" strokeWidth={1.75} />
+          )}
+        </IconButton>
       </div>
     </aside>
   )
@@ -265,6 +329,21 @@ function AppShell() {
   const [activeSection, setActiveSection] = useState<DemoSection>('buttons')
   const [activeColorPage, setActiveColorPage] = useState<ColorPage>('global-colors')
   const [colorOpen, setColorOpen] = useState(true)
+  const [collapsed, setCollapsed] = useState(() => {
+    try {
+      return localStorage.getItem('sidebar-collapsed') === '1'
+    } catch {
+      return false
+    }
+  })
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('sidebar-collapsed', collapsed ? '1' : '0')
+    } catch {
+      /* almacenamiento no disponible */
+    }
+  }, [collapsed])
 
   const current = sections.find(s => s.id === activeSection)!
 
@@ -278,6 +357,8 @@ function AppShell() {
         setActiveColorPage={setActiveColorPage}
         colorOpen={colorOpen}
         setColorOpen={setColorOpen}
+        collapsed={collapsed}
+        setCollapsed={setCollapsed}
       />
 
       {/* Main content */}
