@@ -22,7 +22,7 @@ const gradients = [
 
 function GradientGrid() {
   return (
-    <div className="grid grid-cols-[repeat(3,minmax(0,1fr))] gap-x-[32px] gap-y-[32px] relative w-full" data-name="gradient-grid">
+    <div className="grid grid-cols-[repeat(3,minmax(0,1fr))] gap-x-[24px] gap-y-[24px] relative w-full" data-name="gradient-grid">
       {gradients.map(({ name, colorTop, colorBottom, token }) => (
         <div key={token} className="w-full h-[200px]">
           <ColorCard
