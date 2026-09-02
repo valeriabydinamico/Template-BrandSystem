@@ -5,9 +5,17 @@ Guía para cualquier sesión de Claude Code que trabaje en este repo.
 ## Qué es
 
 Sitio de documentación de un **design system** ("Template - BrandSystem"),
-exportado desde **Figma Make**. Muestra el color system y los componentes de la
-marca. Single-page app en React, sin routing real (la navegación es state en
+exportado desde **Figma Make**. Documenta las decisiones estructurales de la
+marca — **Color System** (Global / Brand / Semantic), **Typography**
+(Foundations / System), **Visual Styles** y **Layout Grids** (System /
+Application) — más una **Introducción** y un **handbook** de componentes propios.
+Single-page app en React, sin routing real (la navegación es state en
 `src/app/App.tsx`).
+
+Cada página de documentación sigue la misma estructura traída de Figma:
+`PageHeader` (IntroCard) → secciones con cards/tokens en vivo → `GovernanceFooter`
+(reglas de gobernanza) → `MetaFooter`. Responsive con breakpoint **1600px** de
+viewport (igual que Brand Colors).
 
 Proyecto original en Figma:
 https://www.figma.com/design/i8FTndoqsyBd5GyaRme2nR/Template---BrandSystem
@@ -69,15 +77,20 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
     (callout aclaratorio), `TypePreview`, `MetaRow`. En el handbook bajo
     "Helpers de documentación". `components/typography/shared.tsx` ya solo tiene
     `FONT`.
-  - `MisComponentesPage` — **handbook**: catálogo vivo de todos los componentes
-    propios (uno rendereado por sección) para revisarlos y ajustarlos. Se entra
-    por el icon button (Layers) del pie del sidebar.
+  - `MisComponentesPage` — **handbook**: catálogo vivo de los componentes propios
+    (PageHeader, ModuleBadge, Badge, GovernanceRule, GovernanceFooter, MetaFooter,
+    TokenTag, Note, ColorCard, SemanticColorCard) + una sección "Helpers de
+    documentación" (SectionHeader, DocNote, TypePreview, MetaRow). Cada uno
+    rendereado en vivo, con índice de navegación. Se entra por el icon button
+    (Layers) del pie del sidebar.
   - `AjustesPage` — placeholder vacío. Se entra por el icon button (cog) del pie
     del sidebar.
   - `components/demo/` — demos por categoría (Buttons, Inputs, Media, Feedback,
     Navigation, Toolbar, PromptChat). Nota: hoy `App.tsx` no las enruta.
   - `components/PageHeader/` — encabezado de página (IntroCard: eyebrow de
-    módulo + título + copy). Lo usan `GlobalColorsPage` y `BrandColorsPage`.
+    módulo + título + copy). Props `{module, title, paragraphs, moduleIconSrc?}`
+    (`null` en `paragraphs` = línea en blanco). Lo usan TODAS las páginas de
+    documentación.
   - `components/ColorCard/` — documenta un **primitive** (variantes primary/
     secondary/tertiary/gradient)
   - `components/SemanticColorCard/` — documenta un **token semántico**
@@ -94,11 +107,11 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
   - `components/ModuleBadge/` — eyebrow con icono del módulo
   - `components/GovernanceRule/` — fila numerada de regla de gobernanza
   - `components/GovernanceFooter/` — bloque completo de "Gobernanza" (header +
-    reglas). Props `title` + `rules: string[]`. Lo usan `BrandColorsPage` y
-    `SemanticColorsPage`.
+    reglas). Props `title` + `rules: string[]`. Lo usan Brand / Semantic /
+    Typography (×2) / Visual Styles / Grids (×2).
   - `components/MetaFooter/` — barra final (metadato de versión + pastilla de
-    estado). Props `label` + `status`. Lo usan `BrandColorsPage` y
-    `SemanticColorsPage`.
+    estado). Props `label` + `status`. Lo usan las mismas páginas que
+    `GovernanceFooter`.
   - `components/Note/` — nota informativa (fondo crema + borde e icono naranja
     `#ad5301`, texto regular 14/20, padding 12, gap 8) bajo las grillas de tokens
     del Color System. El icono se alinea a la 1ª línea (centrado si es 1 línea).
@@ -171,13 +184,17 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
 
 ## Trabajo en curso
 
-- `SemanticColorsPage`, `Typography` (×2), `VisualStylesPage` y `Grids` (×2) ya
-  están documentadas.
-- `AjustesPage` es placeholder vacío.
+- Documentadas: Global / Brand / Semantic Colors, Typography (×2), Visual Styles,
+  Grids (×2), Introducción, handbook.
+- `AjustesPage` es placeholder vacío (icon button "cog" del sidebar).
+- `GlobalColorsPage` sigue renderizando el frame crudo de `src/imports/` (no
+  re-hecho con componentes propios como el resto).
 - Fuentes de ejemplo del Type System (Manrope / Source Serif 4 / JetBrains Mono)
-  se cargan en `src/styles/fonts.css`; vars `--font-brand` / `--font-brand-editorial`.
-- `MisComponentesPage`: sección "Módulos" vacía, se irá llenando conforme lleguen
-  de Figma.
-- Pendiente (opcional): migrar el shell (`App.tsx`) y las páginas restantes fuera
-  de Astra hacia Tailwind puro.
-- `AGENTS.md` (para Codex) duplica esta guía; mantener ambos en sync si se edita.
+  se cargan en `src/styles/fonts.css`; vars `--font-brand` /
+  `--font-brand-editorial`.
+- Pendiente (opcional): migrar el shell (`App.tsx` — `ThemeProvider` + rama de
+  demos), `MisComponentesPage` y los 7 `components/demo/` fuera de Astra a
+  Tailwind puro; entonces se puede quitar `@figma/astraui/styles.css`.
+- ⚠️ `AGENTS.md` (para Codex) está **desactualizado** — se commiteó por error hace
+  varias sesiones y no se mantuvo. Si se retoma Codex, reescribirlo desde este
+  archivo.
