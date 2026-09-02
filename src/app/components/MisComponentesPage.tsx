@@ -21,16 +21,24 @@ function Section({
   id,
   name,
   description,
+  divider = true,
   children,
 }: {
   id: string
   name: string
   description: string
+  /** Línea separadora arriba (separa este componente del anterior). */
+  divider?: boolean
   children: React.ReactNode
 }) {
   return (
-    <section id={id} className="flex scroll-mt-[24px] flex-col gap-[20px]">
-      <div className="flex flex-col gap-[4px] border-b border-[#e3e7ee] pb-[12px]">
+    <section
+      id={id}
+      className={`flex scroll-mt-[24px] flex-col gap-[20px] ${
+        divider ? 'border-t border-[#e3e7ee] pt-[44px]' : ''
+      }`}
+    >
+      <div className="flex flex-col gap-[4px]">
         <h2 className="font-bold text-[22px] leading-[28px] text-[#16181d]">{name}</h2>
         <p className="font-normal text-[14px] leading-[20px] text-[#5f6b78]">{description}</p>
       </div>
@@ -147,11 +155,12 @@ export function MisComponentesPage() {
       />
 
       <div className="flex w-full items-start gap-[40px] px-[40px] pb-[80px] pt-[16px]">
-        <div className="flex min-w-0 flex-1 flex-col gap-[48px]">
+        <div className="flex min-w-0 flex-1 flex-col">
         <Section
           id="page-header"
           name="PageHeader"
           description="Encabezado de página: eyebrow de módulo + título + copy. Lo usan Global Colors, Brand Colors y esta página."
+          divider={false}
         >
           <Example label="module + title + paragraphs (con línea en blanco)">
             <div className="w-full max-w-[720px] rounded-[12px] border border-[#e3e7ee] bg-white">
@@ -443,7 +452,7 @@ export function MisComponentesPage() {
         </Section>
 
         {/* ── Helpers de las páginas de documentación (components/docs/shared.tsx) ── */}
-        <div className="flex w-full flex-col gap-[6px] border-t border-[#e3e7ee] pt-[24px]">
+        <div className="flex w-full flex-col gap-[6px] border-t-[2px] border-[#c4c9d4] pb-[28px] pt-[44px]">
           <p className="font-bold text-[16px] leading-[22px] text-[#16181d]">
             Helpers de documentación
           </p>
@@ -458,6 +467,7 @@ export function MisComponentesPage() {
           id="section-header"
           name="SectionHeader"
           description="Cabecera de sección: título (bold 28) + descripción (15). Abre cada bloque dentro de una página de documentación."
+          divider={false}
         >
           <Example label="title + description">
             <div className="w-full max-w-[720px]">
