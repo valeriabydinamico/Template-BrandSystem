@@ -35,7 +35,7 @@ function Section({
     <section
       id={id}
       className={`flex scroll-mt-[24px] flex-col gap-[20px] ${
-        divider ? 'border-t border-[#e3e7ee] pt-[44px]' : ''
+        divider ? 'border-t border-[#e3e7ee] pt-[24px]' : ''
       }`}
     >
       <div className="flex flex-col gap-[4px]">
@@ -155,7 +155,7 @@ export function MisComponentesPage() {
       />
 
       <div className="flex w-full items-start gap-[40px] px-[40px] pb-[80px] pt-[16px]">
-        <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex min-w-0 flex-1 flex-col gap-[44px]">
         <Section
           id="page-header"
           name="PageHeader"
@@ -452,7 +452,7 @@ export function MisComponentesPage() {
         </Section>
 
         {/* ── Helpers de las páginas de documentación (components/docs/shared.tsx) ── */}
-        <div className="flex w-full flex-col gap-[6px] border-t-[2px] border-[#c4c9d4] pb-[28px] pt-[44px]">
+        <div className="flex w-full flex-col gap-[6px] border-t-[2px] border-[#c4c9d4] pt-[24px]">
           <p className="font-bold text-[16px] leading-[22px] text-[#16181d]">
             Helpers de documentación
           </p>
