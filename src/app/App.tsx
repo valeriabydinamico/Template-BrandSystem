@@ -14,6 +14,7 @@ import {
   Layers,
   Palette,
   Type,
+  Shapes,
   BookOpen,
   ChevronDown,
   PanelLeftClose,
@@ -28,6 +29,7 @@ import { BrandColorsPage } from './components/BrandColorsPage'
 import { SemanticColorsPage } from './components/SemanticColorsPage'
 import { TypographyFoundationsPage } from './components/TypographyFoundationsPage'
 import { TypographySystemPage } from './components/TypographySystemPage'
+import { VisualStylesPage } from './components/VisualStylesPage'
 import { AjustesPage } from './components/AjustesPage'
 import brandMarkIcon from '@/assets/color-system-badge-icon.svg'
 
@@ -40,6 +42,7 @@ type SidebarPage =
   | 'mis-componentes'
   | 'ajustes'
   | 'typography'
+  | 'visual-styles'
   | 'color'
 type ColorPage = 'global-colors' | 'brand-colors' | 'semantic-colors'
 type TypographyPageId = 'foundations' | 'system'
@@ -373,6 +376,14 @@ function Sidebar({
             />
           ))}
         </NavGroup>
+
+        <NavItem
+          Icon={Shapes}
+          label="Visual styles"
+          active={activePage === 'visual-styles'}
+          onClick={() => setActivePage('visual-styles')}
+          collapsed={collapsed}
+        />
       </nav>
 
       {/* Utilidades */}
@@ -468,6 +479,8 @@ function AppShell() {
             {activeTypographyPage === 'foundations' && <TypographyFoundationsPage />}
             {activeTypographyPage === 'system' && <TypographySystemPage />}
           </div>
+        ) : activePage === 'visual-styles' ? (
+          <VisualStylesPage />
         ) : activePage === 'color' ? (
           <div className="flex flex-col gap-xs">
             {activeColorPage === 'global-colors' && <GlobalColorsPage />}

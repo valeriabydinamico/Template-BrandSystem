@@ -51,6 +51,11 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
     (`FONT`, `SectionHeader`, `TypePreview`, `MetaRow`, `QANote`). Icono de módulo
     en `src/assets/type-badge-icon.svg`. Responsive con breakpoint 1600 (+ la
     tabla de jerarquía colapsa a cards por debajo de 1180).
+  - `VisualStylesPage` — ítem "Visual styles" del sidebar (icono `Shapes`).
+    Traída de Figma (nodo 214:2446). Documenta spacing / border radius / borders
+    / shadows / sizing con token cards (preview + valor + `TokenTag` + uso).
+    Reutiliza `PageHeader` / `GovernanceFooter` / `MetaFooter` / `TokenTag`.
+    Icono de módulo en `src/assets/visual-styles-badge-icon.svg`. Responsive 1600.
   - `MisComponentesPage` — **handbook**: catálogo vivo de todos los componentes
     propios (uno rendereado por sección) para revisarlos y ajustarlos. Se entra
     por el icon button (Layers) del pie del sidebar.
@@ -149,7 +154,8 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
 
 ## Trabajo en curso
 
-- `SemanticColorsPage` y las dos páginas de `Typography` ya están documentadas.
+- `SemanticColorsPage`, las dos páginas de `Typography` y `VisualStylesPage` ya
+  están documentadas.
 - `AjustesPage` es placeholder vacío.
 - Fuentes de ejemplo del Type System (Manrope / Source Serif 4 / JetBrains Mono)
   se cargan en `src/styles/fonts.css`; vars `--font-brand` / `--font-brand-editorial`.
