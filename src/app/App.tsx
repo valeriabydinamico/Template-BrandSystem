@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, startTransition } from 'react'
+import { createPortal } from 'react-dom'
 import { ThemeProvider, AstraLogo, useTheme } from '@figma/astraui'
 import {
   Home,
@@ -183,7 +184,11 @@ function NavItem({
   )
 }
 
-/** Grupo colapsable de la navegación (Color system, Typography…). */
+/**
+ * Grupo colapsable de la navegación (Color system, Typography…).
+ * - Expandido: fila con chevron + sublista.
+ * - Comprimido: icono que abre un menú flotante con las sub-páginas.
+ */
 function NavGroup({
   Icon,
   label,
@@ -201,11 +206,62 @@ function NavGroup({
   collapsed: boolean
   children: React.ReactNode
 }) {
+  const [flyout, setFlyout] = useState(false)
+  const [pos, setPos] = useState({ top: 0, left: 0 })
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const panelRef = useRef<HTMLDivElement>(null)
+
+  // Cerrar el flyout al expandir el sidebar.
+  useEffect(() => {
+    if (!collapsed) setFlyout(false)
+  }, [collapsed])
+
+  // Cerrar al hacer click fuera o con Escape.
+  useEffect(() => {
+    if (!flyout) return
+    const onPointerDown = (e: PointerEvent) => {
+      const t = e.target as Node
+      if (!wrapRef.current?.contains(t) && !panelRef.current?.contains(t)) setFlyout(false)
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setFlyout(false)
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [flyout])
+
   if (collapsed) {
+    const toggleFlyout = () => {
+      const r = wrapRef.current?.getBoundingClientRect()
+      if (r) setPos({ top: r.top, left: r.right + 8 })
+      setFlyout((v) => !v)
+    }
     return (
-      <IconButton label={label} active={groupActive} onClick={onToggle}>
-        <Icon className="size-[18px]" strokeWidth={1.75} />
-      </IconButton>
+      <div ref={wrapRef} className="relative">
+        <IconButton label={label} active={groupActive || flyout} onClick={toggleFlyout}>
+          <Icon className="size-[18px]" strokeWidth={1.75} />
+        </IconButton>
+        {flyout &&
+          createPortal(
+            <div
+              ref={panelRef}
+              style={{ position: 'fixed', top: pos.top, left: pos.left }}
+              className="z-[60] flex min-w-[184px] flex-col gap-[1px] rounded-[12px] border border-[#e3e7ee] bg-white p-[6px] shadow-[0_10px_30px_rgba(62,73,88,0.18)]"
+            >
+              <p className="px-[10px] pb-[4px] pt-[6px] font-semibold text-[11px] uppercase leading-[14px] tracking-[0.6px] text-[#8a94a8]">
+                {label}
+              </p>
+              <div onClick={() => setFlyout(false)} className="flex flex-col gap-[1px]">
+                {children}
+              </div>
+            </div>,
+            document.body,
+          )}
+      </div>
     )
   }
   return (

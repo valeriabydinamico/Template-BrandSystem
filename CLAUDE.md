@@ -133,6 +133,10 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
   El pie del sidebar son icon buttons: "Mis componentes" (Layers), "Ajustes"
   (cog) y comprimir/expandir (`PanelLeftClose`/`Open`). Comprimido = rail de
   64px (solo iconos); el estado se guarda en `localStorage` (`sidebar-collapsed`).
+  Comprimido, los grupos (`NavGroup`: Color system / Typography / Grids) abren un
+  **menú flotante** (`createPortal` a `body`, `position: fixed`) con sus
+  sub-páginas; cierra al elegir una, click fuera o Escape. Al cambiar de página
+  el `<main>` vuelve a `scrollTop 0`.
 - Si en algún momento se quiere sacar Astra del todo: falta reescribir el
   `ThemeProvider`/`ForceLightTheme` y la rama de demos de `App.tsx`, quitar el
   import de `@figma/astraui/styles.css`, y migrar
