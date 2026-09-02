@@ -152,7 +152,7 @@ export function ColorCard({
   // rating (nivel) = suave · ratio = sólida · colores según la luminancia del color.
   const panelIsDark = textColor === '#ffffff'
   const badgeBase =
-    'flex items-center justify-center rounded-[20px] px-[12px] py-[8px] font-semibold text-[12px] leading-[16px] whitespace-nowrap'
+    'flex items-center justify-center rounded-[20px] px-[12px] py-[8px] font-semibold text-[14px] leading-[16px] whitespace-nowrap'
   const softBadge = panelIsDark
     ? 'bg-[rgba(255,255,255,0.5)] text-[#16181d]'
     : 'bg-[rgba(22,24,29,0.1)] text-[#16181d]'
