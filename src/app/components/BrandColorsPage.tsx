@@ -106,11 +106,11 @@ const GOVERNANCE_RULES = [
 /* ────────────────────────────────────────────────────────────────────────────
  * Sub-componentes de página
  *
- * Responsive — breakpoint único en 1919px de ancho de viewport:
- *   < 1919px  → apilado: contenido arriba, grilla de cards abajo
- *   ≥ 1919px  → horizontal: contenido a la izquierda (600), cards a la derecha
+ * Responsive — breakpoint único en 1600px de ancho de viewport (incluye sidebar):
+ *   < 1600px  → apilado: contenido arriba, grilla de cards abajo
+ *   ≥ 1600px  → horizontal: contenido a la izquierda (600), cards a la derecha
  * En ambos casos la grilla agrupa máximo 2 cards por fila.
- * (max-[1919px] / min-[1919px] son mutuamente excluyentes a propósito: evitan
+ * (max-[1600px] / min-[1600px] son mutuamente excluyentes a propósito: evitan
  *  el problema de orden en la cascada entre `flex-col` y el variant responsive.)
  * ────────────────────────────────────────────────────────────────────────── */
 
@@ -134,14 +134,14 @@ function BrandCard({ data }: { data: BrandColor }) {
 /**
  * Grilla de color cards.
  * - 1 card: ancho máx 500. Alineada a la izquierda en apilado; pegada a la
- *   derecha de su columna en ≥1919 (caso Primary).
+ *   derecha de su columna en ≥1600 (caso Primary).
  * - 2+ cards: 2 por fila, cada una `(100% − 16px) / 2`; el resto pasa a filas
  *   siguientes conservando ese ancho (la card suelta no se estira — caso Accent).
  */
 function CardGrid({ cards }: { cards: BrandColor[] }) {
   if (cards.length === 1) {
     return (
-      <div className="flex w-full min-[1919px]:justify-end">
+      <div className="flex w-full min-[1600px]:justify-end">
         <div className="w-full max-w-[500px]">
           <BrandCard data={cards[0]} />
         </div>
@@ -172,9 +172,9 @@ function BrandSection({
   cards: BrandColor[]
 }) {
   return (
-    <section className="flex w-full items-start gap-[72px] max-[1919px]:flex-col min-[1919px]:flex-row">
+    <section className="flex w-full items-start gap-[72px] max-[1600px]:flex-col min-[1600px]:flex-row">
       {/* section-header */}
-      <div className="flex flex-col items-start gap-[24px] max-[1919px]:w-full min-[1919px]:w-[600px] min-[1919px]:shrink-0">
+      <div className="flex flex-col items-start gap-[24px] max-[1600px]:w-full min-[1600px]:w-[600px] min-[1600px]:shrink-0">
         <h3 className="w-full font-bold text-[40px] leading-[44px] text-[#16181d]">{title}</h3>
         <div className="w-full font-normal text-[16px] leading-[24px] text-[#576175]">
           {paragraphs.map((p, i) => (
@@ -192,7 +192,7 @@ function BrandSection({
       </div>
 
       {/* color-card-grid */}
-      <div className="max-[1919px]:w-full min-[1919px]:flex-1 min-[1919px]:min-w-0">
+      <div className="max-[1600px]:w-full min-[1600px]:flex-1 min-[1600px]:min-w-0">
         <CardGrid cards={cards} />
       </div>
     </section>
