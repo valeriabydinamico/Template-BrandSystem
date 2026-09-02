@@ -147,7 +147,7 @@ const BRAND_STYLES: StyleToken[] = [
    evitan el problema de orden en la cascada de Tailwind v4 entre una utilidad
    base y su variante responsive (display / border / radius). */
 const TABLE_COLS =
-  'min-[1180px]:grid-cols-[160px_minmax(180px,1.1fr)_120px_92px_60px_84px_96px_minmax(150px,1.3fr)]'
+  'min-[1180px]:grid-cols-[176px_minmax(180px,1.1fr)_120px_92px_60px_84px_96px_minmax(150px,1.3fr)]'
 
 function HeaderCell({ children }: { children: React.ReactNode }) {
   return <span className="font-semibold text-[12px] leading-[16px] text-[#5f6b78]">{children}</span>
