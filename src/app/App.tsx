@@ -1,4 +1,4 @@
-import { useState, useEffect, startTransition } from 'react'
+import { useState, useEffect, useRef, startTransition } from 'react'
 import { ThemeProvider, AstraLogo, useTheme } from '@figma/astraui'
 import {
   Home,
@@ -489,6 +489,12 @@ function AppShell() {
     }
   }, [collapsed])
 
+  // Al abrir cualquier página, el scroll arranca arriba del todo.
+  const mainRef = useRef<HTMLElement>(null)
+  useEffect(() => {
+    mainRef.current?.scrollTo(0, 0)
+  }, [activePage, activeColorPage, activeTypographyPage, activeGridPage])
+
   const current = sections.find(s => s.id === activeSection)!
 
   function goToArea(target: IntroTarget) {
@@ -531,7 +537,7 @@ function AppShell() {
       />
 
       {/* Main content */}
-      <main className="min-w-0 flex-1 overflow-y-auto overflow-x-hidden bg-white">
+      <main ref={mainRef} className="min-w-0 flex-1 overflow-y-auto overflow-x-hidden bg-white">
         {activePage === 'introduccion' ? (
           <IntroduccionPage onNavigate={goToArea} />
         ) : activePage === 'mis-componentes' ? (
