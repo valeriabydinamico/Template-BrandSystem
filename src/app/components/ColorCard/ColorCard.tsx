@@ -144,10 +144,6 @@ export function ColorCard({
   /* ─── Primary & Secondary ─── */
   const isPrimary = variant === 'primary'
 
-  const badgeRowLayout = isPrimary
-    ? 'flex items-start justify-between w-full'
-    : 'flex items-start gap-[8px]'
-
   // Pastillas de contraste — mismo estilo que en SemanticColorCard:
   // rating (nivel) = suave · ratio = sólida · colores según la luminancia del color.
   const panelIsDark = textColor === '#ffffff'
@@ -160,56 +156,59 @@ export function ColorCard({
 
   return (
     <div
-      className={`relative rounded-[16px] p-[20px] flex flex-col w-full h-full ${autoStroke} ${className}`}
+      className={`relative flex w-full flex-col rounded-[16px] p-[20px] ${autoStroke} ${className}`}
       style={{ backgroundColor: color }}
     >
-      {/* Badge row */}
-      <div className={`shrink-0 ${badgeRowLayout}`}>
-        {accessibilityRating ? (
-          <span className={`${badgeBase} ${softBadge}`}>{accessibilityRating}</span>
-        ) : (
-          <span />
-        )}
-        {contrastRatio && <span className={`${badgeBase} ${solidBadge}`}>{contrastRatio}</span>}
-      </div>
+      <div className="flex w-full flex-col gap-[32px]" style={{ color: textColor }}>
 
-      {/* Color info */}
-      <div className="flex flex-col flex-1 items-start justify-between min-h-0 mt-[20px] w-full" style={{ color: textColor }}>
+        {/* Pastillas + nombre */}
+        <div className="flex w-full flex-col gap-[24px]">
+          <div
+            className={
+              isPrimary
+                ? 'flex w-full items-start justify-between'
+                : 'flex items-start gap-[8px]'
+            }
+          >
+            {accessibilityRating ? (
+              <span className={`${badgeBase} ${softBadge}`}>{accessibilityRating}</span>
+            ) : (
+              <span />
+            )}
+            {contrastRatio && <span className={`${badgeBase} ${solidBadge}`}>{contrastRatio}</span>}
+          </div>
 
-        <div className="flex flex-col gap-[6px] w-full shrink-0">
-          <p className="font-bold text-[24px] leading-[28px] w-full">{name}</p>
-          {description && (
-            <p className="font-bold text-[16px] leading-[24px]">{description}</p>
-          )}
+          <div className="flex w-full flex-col gap-[6px] font-bold">
+            <p className="text-[24px] leading-[28px]">{name}</p>
+            {description && <p className="text-[16px] leading-[24px]">{description}</p>}
+          </div>
         </div>
 
-        <div className="flex font-bold text-[16px] leading-[24px] whitespace-nowrap shrink-0 py-[8px]">
-          <span>HEX #</span>
-          <span>{bareHex}</span>
-        </div>
-
-        {(rgb || cmyk) && (
-          <div className="flex gap-[20px] font-bold text-[16px] leading-[0] whitespace-nowrap shrink-0">
+        {/* HEX / RGB / CMYK — etiqueta + valor en dos columnas */}
+        <div className="flex gap-[16px]">
+          <div className="flex flex-col gap-[16px] font-bold text-[16px] leading-[12px]">
+            <p>HEX</p>
+            {rgb && <p>RGB</p>}
+            {cmyk && <p>CMYK</p>}
+          </div>
+          <div className="flex flex-col gap-[16px] font-normal text-[14px] leading-[12px]">
+            <p className="whitespace-nowrap">#{bareHex}</p>
             {rgb && (
-              <div>
-                <p className="leading-[24px] mb-0">R {rgb.r}</p>
-                <p className="leading-[24px] mb-0">G {rgb.g}</p>
-                <p className="leading-[24px]">B {rgb.b}</p>
-              </div>
+              <p className="whitespace-nowrap">
+                {rgb.r}, {rgb.g}, {rgb.b}
+              </p>
             )}
             {cmyk && (
-              <div>
-                <p className="leading-[24px] mb-0">C {cmyk.c}</p>
-                <p className="leading-[24px] mb-0">M {cmyk.m}</p>
-                <p className="leading-[24px] mb-0">Y {cmyk.y}</p>
-                <p className="leading-[24px]">K {cmyk.k}</p>
-              </div>
+              <p className="whitespace-nowrap">
+                {cmyk.c}, {cmyk.m}, {cmyk.y}, {cmyk.k}
+              </p>
             )}
           </div>
-        )}
+        </div>
 
+        {/* Pantone */}
         {pantone && (
-          <div className="flex items-center gap-[8px] text-[16px] leading-[24px] whitespace-nowrap shrink-0">
+          <div className="flex items-center gap-[8px] text-[16px] leading-[24px] whitespace-nowrap">
             <span className="font-bold">P</span>
             <span className="font-normal">{pantone}</span>
           </div>
