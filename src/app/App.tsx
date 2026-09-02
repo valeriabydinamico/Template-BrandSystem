@@ -1,14 +1,5 @@
 import { useState, useEffect, startTransition } from 'react'
-import {
-  ThemeProvider,
-  SidebarNavigation,
-  SidebarButton,
-  SecondaryNav,
-  SecondaryNavItem,
-  Avatar,
-  AstraLogo,
-  useTheme,
-} from '@figma/astraui'
+import { ThemeProvider, AstraLogo, useTheme } from '@figma/astraui'
 import {
   Home,
   Film,
@@ -23,6 +14,7 @@ import {
   Layers,
   Palette,
   BookOpen,
+  ChevronDown,
 } from 'lucide-react'
 
 import { MisComponentesPage } from './components/MisComponentesPage'
@@ -30,6 +22,7 @@ import { IntroduccionPage } from './components/IntroduccionPage'
 import { GlobalColorsPage } from './components/GlobalColorsPage'
 import { BrandColorsPage } from './components/BrandColorsPage'
 import { SemanticColorsPage } from './components/SemanticColorsPage'
+import brandMarkIcon from '@/assets/color-system-badge-icon.svg'
 
 type SidebarPage = 'introduccion' | 'kit' | 'film' | 'book' | 'folder' | 'mis-componentes' | 'color'
 type ColorPage = 'global-colors' | 'brand-colors' | 'semantic-colors'
@@ -69,112 +62,194 @@ function MisComponentesHeader() {
   )
 }
 
+/* ────────────────────────────────────────────────────────────────────────────
+ * Sidebar — Tailwind puro, alineado con la UI de la documentación
+ * (mismo lenguaje que PageHeader / GovernanceFooter):
+ *   superficie #fafbfc · borde #e3e7ee · headings #2f3945 · texto #576175 ·
+ *   labels apagados #8a94a8 · caja de icono #596879 · activo = pastilla brand
+ *   #e1f0ff / texto #004c97 (tokens reales de Brand Colors).
+ * ────────────────────────────────────────────────────────────────────────── */
+
+const NAV_ITEM =
+  'flex w-full items-center gap-[12px] rounded-[10px] px-[12px] py-[9px] text-[13px] leading-[18px] transition-colors cursor-pointer text-left'
+
+function navItemClass(active: boolean) {
+  return `${NAV_ITEM} ${
+    active
+      ? 'bg-[#e1f0ff] font-semibold text-[#004c97]'
+      : 'font-medium text-[#576175] hover:bg-[#eef2f8]'
+  }`
+}
+
+function NavEyebrow({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="px-[12px] pb-[4px] pt-[6px] font-semibold text-[11px] uppercase leading-[14px] tracking-[0.6px] text-[#8a94a8]">
+      {children}
+    </p>
+  )
+}
+
+function NavItem({
+  icon,
+  label,
+  active,
+  onClick,
+}: {
+  icon: React.ReactNode
+  label: string
+  active: boolean
+  onClick: () => void
+}) {
+  return (
+    <button onClick={onClick} className={navItemClass(active)}>
+      <span className="grid size-[18px] shrink-0 place-items-center">{icon}</span>
+      <span className="flex-1 whitespace-nowrap">{label}</span>
+    </button>
+  )
+}
+
+function Sidebar({
+  activePage,
+  setActivePage,
+  activeColorPage,
+  setActiveColorPage,
+  colorOpen,
+  setColorOpen,
+}: {
+  activePage: SidebarPage
+  setActivePage: (p: SidebarPage) => void
+  activeColorPage: ColorPage
+  setActiveColorPage: (p: ColorPage) => void
+  colorOpen: boolean
+  setColorOpen: (fn: (o: boolean) => boolean) => void
+}) {
+  const colorGroupActive = activePage === 'color'
+
+  return (
+    <aside className="flex w-[264px] shrink-0 flex-col border-r border-[#e3e7ee] bg-[#fafbfc]">
+      {/* Marca */}
+      <div className="flex shrink-0 items-center gap-[12px] border-b border-[#eef2f8] px-[20px] py-[20px]">
+        <div className="flex size-[36px] shrink-0 items-center justify-center rounded-[10px] bg-[#596879]">
+          <img src={brandMarkIcon} alt="" className="block size-[20px]" />
+        </div>
+        <div className="flex min-w-0 flex-col">
+          <span className="font-semibold text-[11px] uppercase leading-[14px] tracking-[0.6px] text-[#8a94a8]">
+            Design System
+          </span>
+          <span className="truncate font-bold text-[15px] leading-[20px] text-[#2f3945]">
+            BrandSystem
+          </span>
+        </div>
+      </div>
+
+      {/* Navegación */}
+      <nav className="flex flex-1 flex-col gap-[2px] overflow-y-auto px-[12px] py-[16px]">
+        <NavEyebrow>Contenido</NavEyebrow>
+
+        <NavItem
+          icon={<Home className="size-full" strokeWidth={1.75} />}
+          label="Introducción"
+          active={activePage === 'introduccion'}
+          onClick={() => setActivePage('introduccion')}
+        />
+
+        {/* Grupo Color system */}
+        <button
+          onClick={() => setColorOpen((o) => !o)}
+          className={`${NAV_ITEM} ${
+            colorGroupActive && !colorOpen
+              ? 'bg-[#e1f0ff] font-semibold text-[#004c97]'
+              : colorGroupActive
+                ? 'font-semibold text-[#004c97] hover:bg-[#eef2f8]'
+                : 'font-medium text-[#576175] hover:bg-[#eef2f8]'
+          }`}
+        >
+          <span className="grid size-[18px] shrink-0 place-items-center">
+            <Palette className="size-full" strokeWidth={1.75} />
+          </span>
+          <span className="flex-1 whitespace-nowrap">Color system</span>
+          <ChevronDown
+            className={`size-[14px] shrink-0 text-[#8a94a8] transition-transform duration-200 ${
+              colorOpen ? 'rotate-180' : ''
+            }`}
+          />
+        </button>
+
+        {colorOpen && (
+          <div className="my-[2px] ml-[27px] flex flex-col gap-[1px] border-l border-[#e3e7ee] pl-[11px]">
+            {colorPages.map((p) => {
+              const isActive = activePage === 'color' && activeColorPage === p.id
+              return (
+                <button
+                  key={p.id}
+                  onClick={() =>
+                    startTransition(() => {
+                      setActivePage('color')
+                      setActiveColorPage(p.id)
+                    })
+                  }
+                  className={`w-full cursor-pointer rounded-[8px] px-[12px] py-[7px] text-left text-[13px] leading-[18px] transition-colors ${
+                    isActive
+                      ? 'bg-[#e1f0ff] font-semibold text-[#004c97]'
+                      : 'font-medium text-[#576175] hover:bg-[#eef2f8]'
+                  }`}
+                >
+                  {p.label}
+                </button>
+              )
+            })}
+          </div>
+        )}
+
+        <div className="my-[10px] h-px bg-[#eef2f8]" />
+
+        <NavEyebrow>Handbook</NavEyebrow>
+        <NavItem
+          icon={<Layers className="size-full" strokeWidth={1.75} />}
+          label="Mis componentes"
+          active={activePage === 'mis-componentes'}
+          onClick={() => setActivePage('mis-componentes')}
+        />
+      </nav>
+
+      {/* Cuenta */}
+      <div className="flex shrink-0 items-center gap-[10px] border-t border-[#eef2f8] px-[16px] py-[14px]">
+        <div className="grid size-[32px] shrink-0 place-items-center rounded-full bg-[#596879] font-semibold text-[12px] text-white">
+          AK
+        </div>
+        <div className="flex min-w-0 flex-col">
+          <span className="truncate font-semibold text-[13px] leading-[16px] text-[#2f3945]">
+            Editor
+          </span>
+          <span className="truncate text-[11px] leading-[14px] text-[#8a94a8]">Master template</span>
+        </div>
+      </div>
+    </aside>
+  )
+}
+
 function AppShell() {
   const [activePage, setActivePage] = useState<SidebarPage>('introduccion')
   const [activeSection, setActiveSection] = useState<DemoSection>('buttons')
   const [activeColorPage, setActiveColorPage] = useState<ColorPage>('global-colors')
-  const [kitOpen, setKitOpen] = useState(true)
-  const [colorOpen, setColorOpen] = useState(false)
+  const [colorOpen, setColorOpen] = useState(true)
 
   const current = sections.find(s => s.id === activeSection)!
 
   return (
-    <div className="flex h-screen overflow-hidden bg-brand-tertiary">
+    <div className="flex h-screen overflow-hidden bg-[#f1f4f7]">
 
-      {/* Sidebar — matches Astra SecondaryNav token usage */}
-      <aside className="w-[240px] shrink-0 flex flex-col bg-surface-bg border-r border-border-primary">
-
-        {/* Logo header */}
-        <div className="flex items-center gap-lg px-xl shrink-0 h-14 border-b border-border-primary">
-          <AstraLogo size={20} />
-          <span className="text-label text-text-primary">Astra UI Kit</span>
-        </div>
-
-        {/* Nav — same outer padding as SecondaryNav: px-xl py-lg */}
-        <nav className="flex-1 overflow-y-auto px-xl py-lg flex flex-col gap-xs">
-
-          {/* Introducción — home page */}
-          <button
-            onClick={() => setActivePage('introduccion')}
-            className={`flex items-center gap-lg px-lg py-lg w-full rounded-corner-md transition-colors cursor-pointer text-left ${
-              activePage === 'introduccion'
-                ? 'bg-brand-tertiary text-brand-primary'
-                : 'text-text-secondary hover:bg-bg-hover'
-            }`}
-          >
-            <span className="size-5 shrink-0">
-              <Home className="size-full" strokeWidth={1.5} />
-            </span>
-            <span className="text-label-sm whitespace-nowrap">Introducción</span>
-          </button>
-
-          {/* Divider */}
-          <div className="h-px bg-border-primary my-xs" />
-
-          {/* Color system — collapsible group */}
-          <button
-            onClick={() => setColorOpen(o => !o)}
-            className={`flex items-center gap-lg px-lg py-lg w-full rounded-corner-md transition-colors cursor-pointer text-left ${
-              activePage === 'color' && !colorOpen
-                ? 'bg-brand-tertiary text-brand-primary'
-                : activePage === 'color'
-                ? 'text-text-primary'
-                : 'text-text-secondary hover:bg-bg-hover'
-            }`}
-          >
-            <span className="size-5 shrink-0">
-              <Palette className="size-full" strokeWidth={1.5} />
-            </span>
-            <span className="text-label-sm flex-1 whitespace-nowrap">Color system</span>
-            <span
-              className="text-text-tertiary shrink-0 transition-transform duration-200"
-              style={{ fontSize: 11, display: 'inline-block', transform: colorOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}
-            >▾</span>
-          </button>
-
-          {colorOpen && (
-            <div className="ml-lg pl-md border-l border-border-secondary flex flex-col gap-[2px] pb-xs">
-              {colorPages.map(p => {
-                const isActive = activePage === 'color' && activeColorPage === p.id
-                return (
-                  <button
-                    key={p.id}
-                    onClick={() => startTransition(() => { setActivePage('color'); setActiveColorPage(p.id) })}
-                    className={`flex items-center gap-lg px-lg py-lg w-full rounded-corner-md transition-colors cursor-pointer text-left ${
-                      isActive
-                        ? 'bg-brand-tertiary text-brand-primary'
-                        : 'text-text-secondary hover:bg-bg-hover'
-                    }`}
-                  >
-                    <span className="text-label-sm whitespace-nowrap">{p.label}</span>
-                  </button>
-                )
-              })}
-            </div>
-          )}
-
-        </nav>
-
-        {/* Footer */}
-        <div className="shrink-0 border-t border-border-primary px-xl py-lg flex items-center justify-between">
-          <Avatar type="initial" initials="AK" size="medium" shape="circle" />
-          <button
-            onClick={() => setActivePage('mis-componentes')}
-            title="Mis componentes"
-            className={`flex items-center justify-center size-8 rounded-corner-md transition-colors ${
-              activePage === 'mis-componentes'
-                ? 'bg-brand-tertiary text-brand-primary'
-                : 'text-text-secondary hover:bg-bg-hover'
-            }`}
-          >
-            <Layers size={18} strokeWidth={1.5} />
-          </button>
-        </div>
-
-      </aside>
+      <Sidebar
+        activePage={activePage}
+        setActivePage={setActivePage}
+        activeColorPage={activeColorPage}
+        setActiveColorPage={setActiveColorPage}
+        colorOpen={colorOpen}
+        setColorOpen={setColorOpen}
+      />
 
       {/* Main content */}
-      <main className="flex-1 min-w-0 overflow-x-hidden overflow-y-auto bg-brand-tertiary p-2xl p-[0px]">
+      <main className="min-w-0 flex-1 overflow-y-auto overflow-x-hidden bg-white">
         {activePage === 'introduccion' ? (
           <IntroduccionPage />
         ) : activePage === 'mis-componentes' ? (

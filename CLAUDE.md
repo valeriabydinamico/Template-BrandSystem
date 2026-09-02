@@ -93,13 +93,17 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
   se traduce un diseño de Figma con fidelidad (`text-[48px]`, `gap-[72px]`,
   `bg-[#004c97]`); no es obligatorio pasar por tokens de Astra.
 - **Astra sigue disponible** como base opcional: los paquetes están instalados y
-  el shell (`App.tsx`) todavía usa `ThemeProvider`, `AstraLogo`, `Avatar`,
-  `useTheme`, y su CSS (`@figma/astraui/styles.css`) sigue importado en
-  `index.css`. No romper eso sin migrarlo. Si un componente de Astra resuelve
-  bien un caso, se puede usar — pero no es el camino por defecto.
+  el shell (`App.tsx`) todavía usa `ThemeProvider`, `AstraLogo` (solo en la rama
+  de demos, no enrutada) y `useTheme`, y su CSS (`@figma/astraui/styles.css`)
+  sigue importado en `index.css`. No romper eso sin migrarlo. Si un componente de
+  Astra resuelve bien un caso, se puede usar — pero no es el camino por defecto.
 - `ForceLightTheme` fuerza tema claro al montar (vía `useTheme`).
-- Si en algún momento se quiere sacar Astra del todo: hay que reescribir `App.tsx`
-  en Tailwind puro, quitar el import de `@figma/astraui/styles.css`, y migrar
+- **El sidebar (`Sidebar` en `App.tsx`) ya está en Tailwind puro**, alineado con
+  la UI de la documentación (superficie `#fafbfc`, borde `#e3e7ee`, caja de icono
+  `#596879`, activo = pastilla `#e1f0ff` / texto `#004c97`). `main` es `bg-white`.
+- Si en algún momento se quiere sacar Astra del todo: falta reescribir el
+  `ThemeProvider`/`ForceLightTheme` y la rama de demos de `App.tsx`, quitar el
+  import de `@figma/astraui/styles.css`, y migrar
   `IntroduccionPage`, `SemanticColorsPage`, `MisComponentesPage` y los 7
   `components/demo/` (todos usan clases de tokens de Astra: `bg-brand-*`,
   `text-text-*`, `gap-xl`, `rounded-corner-md`…). Los demos hoy no se enrutan.
