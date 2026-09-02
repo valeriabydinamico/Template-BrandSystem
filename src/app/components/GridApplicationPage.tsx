@@ -3,7 +3,7 @@ import { GovernanceFooter } from './GovernanceFooter'
 import { GovernanceRule } from './GovernanceRule'
 import { MetaFooter } from './MetaFooter'
 import { TokenTag } from './TokenTag'
-import { RefNote, SectionHeader } from './grids/shared'
+import { DocNote, SectionHeader } from './docs/shared'
 import layoutGridsBadgeIcon from '@/assets/layout-grids-badge-icon.svg'
 
 /* ────────────────────────────────────────────────────────────────────────────
@@ -186,11 +186,11 @@ export function GridApplicationPage() {
             description="Base inicial de formatos comunes. Debe adaptarse al proyecto: el objetivo es acelerar la configuración, no imponer un set universal de canales."
           />
           <FormatTable />
-          <RefNote title="Referencia configurable">
+          <DocNote title="Referencia configurable">
             Estas medidas y grids funcionan como punto de partida del master. Antes de usar un formato
             en producción, valida las especificaciones vigentes de la plataforma y las necesidades
             reales del cliente.
-          </RefNote>
+          </DocNote>
         </section>
 
         <section className="flex w-full flex-col gap-[24px]">

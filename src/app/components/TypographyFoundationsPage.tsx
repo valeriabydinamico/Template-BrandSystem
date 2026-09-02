@@ -2,7 +2,8 @@ import type { CSSProperties } from 'react'
 import { PageHeader } from './PageHeader'
 import { GovernanceFooter } from './GovernanceFooter'
 import { MetaFooter } from './MetaFooter'
-import { FONT, MetaRow, QANote, SectionHeader, TypePreview } from './typography/shared'
+import { FONT } from './typography/shared'
+import { DocNote, MetaRow, SectionHeader, TypePreview } from './docs/shared'
 import typeBadgeIcon from '@/assets/type-badge-icon.svg'
 
 /* ────────────────────────────────────────────────────────────────────────────
@@ -196,11 +197,11 @@ export function TypographyFoundationsPage() {
           </div>
         </section>
 
-        <QANote title="QA interno — Prueba de dos líneas">
+        <DocNote title="QA interno — Prueba de dos líneas">
           Cuando se modifique manualmente el line-height de una familia, validar siempre el resultado
           con al menos dos líneas de texto antes de aprobar el valor. Esta prueba es un criterio
           interno de construcción, no una regla visual para el cliente.
-        </QANote>
+        </DocNote>
       </div>
 
       <GovernanceFooter title="Gobernanza tipográfica" rules={GOVERNANCE_RULES} />

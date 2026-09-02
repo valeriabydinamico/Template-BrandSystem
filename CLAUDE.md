@@ -50,10 +50,9 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
     sidebar (icono `Type`). Traídas de Figma (nodos 196:6664 / 154:8196).
     Documentan la **configuración de ejemplo** del Type System (Manrope /
     Source Serif 4 / Inter). Reutilizan `PageHeader`, `GovernanceFooter`,
-    `MetaFooter`, `TokenTag`. Helpers compartidos en `components/typography/shared.tsx`
-    (`FONT`, `SectionHeader`, `TypePreview`, `MetaRow`, `QANote`). Icono de módulo
-    en `src/assets/type-badge-icon.svg`. Responsive con breakpoint 1600 (+ la
-    tabla de jerarquía colapsa a cards por debajo de 1180).
+    `MetaFooter`, `TokenTag` + los helpers de `components/docs/shared.tsx`. Icono
+    de módulo en `src/assets/type-badge-icon.svg`. Responsive con breakpoint 1600
+    (+ la tabla de jerarquía colapsa a cards por debajo de 1180).
   - `VisualStylesPage` — ítem "Visual styles" del sidebar (icono `Shapes`).
     Traída de Figma (nodo 214:2446). Documenta spacing / border radius / borders
     / shadows / sizing con token cards (preview + valor + `TokenTag` + uso).
@@ -63,9 +62,13 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
     `Grid3x3`, módulo "Layout Grids"). Traídas de Figma (nodos 2162:33104 /
     2162:33595). System = anatomía de la grilla + baseline global; Application =
     tabla de formatos de referencia (scroll-x en su contenedor), wireframes por
-    familia y reglas de alineación (`GovernanceRule`). Helpers en
-    `components/grids/shared.tsx`. Icono de módulo en
+    familia y reglas de alineación (`GovernanceRule`). Icono de módulo en
     `src/assets/layout-grids-badge-icon.svg`. Responsive 1600.
+  - `components/docs/shared.tsx` — helpers de layout de TODAS las páginas de
+    documentación (NO son componentes del sistema): `SectionHeader`, `DocNote`
+    (callout aclaratorio), `TypePreview`, `MetaRow`. En el handbook bajo
+    "Helpers de documentación". `components/typography/shared.tsx` ya solo tiene
+    `FONT`.
   - `MisComponentesPage` — **handbook**: catálogo vivo de todos los componentes
     propios (uno rendereado por sección) para revisarlos y ajustarlos. Se entra
     por el icon button (Layers) del pie del sidebar.

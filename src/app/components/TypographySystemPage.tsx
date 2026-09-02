@@ -3,7 +3,8 @@ import { PageHeader } from './PageHeader'
 import { GovernanceFooter } from './GovernanceFooter'
 import { MetaFooter } from './MetaFooter'
 import { TokenTag } from './TokenTag'
-import { FONT, QANote, SectionHeader } from './typography/shared'
+import { FONT } from './typography/shared'
+import { DocNote, SectionHeader } from './docs/shared'
 import typeBadgeIcon from '@/assets/type-badge-icon.svg'
 
 /* ────────────────────────────────────────────────────────────────────────────
@@ -454,11 +455,11 @@ export function TypographySystemPage() {
           </div>
         </section>
 
-        <QANote title="QA interno — Prueba de dos líneas">
+        <DocNote title="QA interno — Prueba de dos líneas">
           Si se modifica el line-height sugerido por la fuente, probar siempre el estilo con al menos
           dos líneas. La decisión final debe evaluarse dentro del componente o layout donde se
           utilizará.
-        </QANote>
+        </DocNote>
       </div>
 
       <GovernanceFooter title="Gobernanza del sistema tipográfico" rules={GOVERNANCE_RULES} />

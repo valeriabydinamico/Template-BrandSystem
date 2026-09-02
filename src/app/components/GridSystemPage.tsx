@@ -2,7 +2,7 @@ import { PageHeader } from './PageHeader'
 import { GovernanceFooter } from './GovernanceFooter'
 import { MetaFooter } from './MetaFooter'
 import { TokenTag } from './TokenTag'
-import { RefNote, SectionHeader } from './grids/shared'
+import { DocNote, SectionHeader } from './docs/shared'
 import layoutGridsBadgeIcon from '@/assets/layout-grids-badge-icon.svg'
 
 /* ────────────────────────────────────────────────────────────────────────────
@@ -119,11 +119,11 @@ export function GridSystemPage() {
             description="El baseline funciona como referencia micro de ritmo vertical. No sustituye la escala oficial de Spacing ni crea un sistema paralelo."
           />
           <BaselineCard />
-          <RefNote title="Relación con Spacing">
+          <DocNote title="Relación con Spacing">
             El baseline de 4 px puede utilizarse como referencia de precisión. Las separaciones
             estructurales deben resolverse con la escala oficial de Spacing documentada en Visual
             Styles.
-          </RefNote>
+          </DocNote>
         </section>
       </div>
 

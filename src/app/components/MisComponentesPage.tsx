@@ -9,6 +9,8 @@ import { TokenTag } from './TokenTag'
 import { Note } from './Note'
 import { ColorCard } from './ColorCard'
 import { SemanticColorCard } from './SemanticColorCard'
+import { DocNote, MetaRow, SectionHeader, TypePreview } from './docs/shared'
+import { FONT } from './typography/shared'
 
 /* ────────────────────────────────────────────────────────────────────────────
  * Handbook de componentes propios del design system.
@@ -68,6 +70,10 @@ const SECTIONS = [
   { id: 'note', name: 'Note' },
   { id: 'color-card', name: 'ColorCard' },
   { id: 'semantic-color-card', name: 'SemanticColorCard' },
+  { id: 'section-header', name: 'SectionHeader' },
+  { id: 'doc-note', name: 'DocNote' },
+  { id: 'type-preview', name: 'TypePreview' },
+  { id: 'meta-row', name: 'MetaRow' },
 ]
 
 export function MisComponentesPage() {
@@ -402,6 +408,90 @@ export function MisComponentesPage() {
                 reference="color/primitive/ink/100"
               />
             </CardSlot>
+          </Example>
+        </Section>
+
+        {/* ── Helpers de las páginas de documentación (components/docs/shared.tsx) ── */}
+        <div className="flex w-full flex-col gap-[6px] border-t border-[#e3e7ee] pt-[24px]">
+          <p className="font-bold text-[16px] leading-[22px] text-[#16181d]">
+            Helpers de documentación
+          </p>
+          <p className="font-normal text-[13px] leading-[19px] text-[#5f6b78]">
+            Piezas de layout compartidas por las páginas de la doc (Typography, Visual Styles,
+            Grids). Viven en <span className="font-mono">components/docs/shared.tsx</span>; no son
+            componentes del design system que se documenta.
+          </p>
+        </div>
+
+        <Section
+          id="section-header"
+          name="SectionHeader"
+          description="Cabecera de sección: título (bold 28) + descripción (15). Abre cada bloque dentro de una página de documentación."
+        >
+          <Example label="title + description">
+            <div className="w-full max-w-[720px]">
+              <SectionHeader
+                title="01. Anatomía de la grilla"
+                description="Cinco elementos definen la estructura base. Se combinan según el formato, pero mantienen una intención consistente dentro del sistema."
+              />
+            </div>
+          </Example>
+        </Section>
+
+        <Section
+          id="doc-note"
+          name="DocNote"
+          description="Callout aclaratorio bajo una sección (QA interno, relación con otra escala, “referencia configurable”…). Fondo claro + borde, sin color de acento. Recibe `title` + contenido."
+        >
+          <Example label="title + texto">
+            <div className="flex w-full max-w-[720px] flex-col gap-[12px]">
+              <DocNote title="QA interno — Prueba de dos líneas">
+                Cuando se modifique manualmente el line-height de una familia, validar siempre el
+                resultado con al menos dos líneas de texto antes de aprobar el valor.
+              </DocNote>
+              <DocNote title="Relación con Spacing">
+                El baseline de 4 px puede utilizarse como referencia de precisión. Las separaciones
+                estructurales deben resolverse con la escala oficial de Spacing.
+              </DocNote>
+            </div>
+          </Example>
+        </Section>
+
+        <Section
+          id="type-preview"
+          name="TypePreview"
+          description="Caja de vista previa de un estilo tipográfico: label + muestra renderizada con el `style` que se le pase. La usa Typography."
+        >
+          <Example label="label + text + style">
+            <div className="flex w-full max-w-[720px] flex-col gap-[12px]">
+              <TypePreview
+                text="Build trust through every interaction."
+                style={{ fontFamily: FONT.brand, fontWeight: 600, fontSize: 30, lineHeight: '38px' }}
+              />
+              <TypePreview
+                label="Body — Inter Regular 16/24"
+                text="Clear, readable interfaces for every task."
+                style={{ fontFamily: FONT.functional, fontWeight: 400, fontSize: 16, lineHeight: '24px' }}
+              />
+            </div>
+          </Example>
+        </Section>
+
+        <Section
+          id="meta-row"
+          name="MetaRow"
+          description="Fila etiqueta + valor dentro de una card de especificación (label 180px + valor). El valor acepta `valueStyle` para renderizarlo en su fuente real."
+        >
+          <Example label="label + value (+ valueStyle)">
+            <div className="flex w-full max-w-[720px] flex-col gap-[8px]">
+              <MetaRow
+                label="Familia configurada"
+                value="Manrope"
+                valueStyle={{ fontFamily: FONT.brand, fontWeight: 600 }}
+              />
+              <MetaRow label="Pesos aprobados" value="Medium · Semi Bold · Bold" />
+              <MetaRow label="Uso recomendado" value="Display · Headlines · Campaigns · Storytelling" />
+            </div>
           </Example>
         </Section>
       </div>

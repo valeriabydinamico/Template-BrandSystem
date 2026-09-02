@@ -3,6 +3,7 @@ import { PageHeader } from './PageHeader'
 import { GovernanceFooter } from './GovernanceFooter'
 import { MetaFooter } from './MetaFooter'
 import { TokenTag } from './TokenTag'
+import { DocNote, SectionHeader } from './docs/shared'
 import visualStylesBadgeIcon from '@/assets/visual-styles-badge-icon.svg'
 
 /* ────────────────────────────────────────────────────────────────────────────
@@ -17,28 +18,6 @@ import visualStylesBadgeIcon from '@/assets/visual-styles-badge-icon.svg'
  * ────────────────────────────────────────────────────────────────────────── */
 
 const SAMPLE = '#3c5c87'
-
-/* ─── Bloques compartidos ─── */
-
-function SectionHeader({ title, description }: { title: string; description: string }) {
-  return (
-    <div className="flex w-full flex-col gap-[8px]">
-      <h2 className="font-bold text-[28px] leading-[34px] tracking-[-0.2px] text-[#292e38]">
-        {title}
-      </h2>
-      <p className="w-full font-normal text-[15px] leading-[22px] text-[#576175]">{description}</p>
-    </div>
-  )
-}
-
-function UsageNote({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <div className="flex w-full flex-col gap-[6px] rounded-[12px] border border-[#b9c3ce] bg-[#f7f9fb] p-[20px]">
-      <p className="font-bold text-[16px] leading-[22px] text-[#292e38]">{title}</p>
-      <p className="font-normal text-[14px] leading-[22px] text-[#576175]">{children}</p>
-    </div>
-  )
-}
 
 /** Card de token: preview + valor + chip + uso. Base de spacing / radius / borders. */
 function TokenCard({
@@ -297,10 +276,10 @@ export function VisualStylesPage() {
               />
             ))}
           </div>
-          <UsageNote title="Padding & Gap">
+          <DocNote title="Padding & Gap">
             Usar los mismos tokens de spacing para padding interno y separación entre elementos. Esto
             evita escalas duplicadas y mantiene una única fuente de verdad.
-          </UsageNote>
+          </DocNote>
         </section>
 
         {/* 02 · Border Radius */}
