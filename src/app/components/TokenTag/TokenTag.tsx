@@ -5,6 +5,12 @@ export interface TokenTagProps {
   children: string
   /** Fondo de la píldora: `default` (#e6eef8) o `plain` (blanco) */
   tone?: 'default' | 'plain'
+  /**
+   * `fit` — la píldora se ajusta al ancho del texto (sin superar el espacio
+   * disponible; si el texto es muy largo, se recorta). Por defecto ocupa todo
+   * el ancho.
+   */
+  fit?: boolean
   className?: string
 }
 
@@ -18,7 +24,12 @@ export interface TokenTagProps {
  * Medidas: fondo #e6eef8 · radio 6 · padding 8/12 · alto 38 · sin sombra ·
  * texto Inter mono 12/14 #16181d.
  */
-export function TokenTag({ children, tone = 'default', className = '' }: TokenTagProps) {
+export function TokenTag({
+  children,
+  tone = 'default',
+  fit = false,
+  className = '',
+}: TokenTagProps) {
   const textRef = useRef<HTMLParagraphElement>(null)
   const [isTruncated, setIsTruncated] = useState(false)
 
@@ -34,9 +45,9 @@ export function TokenTag({ children, tone = 'default', className = '' }: TokenTa
 
   return (
     <div
-      className={`flex h-[38px] w-full shrink-0 flex-col items-start justify-center rounded-[6px] px-[8px] py-[12px] ${
-        tone === 'plain' ? 'bg-white' : 'bg-[#e6eef8]'
-      } ${className}`}
+      className={`flex h-[38px] max-w-full shrink-0 flex-col items-start justify-center rounded-[6px] px-[8px] py-[12px] ${
+        fit ? 'w-fit' : 'w-full'
+      } ${tone === 'plain' ? 'bg-white' : 'bg-[#e6eef8]'} ${className}`}
     >
       <p
         ref={textRef}

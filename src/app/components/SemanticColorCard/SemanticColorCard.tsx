@@ -160,7 +160,9 @@ function Field({
   return (
     <div className="flex w-full flex-col gap-[8px]">
       <p className="font-semibold text-[14px] leading-[22px] text-[#16181d]">{label}</p>
-      <TokenTag tone={tone}>{value}</TokenTag>
+      <TokenTag tone={tone} fit>
+        {value}
+      </TokenTag>
     </div>
   )
 }
