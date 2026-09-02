@@ -70,7 +70,7 @@ function Card01Orange() {
   return (
     <div className="bg-white content-stretch relative w-full grid row-span-2 [grid-template-rows:subgrid]" data-name="card-01-orange">
       <CardHeader6 />
-      <div className="flex flex-col gap-[12px]">
+      <div className="flex flex-col gap-[24px]">
         {orangeTones.map(({ tone, hex, rgb, hsl, token }) => (
           <ColorCard key={tone} variant="tertiary" color={`#${hex}`} name={tone} hex={hex} rgb={rgb} hsl={hsl} token={token} />
         ))}
@@ -83,7 +83,7 @@ function Card02Teal() {
   return (
     <div className="bg-white content-stretch relative w-full grid row-span-2 [grid-template-rows:subgrid]" data-name="card-02-teal">
       <CardHeader7 />
-      <div className="flex flex-col gap-[12px]">
+      <div className="flex flex-col gap-[24px]">
         {tealTones.map(({ tone, hex, rgb, hsl, token }) => (
           <ColorCard key={tone} variant="tertiary" color={`#${hex}`} name={tone} hex={hex} rgb={rgb} hsl={hsl} token={token} />
         ))}
@@ -96,7 +96,7 @@ function Card03Apple() {
   return (
     <div className="bg-white content-stretch relative w-full grid row-span-2 [grid-template-rows:subgrid]" data-name="card-03-apple">
       <CardHeader8 />
-      <div className="flex flex-col gap-[12px]">
+      <div className="flex flex-col gap-[24px]">
         {appleTones.map(({ tone, hex, rgb, hsl, token }) => (
           <ColorCard key={tone} variant="tertiary" color={`#${hex}`} name={tone} hex={hex} rgb={rgb} hsl={hsl} token={token} />
         ))}
@@ -117,7 +117,7 @@ function ColorScaleGrid3() {
 
 function SectionHeader3() {
   return (
-    <div className="[word-break:break-word] content-stretch flex flex-col gap-[12px] items-start not-italic relative w-full max-w-[500px]" data-name="section-header">
+    <div className="[word-break:break-word] content-stretch flex flex-col gap-[12px] items-start not-italic relative w-full" data-name="section-header">
       <p className="font-['Inter:Bold',sans-serif] font-bold leading-[44px] relative shrink-0 text-[#16181d] text-[40px] w-full">Escalas de colores terciarios</p>
       <div className="font-['Inter:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#576175] text-[16px] w-full">
         <p className="leading-[24px] mb-0">Escalas cromáticas complementarias para ampliar el rango expresivo del sistema.</p>

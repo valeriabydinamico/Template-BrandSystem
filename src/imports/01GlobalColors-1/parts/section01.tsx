@@ -24,9 +24,9 @@ const blueScaleTones = [
 
 function InputForm() {
   return (
-    <div className="content-stretch flex flex-col gap-[32px] items-start overflow-clip relative w-full max-w-[500px]" data-name="Input form">
+    <div className="content-stretch flex flex-col gap-[24px] items-start overflow-clip relative w-full max-w-[500px]" data-name="Input form">
       <ParagraphContainer />
-      <div className="flex flex-col gap-[12px] w-full">
+      <div className="flex flex-col gap-[24px] w-full">
         {blueScaleTones.map(({ tone, hex, rgb, hsl, token }) => (
           <ColorCard
             key={tone}
@@ -46,8 +46,8 @@ function InputForm() {
 
 function SectionHeader5() {
   return (
-    <div className="[word-break:break-word] content-stretch flex flex-col gap-[12px] items-start not-italic relative w-full max-w-[500px]" data-name="section-header">
-      <p className="font-['Inter:Bold',sans-serif] font-bold leading-[44px] relative shrink-0 text-[#16181d] whitespace-nowrap text-[32px]">Escala de color primario</p>
+    <div className="[word-break:break-word] content-stretch flex flex-col gap-[12px] items-start not-italic relative w-full" data-name="section-header">
+      <p className="font-['Inter:Bold',sans-serif] font-bold leading-[44px] relative shrink-0 text-[#16181d] text-[40px] w-full">Escala de color primario</p>
       <div className="font-['Inter:Regular',sans-serif] font-normal leading-[0] min-w-full relative shrink-0 text-[#576175] text-[16px] w-[min-content]">
         <p className="leading-[24px] mb-0">Escala cromática principal del sistema, organizada de 50 a 900.</p>
         <p className="leading-[24px]">Funciona como primitive y sirve como fuente para construir roles de marca y tokens semánticos sin definir todavía un uso específico de interfaz.</p>

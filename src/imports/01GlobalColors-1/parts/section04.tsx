@@ -48,7 +48,7 @@ function Card01Ink() {
   return (
     <div className="bg-white content-stretch relative w-full grid row-span-2 [grid-template-rows:subgrid]" data-name="card-01-ink">
       <CardHeader4 />
-      <div className="flex flex-col gap-[12px]">
+      <div className="flex flex-col gap-[24px]">
         {inkTones.map(({ tone, hex, rgb, hsl, token }) => (
           <ColorCard key={tone} variant="tertiary" color={`#${hex}`} name={tone} hex={hex} rgb={rgb} hsl={hsl} token={token} />
         ))}
@@ -61,7 +61,7 @@ function Card02Gray() {
   return (
     <div className="bg-white content-stretch relative w-full grid row-span-2 [grid-template-rows:subgrid]" data-name="card-02-gray">
       <CardHeader5 />
-      <div className="flex flex-col gap-[12px]">
+      <div className="flex flex-col gap-[24px]">
         {grayTones.map(({ tone, hex, rgb, hsl, token }) => (
           <ColorCard key={tone} variant="tertiary" color={`#${hex}`} name={tone} hex={hex} rgb={rgb} hsl={hsl} token={token} />
         ))}
@@ -89,7 +89,7 @@ function ColorScaleGrid1() {
 
 function SectionHeader2() {
   return (
-    <div className="[word-break:break-word] content-stretch flex flex-col gap-[12px] items-start not-italic relative w-full max-w-[500px]" data-name="section-header">
+    <div className="[word-break:break-word] content-stretch flex flex-col gap-[12px] items-start not-italic relative w-full" data-name="section-header">
       <p className="font-['Inter:Bold',sans-serif] font-bold leading-[44px] relative shrink-0 text-[#16181d] text-[40px] w-full">Escala de colores neutrales</p>
       <div className="font-['Inter:Regular',sans-serif] font-normal leading-[0] relative shrink-0 text-[#576175] text-[16px] w-full">
         <p className="leading-[24px] mb-0">Escala neutral base para construir contraste, jerarquía y superficies de soporte.</p>

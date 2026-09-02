@@ -4,7 +4,7 @@ function SectionHeader() {
   return (
     <div className="[word-break:break-word] content-stretch flex flex-col gap-[8px] items-start not-italic overflow-clip pb-[24px] relative shrink-0 w-full" data-name="section-header">
       <p className="font-['Inter:Bold',sans-serif] font-bold leading-[normal] relative shrink-0 text-[#16181d] text-[40px] whitespace-nowrap">Gradientes</p>
-      <p className="font-['Inter:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[#576175] text-[16px] w-full max-w-[500px]">Recursos cromáticos opcionales del sistema. El template conserva una estructura editable para documentar gradientes cuando una marca los requiera, sin asignarles un uso predeterminado.</p>
+      <p className="font-['Inter:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[#576175] text-[16px] w-full">Recursos cromáticos opcionales del sistema. El template conserva una estructura editable para documentar gradientes cuando una marca los requiera, sin asignarles un uso predeterminado.</p>
     </div>
   );
 }
@@ -42,7 +42,7 @@ function GradientGrid() {
 
 function GradientImplementationNote() {
   return (
-    <div className="bg-[#f7f8fa] h-[80px] relative rounded-[12px] shrink-0 w-full" data-name="gradient-implementation-note">
+    <div className="bg-[#f7f8fa] min-h-[80px] relative rounded-[12px] shrink-0 w-full" data-name="gradient-implementation-note">
       <div className="overflow-clip rounded-[inherit] size-full">
         <div className="[word-break:break-word] content-stretch flex flex-col gap-[6px] items-start leading-[normal] not-italic px-[20px] py-[16px] relative size-full">
           <p className="font-['Inter:Semi_Bold',sans-serif] font-semibold relative shrink-0 text-[#16181d] text-[14px] whitespace-nowrap">Implementación de gradientes</p>
@@ -58,8 +58,8 @@ function GradientContent() {
   return (
     <div className="content-stretch flex flex-col gap-[32px] items-start overflow-clip relative w-full" data-name="gradient-content">
       <SectionHeader />
-      <GradientGrid />
       <GradientImplementationNote />
+      <GradientGrid />
     </div>
   );
 }

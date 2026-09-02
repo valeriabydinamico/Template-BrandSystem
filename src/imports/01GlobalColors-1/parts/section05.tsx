@@ -64,7 +64,7 @@ function CardFunctionalGreen() {
   return (
     <div className="bg-white content-stretch relative w-full grid row-span-2 [grid-template-rows:subgrid]" data-name="card-functional-green">
       <CardHeader />
-      <div className="flex flex-col gap-[12px]">
+      <div className="flex flex-col gap-[24px]">
         {greenTones.map(({ tone, hex, rgb, hsl, token }) => (
           <ColorCard key={tone} variant="tertiary" color={`#${hex}`} name={tone} hex={hex} rgb={rgb} hsl={hsl} token={token} />
         ))}
@@ -77,7 +77,7 @@ function CardFunctionalAmber() {
   return (
     <div className="bg-white content-stretch relative w-full grid row-span-2 [grid-template-rows:subgrid]" data-name="card-functional-amber">
       <CardHeader1 />
-      <div className="flex flex-col gap-[12px]">
+      <div className="flex flex-col gap-[24px]">
         {amberTones.map(({ tone, hex, rgb, hsl, token }) => (
           <ColorCard key={tone} variant="tertiary" color={`#${hex}`} name={tone} hex={hex} rgb={rgb} hsl={hsl} token={token} />
         ))}
@@ -90,7 +90,7 @@ function CardFunctionalRed() {
   return (
     <div className="bg-white content-stretch relative w-full grid row-span-2 [grid-template-rows:subgrid]" data-name="card-functional-red">
       <CardHeader2 />
-      <div className="flex flex-col gap-[12px]">
+      <div className="flex flex-col gap-[24px]">
         {redTones.map(({ tone, hex, rgb, hsl, token }) => (
           <ColorCard key={tone} variant="tertiary" color={`#${hex}`} name={tone} hex={hex} rgb={rgb} hsl={hsl} token={token} />
         ))}
@@ -103,7 +103,7 @@ function CardFunctionalBlue() {
   return (
     <div className="bg-white content-stretch relative w-full grid row-span-2 [grid-template-rows:subgrid]" data-name="card-functional-blue">
       <CardHeader3 />
-      <div className="flex flex-col gap-[12px]">
+      <div className="flex flex-col gap-[24px]">
         {blueTones.map(({ tone, hex, rgb, hsl, token }) => (
           <ColorCard key={tone} variant="tertiary" color={`#${hex}`} name={tone} hex={hex} rgb={rgb} hsl={hsl} token={token} />
         ))}
@@ -137,7 +137,7 @@ function ColorScaleGrid() {
 
 function SectionHeader1() {
   return (
-    <div className="[word-break:break-word] content-stretch flex flex-col gap-[12px] items-start not-italic relative w-full max-w-[500px]" data-name="section-header">
+    <div className="[word-break:break-word] content-stretch flex flex-col gap-[12px] items-start not-italic relative w-full" data-name="section-header">
       <p className="font-['Inter:Bold',sans-serif] font-bold leading-[44px] relative shrink-0 text-[#16181d] text-[40px] w-full">Escalas de colores funcionales</p>
       <p className="font-['Inter:Regular',sans-serif] font-normal leading-[24px] relative shrink-0 text-[#576175] text-[16px] w-full">Primitives cromáticos para estados funcionales del sistema. No existe un HEX universal para Success, Warning, Error o Info: estos valores son defaults neutrales del template y pueden reemplazarse por proyecto sin alterar los roles semánticos.</p>
     </div>
