@@ -267,15 +267,11 @@ export function MisComponentesPage() {
           description="Nota informativa que aparece bajo las grillas de tokens del Color System para aclarar decisiones de diseño (qué puede cambiar por proyecto, cómo se comporta un estado…)."
         >
           <Example label="icono + texto">
-            <div className="flex w-full max-w-[720px] flex-col gap-[12px]">
+            <div className="w-full max-w-[720px]">
               <Note>
                 El rol de acción principal debe apuntar al color de marca configurado para cada
                 proyecto. Su valor puede cambiar sin alterar el nombre ni la intención del token
                 semántico.
-              </Note>
-              <Note>
-                En esta propuesta, el estado pressed aumenta la profundidad del color para reforzar
-                feedback táctil y diferenciarlo del estado default.
               </Note>
             </div>
           </Example>
@@ -479,11 +475,7 @@ export function MisComponentesPage() {
           description="Callout aclaratorio bajo una sección (QA interno, relación con otra escala, “referencia configurable”…). Fondo claro + borde, sin color de acento. Recibe `title` + contenido."
         >
           <Example label="title + texto">
-            <div className="flex w-full max-w-[720px] flex-col gap-[12px]">
-              <DocNote title="QA interno — Prueba de dos líneas">
-                Cuando se modifique manualmente el line-height de una familia, validar siempre el
-                resultado con al menos dos líneas de texto antes de aprobar el valor.
-              </DocNote>
+            <div className="w-full max-w-[720px]">
               <DocNote title="Relación con Spacing">
                 El baseline de 4 px puede utilizarse como referencia de precisión. Las separaciones
                 estructurales deben resolverse con la escala oficial de Spacing.
