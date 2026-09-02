@@ -136,22 +136,14 @@ function ContrastBadge({ badge, panelIsDark }: { badge: BadgeSpec; panelIsDark: 
     : 'bg-[rgba(22,24,29,0.1)] text-[#16181d]'
   const solid = panelIsDark ? 'bg-white text-[#16181d]' : 'bg-[#16181d] text-white'
 
-  if (badge.kind === 'na') {
-    return (
-      <span
-        className={`flex items-center justify-center rounded-[20px] px-[12px] py-[8px] font-semibold text-[16px] leading-none whitespace-nowrap ${soft}`}
-      >
-        N/A
-      </span>
-    )
-  }
+  // La pastilla N/A comparte el estilo sólido de la pastilla de ratio.
+  const cls = badge.kind === 'level' ? soft : solid
+
   return (
     <span
-      className={`flex items-center justify-center rounded-[20px] px-[12px] py-[8px] font-semibold text-[12px] leading-[16px] whitespace-nowrap ${
-        badge.kind === 'ratio' ? solid : soft
-      }`}
+      className={`flex items-center justify-center rounded-[20px] px-[12px] py-[8px] font-semibold text-[12px] leading-[16px] whitespace-nowrap ${cls}`}
     >
-      {badge.text}
+      {badge.kind === 'na' ? 'N/A' : badge.text}
     </span>
   )
 }
