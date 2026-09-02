@@ -16,6 +16,16 @@ function getGradientTextColor(hexTop: string, hexBottom: string): string {
   return avg > 0.179 ? '#000000' : '#ffffff'
 }
 
+/**
+ * Tonos casi blancos (brillo/L de HSL entre 98 y 100) necesitan un stroke sutil
+ * de 1px (#F2F2F2) para separarse del fondo blanco de la página.
+ */
+function needsLightStroke(hsl?: { l: string }): boolean {
+  if (!hsl) return false
+  const l = parseFloat(hsl.l)
+  return !Number.isNaN(l) && l >= 98 && l <= 100
+}
+
 export interface ColorCardProps {
   /**
    * primary   — fondo sólido, badges WCAG en extremos. Para tonos individuales.
@@ -75,6 +85,7 @@ export function ColorCard({
 }: ColorCardProps) {
   const bareHex = hex.replace(/^#/, '')
   const textColor = getAccessibleTextColor(hex)
+  const autoStroke = needsLightStroke(hsl) ? 'border border-[#F2F2F2]' : ''
 
   /* ─── Gradient ─── */
   if (variant === 'gradient') {
@@ -126,7 +137,7 @@ export function ColorCard({
   if (variant === 'tertiary') {
     return (
       <div
-        className={`flex flex-col items-center overflow-clip p-[2px] rounded-[8px] shrink-0 w-full ${className}`}
+        className={`flex flex-col items-center overflow-clip p-[2px] rounded-[8px] shrink-0 w-full ${autoStroke} ${className}`}
         style={{ backgroundColor: color }}
       >
         {/* Top: name + color values */}
@@ -173,7 +184,7 @@ export function ColorCard({
 
   return (
     <div
-      className={`relative rounded-[16px] p-[20px] flex flex-col w-full h-full ${className}`}
+      className={`relative rounded-[16px] p-[20px] flex flex-col w-full h-full ${autoStroke} ${className}`}
       style={{ backgroundColor: color }}
     >
       {/* Badge row */}
