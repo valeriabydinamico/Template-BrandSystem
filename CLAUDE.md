@@ -81,8 +81,9 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
     (PageHeader, ModuleBadge, Badge, GovernanceRule, GovernanceFooter, MetaFooter,
     TokenTag, Note, ColorCard, SemanticColorCard) + una sección "Helpers de
     documentación" (SectionHeader, DocNote, TypePreview, MetaRow). Cada uno
-    rendereado en vivo, con índice de navegación. Se entra por el icon button
-    (Layers) del pie del sidebar.
+    rendereado en vivo. Índice de navegación fijo (`sticky`) a la derecha
+    (`PageNav`, ≥1080px) con scrollspy (IntersectionObserver); click = scroll a
+    esa sección. Se entra por el icon button (Layers) del pie del sidebar.
   - `AjustesPage` — placeholder vacío. Se entra por el icon button (cog) del pie
     del sidebar.
   - `components/demo/` — demos por categoría (Buttons, Inputs, Media, Feedback,

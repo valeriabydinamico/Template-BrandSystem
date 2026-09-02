@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { PageHeader } from './PageHeader'
 import { ModuleBadge } from './ModuleBadge'
 import { Badge } from './Badge'
@@ -29,13 +29,45 @@ function Section({
   children: React.ReactNode
 }) {
   return (
-    <section id={id} className="flex flex-col gap-[20px] scroll-mt-[24px]">
+    <section id={id} className="flex scroll-mt-[24px] flex-col gap-[20px]">
       <div className="flex flex-col gap-[4px] border-b border-[#e3e7ee] pb-[12px]">
         <h2 className="font-bold text-[22px] leading-[28px] text-[#16181d]">{name}</h2>
         <p className="font-normal text-[14px] leading-[20px] text-[#5f6b78]">{description}</p>
       </div>
       {children}
     </section>
+  )
+}
+
+/** Índice fijo a la derecha: navega a cada componente y marca el visible. */
+function PageNav({ active, onGo }: { active: string; onGo: (id: string) => void }) {
+  return (
+    <nav className="sticky top-[24px] h-max max-h-[calc(100vh-48px)] w-[212px] shrink-0 overflow-y-auto max-[1080px]:hidden min-[1080px]:block">
+      <p className="px-[10px] pb-[6px] font-semibold text-[11px] uppercase leading-[14px] tracking-[0.6px] text-[#8a94a8]">
+        En esta página
+      </p>
+      <div className="flex flex-col gap-[1px]">
+        {SECTIONS.map((s) => (
+          <div key={s.id}>
+            {s.id === 'section-header' && (
+              <p className="mb-[2px] mt-[10px] border-t border-[#e3e7ee] px-[10px] pb-[4px] pt-[12px] font-semibold text-[11px] uppercase leading-[14px] tracking-[0.6px] text-[#8a94a8]">
+                Helpers de doc
+              </p>
+            )}
+            <button
+              onClick={() => onGo(s.id)}
+              className={`block w-full cursor-pointer rounded-[8px] px-[10px] py-[7px] text-left text-[13px] leading-[18px] transition-colors ${
+                active === s.id
+                  ? 'bg-[#e1f0ff] font-semibold text-[#004c97]'
+                  : 'font-medium text-[#576175] hover:bg-[#eef2f8]'
+              }`}
+            >
+              {s.name}
+            </button>
+          </div>
+        ))}
+      </div>
+    </nav>
   )
 }
 
@@ -77,12 +109,31 @@ const SECTIONS = [
 ]
 
 export function MisComponentesPage() {
-  const [active, setActive] = useState('')
+  const [active, setActive] = useState(SECTIONS[0].id)
 
   function go(id: string) {
     setActive(id)
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
+
+  // Scrollspy: marca en el índice la sección visible más arriba.
+  useEffect(() => {
+    const els = SECTIONS.map((s) => document.getElementById(s.id)).filter(
+      (el): el is HTMLElement => Boolean(el),
+    )
+    if (!els.length) return
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
+        if (visible[0]) setActive(visible[0].target.id)
+      },
+      { rootMargin: '-12% 0px -78% 0px' },
+    )
+    els.forEach((el) => io.observe(el))
+    return () => io.disconnect()
+  }, [])
 
   return (
     <div className="flex w-full flex-col items-start bg-white">
@@ -95,24 +146,8 @@ export function MisComponentesPage() {
         ]}
       />
 
-      <div className="flex w-full flex-col gap-[48px] px-[40px] pb-[80px] pt-[16px]">
-        {/* Índice */}
-        <nav className="flex flex-wrap gap-[8px]">
-          {SECTIONS.map((s) => (
-            <button
-              key={s.id}
-              onClick={() => go(s.id)}
-              className={`rounded-[8px] border px-[12px] py-[6px] font-medium text-[13px] transition-colors ${
-                active === s.id
-                  ? 'border-[#004c97] bg-[#e6f2ff] text-[#004c97]'
-                  : 'border-[#e3e7ee] bg-white text-[#5f6b78] hover:border-[#b9c3ce]'
-              }`}
-            >
-              {s.name}
-            </button>
-          ))}
-        </nav>
-
+      <div className="flex w-full items-start gap-[40px] px-[40px] pb-[80px] pt-[16px]">
+        <div className="flex min-w-0 flex-1 flex-col gap-[48px]">
         <Section
           id="page-header"
           name="PageHeader"
@@ -494,6 +529,9 @@ export function MisComponentesPage() {
             </div>
           </Example>
         </Section>
+        </div>
+
+        <PageNav active={active} onGo={go} />
       </div>
     </div>
   )
