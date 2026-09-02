@@ -1,3 +1,5 @@
+import { TokenTag } from '../TokenTag'
+
 function getRelativeLuminance(hex: string): number {
   const bare = hex.replace(/^#/, '')
   const r = parseInt(bare.slice(0, 2), 16) / 255
@@ -134,11 +136,7 @@ export function ColorCard({
         </div>
 
         {/* Token tag */}
-        <div className="bg-[#e6eef8] content-stretch drop-shadow-[0px_4px_2px_rgba(0,39,90,0.1)] flex flex-col h-[38px] items-start justify-center px-[8px] py-[12px] relative rounded-[6px] shrink-0 w-full">
-          <p className="font-normal font-mono leading-[14px] text-[#16181d] text-[12px] whitespace-nowrap">
-            {token ?? 'token'}
-          </p>
-        </div>
+        <TokenTag>{token ?? 'token'}</TokenTag>
       </div>
     )
   }
@@ -170,13 +168,7 @@ export function ColorCard({
         </div>
 
         {/* Token tag */}
-        {token && (
-          <div className="bg-[#e6eef8] drop-shadow-[0px_4px_2px_rgba(0,39,90,0.1)] flex flex-col items-start justify-center px-[8px] py-[12px] rounded-[6px] shrink-0 w-full h-[38px]">
-            <p className="font-normal font-mono leading-[14px] text-[#16181d] text-[12px] whitespace-nowrap">
-              {token ?? description ?? 'token'}
-            </p>
-          </div>
-        )}
+        {token && <TokenTag>{token}</TokenTag>}
       </div>
     )
   }
