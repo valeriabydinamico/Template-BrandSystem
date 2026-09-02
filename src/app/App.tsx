@@ -17,14 +17,50 @@ import {
   ChevronDown,
 } from 'lucide-react'
 
+const IconButton = ({
+  label,
+  active,
+  onClick,
+  children,
+}: {
+  label: string
+  active: boolean
+  onClick: () => void
+  children: React.ReactNode
+}) => (
+  <button
+    type="button"
+    onClick={onClick}
+    title={label}
+    aria-label={label}
+    aria-pressed={active}
+    className={`flex size-[34px] shrink-0 items-center justify-center rounded-[10px] transition-colors ${
+      active
+        ? 'bg-[#e1f0ff] text-[#004c97]'
+        : 'text-[#8a94a8] hover:bg-[#eef2f8] hover:text-[#576175]'
+    }`}
+  >
+    {children}
+  </button>
+)
+
 import { MisComponentesPage } from './components/MisComponentesPage'
 import { IntroduccionPage } from './components/IntroduccionPage'
 import { GlobalColorsPage } from './components/GlobalColorsPage'
 import { BrandColorsPage } from './components/BrandColorsPage'
 import { SemanticColorsPage } from './components/SemanticColorsPage'
+import { AjustesPage } from './components/AjustesPage'
 import brandMarkIcon from '@/assets/color-system-badge-icon.svg'
 
-type SidebarPage = 'introduccion' | 'kit' | 'film' | 'book' | 'folder' | 'mis-componentes' | 'color'
+type SidebarPage =
+  | 'introduccion'
+  | 'kit'
+  | 'film'
+  | 'book'
+  | 'folder'
+  | 'mis-componentes'
+  | 'ajustes'
+  | 'color'
 type ColorPage = 'global-colors' | 'brand-colors' | 'semantic-colors'
 type DemoSection =
   | 'buttons'
@@ -201,28 +237,24 @@ function Sidebar({
           </div>
         )}
 
-        <div className="my-[10px] h-px bg-[#eef2f8]" />
+      </nav>
 
-        <NavEyebrow>Handbook</NavEyebrow>
-        <NavItem
-          icon={<Layers className="size-full" strokeWidth={1.75} />}
+      {/* Utilidades */}
+      <div className="flex shrink-0 items-center gap-[4px] border-t border-[#eef2f8] px-[16px] py-[12px]">
+        <IconButton
           label="Mis componentes"
           active={activePage === 'mis-componentes'}
           onClick={() => setActivePage('mis-componentes')}
-        />
-      </nav>
-
-      {/* Cuenta */}
-      <div className="flex shrink-0 items-center gap-[10px] border-t border-[#eef2f8] px-[16px] py-[14px]">
-        <div className="grid size-[32px] shrink-0 place-items-center rounded-full bg-[#596879] font-semibold text-[12px] text-white">
-          AK
-        </div>
-        <div className="flex min-w-0 flex-col">
-          <span className="truncate font-semibold text-[13px] leading-[16px] text-[#2f3945]">
-            Editor
-          </span>
-          <span className="truncate text-[11px] leading-[14px] text-[#8a94a8]">Master template</span>
-        </div>
+        >
+          <Layers className="size-[18px]" strokeWidth={1.75} />
+        </IconButton>
+        <IconButton
+          label="Ajustes"
+          active={activePage === 'ajustes'}
+          onClick={() => setActivePage('ajustes')}
+        >
+          <Settings className="size-[18px]" strokeWidth={1.75} />
+        </IconButton>
       </div>
     </aside>
   )
@@ -254,6 +286,8 @@ function AppShell() {
           <IntroduccionPage />
         ) : activePage === 'mis-componentes' ? (
           <MisComponentesPage />
+        ) : activePage === 'ajustes' ? (
+          <AjustesPage />
         ) : activePage === 'color' ? (
           <div className="flex flex-col gap-xs">
             {activeColorPage === 'global-colors' && <GlobalColorsPage />}

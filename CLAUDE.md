@@ -44,7 +44,10 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
     componentes propios (hecho, sin Astra)
   - `SemanticColorsPage` — placeholder, pendiente de contenido
   - `MisComponentesPage` — **handbook**: catálogo vivo de todos los componentes
-    propios (uno rendereado por sección) para revisarlos y ajustarlos
+    propios (uno rendereado por sección) para revisarlos y ajustarlos. Se entra
+    por el icon button (Layers) del pie del sidebar.
+  - `AjustesPage` — placeholder vacío. Se entra por el icon button (cog) del pie
+    del sidebar.
   - `components/demo/` — demos por categoría (Buttons, Inputs, Media, Feedback,
     Navigation, Toolbar, PromptChat). Nota: hoy `App.tsx` no las enruta.
   - `components/PageHeader/` — encabezado de página (IntroCard: eyebrow de
@@ -101,6 +104,8 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
 - **El sidebar (`Sidebar` en `App.tsx`) ya está en Tailwind puro**, alineado con
   la UI de la documentación (superficie `#fafbfc`, borde `#e3e7ee`, caja de icono
   `#596879`, activo = pastilla `#e1f0ff` / texto `#004c97`). `main` es `bg-white`.
+  El pie del sidebar son dos icon buttons: "Mis componentes" (Layers) y "Ajustes"
+  (cog).
 - Si en algún momento se quiere sacar Astra del todo: falta reescribir el
   `ThemeProvider`/`ForceLightTheme` y la rama de demos de `App.tsx`, quitar el
   import de `@figma/astraui/styles.css`, y migrar
