@@ -65,7 +65,8 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
   - `components/ModuleBadge/` — eyebrow con icono del módulo
   - `components/GovernanceRule/` — fila numerada de regla de gobernanza
   - `components/Note/` — nota informativa (fondo crema + borde e icono naranja
-    `#ad5301`) bajo las grillas de tokens del Color System. Traído 1:1 de Figma.
+    `#ad5301`, texto regular 14/20) bajo las grillas de tokens del Color System.
+    El icono se alinea a la 1ª línea del texto (centrado si es 1 sola línea).
 - `src/imports/` — **código generado por Figma Make**. Frames, SVGs (`svg-*.ts`) e
   imágenes. No editar a mano salvo necesidad puntual; se re-genera desde Figma.
 - `src/assets/` — assets propios / exportados de Figma (SVGs, imágenes)

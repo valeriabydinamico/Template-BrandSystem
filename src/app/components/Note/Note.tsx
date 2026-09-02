@@ -13,16 +13,22 @@ export interface NoteProps {
  *
  * Medidas exactas del diseño (Figma · 03 Semantic Colors · `nota-01-*`):
  * fondo #fdf6f0 · borde rgba(173,83,1,0.5) · radio 10 · padding 15/19 ·
- * icono 16 · gap 16 · texto Inter Medium 16/20 #ad5301.
+ * icono 16 · gap 16 · texto Inter Regular 14/20 #ad5301.
+ *
+ * El icono se alinea a la primera línea del texto: va dentro de una caja de
+ * `leading` (20px) centrada, y el contenedor usa `items-start`. Con una sola
+ * línea, esa caja ocupa todo el alto y el icono queda centrado.
  */
 export function Note({ children, className = '' }: NoteProps) {
   return (
     <div
-      className={`flex w-full items-center justify-between rounded-[10px] border border-[rgba(173,83,1,0.5)] bg-[#fdf6f0] px-[19px] py-[15px] ${className}`}
+      className={`flex w-full items-start justify-between rounded-[10px] border border-[rgba(173,83,1,0.5)] bg-[#fdf6f0] px-[19px] py-[15px] ${className}`}
     >
-      <div className="flex min-w-0 flex-1 items-center gap-[16px]">
-        <img src={noteIcon} alt="" className="block size-[16px] shrink-0" />
-        <p className="min-w-0 flex-1 font-medium text-[16px] leading-[20px] text-[#ad5301] [word-break:break-word]">
+      <div className="flex min-w-0 flex-1 items-start gap-[16px]">
+        <span className="flex h-[20px] shrink-0 items-center">
+          <img src={noteIcon} alt="" className="block size-[16px]" />
+        </span>
+        <p className="min-w-0 flex-1 font-normal text-[14px] leading-[20px] text-[#ad5301] [word-break:break-word]">
           {children}
         </p>
       </div>
