@@ -15,6 +15,7 @@ import {
   Palette,
   Type,
   Shapes,
+  Grid3x3,
   BookOpen,
   ChevronDown,
   PanelLeftClose,
@@ -30,6 +31,8 @@ import { SemanticColorsPage } from './components/SemanticColorsPage'
 import { TypographyFoundationsPage } from './components/TypographyFoundationsPage'
 import { TypographySystemPage } from './components/TypographySystemPage'
 import { VisualStylesPage } from './components/VisualStylesPage'
+import { GridSystemPage } from './components/GridSystemPage'
+import { GridApplicationPage } from './components/GridApplicationPage'
 import { AjustesPage } from './components/AjustesPage'
 import brandMarkIcon from '@/assets/color-system-badge-icon.svg'
 
@@ -43,9 +46,11 @@ type SidebarPage =
   | 'ajustes'
   | 'typography'
   | 'visual-styles'
+  | 'grids'
   | 'color'
 type ColorPage = 'global-colors' | 'brand-colors' | 'semantic-colors'
 type TypographyPageId = 'foundations' | 'system'
+type GridPageId = 'system' | 'application'
 type DemoSection =
   | 'buttons'
   | 'inputs'
@@ -64,6 +69,11 @@ const colorPages: { id: ColorPage; label: string }[] = [
 const typographyPages: { id: TypographyPageId; label: string }[] = [
   { id: 'foundations', label: 'Foundations' },
   { id: 'system', label: 'System' },
+]
+
+const gridPages: { id: GridPageId; label: string }[] = [
+  { id: 'system', label: 'System' },
+  { id: 'application', label: 'Application' },
 ]
 
 const sections: { id: DemoSection; label: string; icon: React.ReactNode }[] = [
@@ -261,6 +271,10 @@ function Sidebar({
   setActiveTypographyPage,
   typographyOpen,
   setTypographyOpen,
+  activeGridPage,
+  setActiveGridPage,
+  gridsOpen,
+  setGridsOpen,
   collapsed,
   setCollapsed,
 }: {
@@ -274,6 +288,10 @@ function Sidebar({
   setActiveTypographyPage: (p: TypographyPageId) => void
   typographyOpen: boolean
   setTypographyOpen: (fn: (o: boolean) => boolean) => void
+  activeGridPage: GridPageId
+  setActiveGridPage: (p: GridPageId) => void
+  gridsOpen: boolean
+  setGridsOpen: (fn: (o: boolean) => boolean) => void
   collapsed: boolean
   setCollapsed: (fn: (c: boolean) => boolean) => void
 }) {
@@ -384,6 +402,29 @@ function Sidebar({
           onClick={() => setActivePage('visual-styles')}
           collapsed={collapsed}
         />
+
+        <NavGroup
+          Icon={Grid3x3}
+          label="Grids"
+          groupActive={activePage === 'grids'}
+          open={gridsOpen}
+          onToggle={toggleGroup(setGridsOpen)}
+          collapsed={collapsed}
+        >
+          {gridPages.map((p) => (
+            <NavSubItem
+              key={p.id}
+              label={p.label}
+              active={activePage === 'grids' && activeGridPage === p.id}
+              onClick={() =>
+                startTransition(() => {
+                  setActivePage('grids')
+                  setActiveGridPage(p.id)
+                })
+              }
+            />
+          ))}
+        </NavGroup>
       </nav>
 
       {/* Utilidades */}
@@ -430,6 +471,8 @@ function AppShell() {
   const [colorOpen, setColorOpen] = useState(true)
   const [activeTypographyPage, setActiveTypographyPage] = useState<TypographyPageId>('foundations')
   const [typographyOpen, setTypographyOpen] = useState(true)
+  const [activeGridPage, setActiveGridPage] = useState<GridPageId>('system')
+  const [gridsOpen, setGridsOpen] = useState(true)
   const [collapsed, setCollapsed] = useState(() => {
     try {
       return localStorage.getItem('sidebar-collapsed') === '1'
@@ -462,6 +505,10 @@ function AppShell() {
         setActiveTypographyPage={setActiveTypographyPage}
         typographyOpen={typographyOpen}
         setTypographyOpen={setTypographyOpen}
+        activeGridPage={activeGridPage}
+        setActiveGridPage={setActiveGridPage}
+        gridsOpen={gridsOpen}
+        setGridsOpen={setGridsOpen}
         collapsed={collapsed}
         setCollapsed={setCollapsed}
       />
@@ -481,6 +528,11 @@ function AppShell() {
           </div>
         ) : activePage === 'visual-styles' ? (
           <VisualStylesPage />
+        ) : activePage === 'grids' ? (
+          <div className="flex flex-col gap-xs">
+            {activeGridPage === 'system' && <GridSystemPage />}
+            {activeGridPage === 'application' && <GridApplicationPage />}
+          </div>
         ) : activePage === 'color' ? (
           <div className="flex flex-col gap-xs">
             {activeColorPage === 'global-colors' && <GlobalColorsPage />}

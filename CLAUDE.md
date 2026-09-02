@@ -56,6 +56,13 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
     / shadows / sizing con token cards (preview + valor + `TokenTag` + uso).
     Reutiliza `PageHeader` / `GovernanceFooter` / `MetaFooter` / `TokenTag`.
     Icono de módulo en `src/assets/visual-styles-badge-icon.svg`. Responsive 1600.
+  - `GridSystemPage` / `GridApplicationPage` — grupo "Grids" del sidebar (icono
+    `Grid3x3`, módulo "Layout Grids"). Traídas de Figma (nodos 2162:33104 /
+    2162:33595). System = anatomía de la grilla + baseline global; Application =
+    tabla de formatos de referencia (scroll-x en su contenedor), wireframes por
+    familia y reglas de alineación (`GovernanceRule`). Helpers en
+    `components/grids/shared.tsx`. Icono de módulo en
+    `src/assets/layout-grids-badge-icon.svg`. Responsive 1600.
   - `MisComponentesPage` — **handbook**: catálogo vivo de todos los componentes
     propios (uno rendereado por sección) para revisarlos y ajustarlos. Se entra
     por el icon button (Layers) del pie del sidebar.
@@ -154,7 +161,7 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
 
 ## Trabajo en curso
 
-- `SemanticColorsPage`, las dos páginas de `Typography` y `VisualStylesPage` ya
+- `SemanticColorsPage`, `Typography` (×2), `VisualStylesPage` y `Grids` (×2) ya
   están documentadas.
 - `AjustesPage` es placeholder vacío.
 - Fuentes de ejemplo del Type System (Manrope / Source Serif 4 / JetBrains Mono)
