@@ -47,7 +47,8 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
 - Workflow: `.github/workflows/deploy.yml` — build + deploy en cada push a `main`.
 - `vite.config.ts` usa `base: '/Template-BrandSystem/'` **solo en build**
   (`command === 'build'`); en `npm run dev` sigue en la raíz.
-- Requiere que en el repo esté activado *Settings → Pages → Source: GitHub Actions*.
+- Pages está activado (*Settings → Pages → Source: GitHub Actions*) y el repo es
+  **público** (Pages con repo privado necesita plan de pago).
 
 ## Estructura
 
@@ -183,7 +184,8 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
 
 ## Git / flujo de trabajo
 
-- Repo privado en GitHub: `valeriabydinamico/Template-BrandSystem`
+- Repo **público** en GitHub: `valeriabydinamico/Template-BrandSystem`
+  (se hizo público para poder usar GitHub Pages gratis — ver "Deploy").
 - `gh` CLI ya autenticado como `valeriabydinamico`.
 - Rama principal: `main`. Hasta ahora se trabaja directo sobre `main`.
 - `node_modules/`, `dist/` y logs están en `.gitignore`. `package-lock.json` SÍ
