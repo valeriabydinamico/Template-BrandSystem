@@ -40,6 +40,15 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
 
 `npm run build` genera el build de producción en `dist/`.
 
+## Deploy
+
+Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-BrandSystem/
+
+- Workflow: `.github/workflows/deploy.yml` — build + deploy en cada push a `main`.
+- `vite.config.ts` usa `base: '/Template-BrandSystem/'` **solo en build**
+  (`command === 'build'`); en `npm run dev` sigue en la raíz.
+- Requiere que en el repo esté activado *Settings → Pages → Source: GitHub Actions*.
+
 ## Estructura
 
 - `src/main.tsx` — entry point, monta `<App />`, importa `src/styles/index.css`
