@@ -524,11 +524,12 @@ function AppShell() {
   const [activePage, setActivePage] = useState<SidebarPage>('introduccion')
   const [activeSection, setActiveSection] = useState<DemoSection>('buttons')
   const [activeColorPage, setActiveColorPage] = useState<ColorPage>('global-colors')
-  const [colorOpen, setColorOpen] = useState(true)
+  // Los grupos del sidebar arrancan plegados.
+  const [colorOpen, setColorOpen] = useState(false)
   const [activeTypographyPage, setActiveTypographyPage] = useState<TypographyPageId>('foundations')
-  const [typographyOpen, setTypographyOpen] = useState(true)
+  const [typographyOpen, setTypographyOpen] = useState(false)
   const [activeGridPage, setActiveGridPage] = useState<GridPageId>('system')
-  const [gridsOpen, setGridsOpen] = useState(true)
+  const [gridsOpen, setGridsOpen] = useState(false)
   const [collapsed, setCollapsed] = useState(() => {
     try {
       return localStorage.getItem('sidebar-collapsed') === '1'
