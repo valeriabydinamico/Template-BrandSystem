@@ -1,98 +1,25 @@
+import { Fragment } from 'react'
 import { ColorCard } from './ColorCard'
 import { Badge } from './Badge'
 import { PageHeader } from './PageHeader'
 import { GovernanceFooter } from './GovernanceFooter'
 import { MetaFooter } from './MetaFooter'
+import type { BrandColorEntry } from '../data/brandColors'
+import { brandColorsReports } from '../lib/siteCompleteness'
 
 /* ────────────────────────────────────────────────────────────────────────────
- * Datos — Brand Colors (Figma · F01 Color System · "02 Brand Colors")
- * HEX es la fuente de verdad; RGB / CMYK / Pantone son referencia técnica.
+ * Los datos viven en `src/app/data/brandColors.ts`. Acá solo queda el layout:
+ * qué secciones se arman con qué reporte de `brandColorsReports` (calculado en
+ * `src/app/lib/siteCompleteness.ts`). Una sección sin colores completos NO se
+ * renderiza — ver "Regla de completitud de datos" en CLAUDE.md.
+ *
+ * Responsive — breakpoint único en 1600px de ancho de viewport (incluye sidebar):
+ *   < 1600px  → apilado: contenido arriba, grilla de cards abajo
+ *   ≥ 1600px  → horizontal: contenido a la izquierda (600), cards a la derecha
+ * En ambos casos la grilla agrupa máximo 2 cards por fila.
+ * (max-[1600px] / min-[1600px] son mutuamente excluyentes a propósito: evitan
+ *  el problema de orden en la cascada entre `flex-col` y el variant responsive.)
  * ────────────────────────────────────────────────────────────────────────── */
-
-interface BrandColor {
-  color: string
-  name: string
-  description: string
-  hex: string
-  rgb: { r: number; g: number; b: number }
-  cmyk: { c: number; m: number; y: number; k: number }
-  pantone: string
-  accessibilityRating: string
-  contrastRatio: string
-}
-
-const PRIMARY: BrandColor = {
-  color: '#004c97',
-  name: 'Primary',
-  description: 'Color Reference: Blue 700',
-  hex: '004C97',
-  rgb: { r: 0, g: 76, b: 151 },
-  cmyk: { c: 100, m: 50, y: 0, k: 41 },
-  pantone: 'Pantone 2945 C',
-  accessibilityRating: 'AAA',
-  contrastRatio: '8.47:1',
-}
-
-const SECONDARY: BrandColor[] = [
-  {
-    color: '#ffffff',
-    name: 'Neutral',
-    description: 'Color Reference: Gray 50',
-    hex: 'FFFFFF',
-    rgb: { r: 255, g: 255, b: 255 },
-    cmyk: { c: 0, m: 0, y: 0, k: 0 },
-    pantone: 'Paper White / Digital White',
-    accessibilityRating: 'AAA',
-    contrastRatio: '13.56:1',
-  },
-  {
-    color: '#00a3e1',
-    name: 'Secondary',
-    description: 'Color Reference: Light Blue 600',
-    hex: '00A3E1',
-    rgb: { r: 0, g: 163, b: 225 },
-    cmyk: { c: 100, m: 28, y: 0, k: 12 },
-    pantone: 'Pantone 2995 C',
-    accessibilityRating: 'AA',
-    contrastRatio: '4.73:1',
-  },
-]
-
-const ACCENTS: BrandColor[] = [
-  {
-    color: '#ff7900',
-    name: 'Accent 01',
-    description: 'Color Reference: Orange 500',
-    hex: 'FF7900',
-    rgb: { r: 255, g: 121, b: 0 },
-    cmyk: { c: 0, m: 53, y: 100, k: 0 },
-    pantone: 'Pantone 144 C',
-    accessibilityRating: 'AA',
-    contrastRatio: '5.31:1',
-  },
-  {
-    color: '#20a5b1',
-    name: 'Accent 02',
-    description: 'Color Reference: Teal 600',
-    hex: '20A5B1',
-    rgb: { r: 32, g: 165, b: 177 },
-    cmyk: { c: 82, m: 7, y: 0, k: 31 },
-    pantone: 'Pantone 7710 C',
-    accessibilityRating: 'AA',
-    contrastRatio: '4.52:1',
-  },
-  {
-    color: '#7dc030',
-    name: 'Accent 03',
-    description: 'Color Reference: Apple 500',
-    hex: '7DC030',
-    rgb: { r: 125, g: 192, b: 48 },
-    cmyk: { c: 35, m: 0, y: 75, k: 25 },
-    pantone: 'Pantone 376 C',
-    accessibilityRating: 'AAA',
-    contrastRatio: '7.18:1',
-  },
-]
 
 const GOVERNANCE_RULES = [
   'Los roles de Brand Colors deben construirse siempre a partir de primitives existentes; no se deben crear valores HEX aislados directamente en esta capa.',
@@ -105,28 +32,19 @@ const GOVERNANCE_RULES = [
 
 /* ────────────────────────────────────────────────────────────────────────────
  * Sub-componentes de página
- *
- * Responsive — breakpoint único en 1600px de ancho de viewport (incluye sidebar):
- *   < 1600px  → apilado: contenido arriba, grilla de cards abajo
- *   ≥ 1600px  → horizontal: contenido a la izquierda (600), cards a la derecha
- * En ambos casos la grilla agrupa máximo 2 cards por fila.
- * (max-[1600px] / min-[1600px] son mutuamente excluyentes a propósito: evitan
- *  el problema de orden en la cascada entre `flex-col` y el variant responsive.)
  * ────────────────────────────────────────────────────────────────────────── */
 
-function BrandCard({ data }: { data: BrandColor }) {
+function BrandCard({ data }: { data: BrandColorEntry }) {
   return (
     <ColorCard
       variant={data.name === 'Primary' ? 'primary' : 'secondary'}
-      color={data.color}
-      name={data.name}
+      color={`#${data.hex}`}
+      name={data.name!}
       description={data.description}
       hex={data.hex}
       rgb={data.rgb}
       cmyk={data.cmyk}
       pantone={data.pantone}
-      accessibilityRating={data.accessibilityRating}
-      contrastRatio={data.contrastRatio}
     />
   )
 }
@@ -138,7 +56,7 @@ function BrandCard({ data }: { data: BrandColor }) {
  * - 2+ cards: 2 por fila, cada una `(100% − 16px) / 2`; el resto pasa a filas
  *   siguientes conservando ese ancho (la card suelta no se estira — caso Accent).
  */
-function CardGrid({ cards }: { cards: BrandColor[] }) {
+function CardGrid({ cards }: { cards: BrandColorEntry[] }) {
   if (cards.length === 1) {
     return (
       <div className="flex w-full min-[1600px]:justify-end">
@@ -150,8 +68,8 @@ function CardGrid({ cards }: { cards: BrandColor[] }) {
   }
   return (
     <div className="flex w-full flex-wrap gap-[16px]">
-      {cards.map((c) => (
-        <div key={c.name} className="w-[calc(50%_-_8px)] min-w-[280px] max-w-[500px]">
+      {cards.map((c, i) => (
+        <div key={c.name ?? i} className="w-[calc(50%_-_8px)] min-w-[280px] max-w-[500px]">
           <BrandCard data={c} />
         </div>
       ))}
@@ -169,7 +87,7 @@ function BrandSection({
   title: string
   paragraphs: string[]
   usage: string[]
-  cards: BrandColor[]
+  cards: BrandColorEntry[]
 }) {
   return (
     <section className="flex w-full items-start gap-[72px] max-[1600px]:flex-col min-[1600px]:flex-row">
@@ -207,7 +125,60 @@ function Divider() {
  * Página
  * ────────────────────────────────────────────────────────────────────────── */
 
+interface SectionDef {
+  key: string
+  title: string
+  paragraphs: string[]
+  usage: string[]
+  cards: BrandColorEntry[]
+}
+
 export function BrandColorsPage() {
+  const sections: SectionDef[] = [
+    brandColorsReports.primary.visible.length > 0 && {
+      key: 'primary',
+      title: 'Color primario de marca',
+      paragraphs: [
+        'Rol cromático principal de la identidad.',
+        'Debe concentrar el mayor reconocimiento de marca y utilizarse como referencia para los momentos de mayor jerarquía visual. La familia y el tono asignados pueden cambiar según el proyecto.',
+      ],
+      usage: ['CTA’s', 'Headers', 'Hero surfaces', 'Logo', 'Elementos'],
+      cards: brandColorsReports.primary.visible,
+    },
+    brandColorsReports.secondary.visible.length > 0 && {
+      key: 'secondary',
+      title: 'Colores secundarios de marca',
+      paragraphs: [
+        'Roles cromáticos de apoyo que amplían la identidad sin competir con Primary.',
+        'Pueden utilizarse para construir jerarquía, profundidad, superficies auxiliares y diferenciación visual. La cantidad de roles secundarios puede variar según cada marca.',
+      ],
+      usage: [
+        'Backgrounds',
+        'Estados interactivos',
+        'Diferenciación modular',
+        'Apoyo Editorial',
+        'Iconos',
+      ],
+      cards: brandColorsReports.secondary.visible,
+    },
+    brandColorsReports.accent.visible.length > 0 && {
+      key: 'accent',
+      title: 'Colores de acento de marca',
+      paragraphs: [
+        'Roles cromáticos complementarios para ampliar el rango expresivo de la marca.',
+        'Se utilizan de forma intencional para campañas, categorías, storytelling o momentos específicos sin desplazar los roles Primary y Secondary. La cantidad de accents debe responder a las necesidades reales del proyecto.',
+      ],
+      usage: [
+        'Promociones',
+        'CTA’s',
+        'Contraste Visual',
+        'Información puntual',
+        'Bloques secundarios de contenido',
+      ],
+      cards: brandColorsReports.accent.visible,
+    },
+  ].filter(Boolean) as SectionDef[]
+
   return (
     <div className="flex w-full flex-col items-start bg-white">
       <PageHeader
@@ -221,52 +192,14 @@ export function BrandColorsPage() {
         ]}
       />
 
-      {/* Secciones de roles */}
+      {/* Secciones de roles — solo las que tienen datos completos */}
       <div className="flex w-full flex-col items-start gap-[64px] px-[40px] py-[80px]">
-        <Divider />
-        <BrandSection
-          title="Color primario de marca"
-          paragraphs={[
-            'Rol cromático principal de la identidad.',
-            'Debe concentrar el mayor reconocimiento de marca y utilizarse como referencia para los momentos de mayor jerarquía visual. La familia y el tono asignados pueden cambiar según el proyecto.',
-          ]}
-          usage={['CTA’s', 'Headers', 'Hero surfaces', 'Logo', 'Elementos']}
-          cards={[PRIMARY]}
-        />
-
-        <Divider />
-        <BrandSection
-          title="Colores secundarios de marca"
-          paragraphs={[
-            'Roles cromáticos de apoyo que amplían la identidad sin competir con Primary.',
-            'Pueden utilizarse para construir jerarquía, profundidad, superficies auxiliares y diferenciación visual. La cantidad de roles secundarios puede variar según cada marca.',
-          ]}
-          usage={[
-            'Backgrounds',
-            'Estados interactivos',
-            'Diferenciación modular',
-            'Apoyo Editorial',
-            'Iconos',
-          ]}
-          cards={SECONDARY}
-        />
-
-        <Divider />
-        <BrandSection
-          title="Colores de acento de marca"
-          paragraphs={[
-            'Roles cromáticos complementarios para ampliar el rango expresivo de la marca.',
-            'Se utilizan de forma intencional para campañas, categorías, storytelling o momentos específicos sin desplazar los roles Primary y Secondary. La cantidad de accents debe responder a las necesidades reales del proyecto.',
-          ]}
-          usage={[
-            'Promociones',
-            'CTA’s',
-            'Contraste Visual',
-            'Información puntual',
-            'Bloques secundarios de contenido',
-          ]}
-          cards={ACCENTS}
-        />
+        {sections.map((s) => (
+          <Fragment key={s.key}>
+            <Divider />
+            <BrandSection {...s} />
+          </Fragment>
+        ))}
       </div>
 
       <GovernanceFooter title="Gobernanza del color de marca" rules={GOVERNANCE_RULES} />

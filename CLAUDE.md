@@ -20,6 +20,46 @@ viewport (igual que Brand Colors).
 Proyecto original en Figma:
 https://www.figma.com/design/i8FTndoqsyBd5GyaRme2nR/Template---BrandSystem
 
+## Regla de completitud de datos (dinámico por brief de marca)
+
+**Regla super importante, nunca pasarla por alto:** el sitio se completa con
+los datos de un `.md` de intake (ver `BRAND-SYSTEM-INTAKE.md`) por proyecto.
+**Todo campo hardcodeado hoy en el master es un dato obligatorio** para que
+ese ítem se muestre — lo único exento son los campos que un componente
+calcula solo (ej. ratio de contraste y nivel WCAG en `ColorCard` /
+`SemanticColorCard`, derivados del HEX).
+
+- Un ítem (un color, una fila de token…) al que le falta **algún** campo
+  obligatorio se oculta igual que si le faltaran todos — no se muestra "a
+  medias". La diferencia es solo de **registro**: si vino *parcial* (algunos
+  campos sí) queda categorizado distinto que si no vino *nada*.
+- Una sección/grupo se oculta como **consecuencia natural** de que todos sus
+  ítems quedaron ocultos — no hay campos obligatorios a nivel de página ni de
+  módulo, solo a nivel de cada componente/ítem individual.
+- Todo lo oculto queda registrado en **Registro de completado** (icon button
+  entre "Mis componentes" y "Ajustes" del sidebar), separado en 🟡 *Datos
+  parciales* (falta algo) y 🔴 *Sin datos* (no vino nada), con el detalle de
+  qué campo falta por ítem.
+
+**Cómo está implementado** (patrón a replicar si se suma un módulo nuevo):
+- `src/app/lib/completeness.ts` — motor genérico: `evaluateSection` separa
+  `visible` (items completos) de `hidden` (con motivo + campos faltantes).
+- `src/app/data/<pagina>.ts` — datos de la página, con todo campo de marca
+  como opcional en el tipo (`hex?: string`, no `hex: string`) + su lista de
+  `RequiredField` obligatorios.
+- `src/app/lib/siteCompleteness.ts` — importa los datos de cada página y
+  corre `evaluateSection` una sola vez; expone los reportes por página +
+  `ALL_HIDDEN_ENTRIES` (usado por `RegistroPage`). Única fuente de verdad:
+  tanto la página como el registro leen de acá, así el registro no depende de
+  haber visitado la página.
+- La página de documentación (`BrandColorsPage`, `SemanticColorsPage`, …)
+  importa su reporte de `siteCompleteness.ts` y renderiza solo `.visible`;
+  una sección/`Group` sin nada visible retorna `null` (o no se agrega al
+  array de secciones a renderizar).
+- **Hoy implementado en:** Brand Colors, Semantic Colors. **Pendiente con el
+  mismo patrón:** Typography Foundations/System, Visual Styles, Grid
+  System/Application.
+
 ## Stack
 
 - React 18 + TypeScript
@@ -94,6 +134,12 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
     rendereado en vivo. Índice de navegación fijo (`sticky`) a la derecha
     (`PageNav`, ≥1080px) con scrollspy (IntersectionObserver); click = scroll a
     esa sección. Se entra por el icon button (Layers) del pie del sidebar.
+  - `RegistroPage` — **Registro de completado**: historial de lo que se ocultó
+    por falta de datos de marca (ver "Regla de completitud de datos"), separado
+    en Datos parciales / Sin datos con el detalle de qué falta. Lee
+    `ALL_HIDDEN_ENTRIES` de `src/app/lib/siteCompleteness.ts`. Se entra por el
+    icon button (ClipboardList) del pie del sidebar, entre "Mis componentes" y
+    "Ajustes".
   - `AjustesPage` — placeholder vacío. Se entra por el icon button (cog) del pie
     del sidebar.
   - `components/demo/` — demos por categoría (Buttons, Inputs, Media, Feedback,
@@ -103,7 +149,8 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
     (`null` en `paragraphs` = línea en blanco). Lo usan TODAS las páginas de
     documentación.
   - `components/ColorCard/` — documenta un **primitive** (variantes primary/
-    secondary/tertiary/gradient)
+    secondary/tertiary/gradient). Ratio y nivel WCAG (primary/secondary) se
+    calculan solos desde el HEX — no son dato de marca a completar.
   - `components/SemanticColorCard/` — documenta un **token semántico**
     (`color/text/*`, `color/ui/border/*`, `color/background/*`…). Variantes
     `text` / `border` / `background` / `background-border`. Ratios y nivel WCAG
@@ -112,6 +159,13 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
   - `components/TokenTag/` — píldora gris de ruta/token; recorta con "…" +
     tooltip con el texto completo si no entra. Usar siempre para ese tipo de
     etiqueta. Prop `tone`: `default` (#e6eef8) / `plain` (blanco).
+- `src/app/data/` — datos de marca de las páginas que ya siguen la regla de
+  completitud (`brandColors.ts`, `semanticColors.ts`): campos opcionales +
+  su lista de `RequiredField`. Ver "Regla de completitud de datos".
+- `src/app/lib/completeness.ts` — motor genérico de completitud
+  (`evaluateSection`, `evaluateItem`).
+- `src/app/lib/siteCompleteness.ts` — agrega los reportes de completitud de
+  cada página (fuente única para las páginas y para `RegistroPage`).
 - `src/app/lib/contrast.ts` — helpers de contraste/accesibilidad WCAG
   compartidos (`relativeLuminance`, `accessibleTextColor`, `contrastRatio`,
   `wcagLevel`, `isNearWhite`, …). Los usan `ColorCard` y `SemanticColorCard`.
@@ -198,6 +252,10 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
 
 - Documentadas: Global / Brand / Semantic Colors, Typography (×2), Visual Styles,
   Grids (×2), Introducción, handbook.
+- Regla de completitud de datos (ver sección arriba) implementada en Brand
+  Colors y Semantic Colors. **Pendiente**: llevar Typography Foundations/System,
+  Visual Styles y Grid System/Application al mismo patrón (datos en
+  `src/app/data/`, reporte en `siteCompleteness.ts`, render condicional).
 - `AjustesPage` es placeholder vacío (icon button "cog" del sidebar).
 - `GlobalColorsPage` sigue renderizando el frame crudo de `src/imports/` (no
   re-hecho con componentes propios como el resto).

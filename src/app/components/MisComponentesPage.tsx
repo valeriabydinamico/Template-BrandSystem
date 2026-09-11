@@ -302,8 +302,6 @@ export function MisComponentesPage() {
                 rgb={{ r: 0, g: 76, b: 151 }}
                 cmyk={{ c: 100, m: 50, y: 0, k: 41 }}
                 pantone="Pantone 2945 C"
-                accessibilityRating="AAA"
-                contrastRatio="8.47:1"
               />
             </CardSlot>
           </Example>
@@ -318,8 +316,6 @@ export function MisComponentesPage() {
                 rgb={{ r: 0, g: 163, b: 225 }}
                 cmyk={{ c: 100, m: 28, y: 0, k: 12 }}
                 pantone="Pantone 2995 C"
-                accessibilityRating="AA"
-                contrastRatio="4.73:1"
               />
             </CardSlot>
           </Example>

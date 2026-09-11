@@ -1,5 +1,12 @@
 import { TokenTag } from '../TokenTag'
-import { relativeLuminance, accessibleTextColor, isNearWhite } from '../../lib/contrast'
+import {
+  relativeLuminance,
+  accessibleTextColor,
+  isNearWhite,
+  contrastRatio as getContrastRatio,
+  wcagLevel,
+  formatRatio,
+} from '../../lib/contrast'
 
 function getGradientTextColor(hexTop: string, hexBottom: string): string {
   const avg = (relativeLuminance(hexTop) + relativeLuminance(hexBottom)) / 2
@@ -32,10 +39,6 @@ export interface ColorCardProps {
   token?: string
   /** Referencia Pantone (primary/secondary) */
   pantone?: string
-  /** Nivel WCAG (primary/secondary) */
-  accessibilityRating?: string
-  /** Ratio de contraste (primary/secondary) */
-  contrastRatio?: string
   /** HEX sin # del color superior del degradado (gradient) */
   colorTop?: string
   /** HEX sin # del color inferior del degradado (gradient) */
@@ -56,8 +59,6 @@ export function ColorCard({
   hsl,
   token,
   pantone,
-  accessibilityRating,
-  contrastRatio,
   colorTop,
   colorBottom,
   angle,
@@ -144,8 +145,12 @@ export function ColorCard({
   /* ─── Primary & Secondary ─── */
   const isPrimary = variant === 'primary'
 
-  // Pastillas de contraste — mismo estilo que en SemanticColorCard:
-  // rating (nivel) = suave · ratio = sólida · colores según la luminancia del color.
+  // Pastillas de contraste — mismo estilo que en SemanticColorCard: rating
+  // (nivel) = suave · ratio = sólida · colores según la luminancia del color.
+  // Se calculan solas a partir del HEX (no son dato de marca a completar).
+  const ratio = bareHex ? getContrastRatio(`#${bareHex}`, textColor) : null
+  const accessibilityRating = ratio !== null ? wcagLevel(ratio) : null
+  const contrastRatio = ratio !== null ? formatRatio(ratio) : null
   const panelIsDark = textColor === '#ffffff'
   const badgeBase =
     'flex items-center justify-center rounded-[20px] px-[12px] py-[8px] font-semibold text-[14px] leading-[16px] whitespace-nowrap'

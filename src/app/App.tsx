@@ -21,10 +21,12 @@ import {
   ChevronDown,
   PanelLeftClose,
   PanelLeftOpen,
+  ClipboardList,
   type LucideIcon,
 } from 'lucide-react'
 
 import { MisComponentesPage } from './components/MisComponentesPage'
+import { RegistroPage } from './components/RegistroPage'
 import { IntroduccionPage, type IntroTarget } from './components/IntroduccionPage'
 import { GlobalColorsPage } from './components/GlobalColorsPage'
 import { BrandColorsPage } from './components/BrandColorsPage'
@@ -44,6 +46,7 @@ type SidebarPage =
   | 'book'
   | 'folder'
   | 'mis-componentes'
+  | 'registro'
   | 'ajustes'
   | 'typography'
   | 'visual-styles'
@@ -497,6 +500,13 @@ function Sidebar({
           <Layers className="size-[18px]" strokeWidth={1.75} />
         </IconButton>
         <IconButton
+          label="Registro de completado"
+          active={activePage === 'registro'}
+          onClick={() => setActivePage('registro')}
+        >
+          <ClipboardList className="size-[18px]" strokeWidth={1.75} />
+        </IconButton>
+        <IconButton
           label="Ajustes"
           active={activePage === 'ajustes'}
           onClick={() => setActivePage('ajustes')}
@@ -599,6 +609,8 @@ function AppShell() {
           <IntroduccionPage onNavigate={goToArea} />
         ) : activePage === 'mis-componentes' ? (
           <MisComponentesPage />
+        ) : activePage === 'registro' ? (
+          <RegistroPage />
         ) : activePage === 'ajustes' ? (
           <AjustesPage />
         ) : activePage === 'typography' ? (
