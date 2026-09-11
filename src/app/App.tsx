@@ -65,9 +65,9 @@ type DemoSection =
   | 'prompt'
 
 const colorPages: { id: ColorPage; label: string }[] = [
-  { id: 'global-colors', label: 'Global colors' },
-  { id: 'brand-colors', label: 'Brand colors' },
-  { id: 'semantic-colors', label: 'Semantic colors' },
+  { id: 'global-colors', label: 'Global' },
+  { id: 'brand-colors', label: 'Brand' },
+  { id: 'semantic-colors', label: 'Semantic' },
 ]
 
 const typographyPages: { id: TypographyPageId; label: string }[] = [
