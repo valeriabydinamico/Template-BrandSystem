@@ -54,3 +54,14 @@ export const ALL_HIDDEN_ENTRIES: HiddenEntry[] = [
   ...Object.values(brandColorsReports).flatMap((r) => r.hidden),
   ...Object.values(semanticColorsReports).flatMap((r) => r.hidden),
 ]
+
+/**
+ * A qué leaf de `moduleConfig.ts` pertenece cada `module` de reporte — para
+ * que el Registro de completado solo evalúe módulos prendidos en Ajustes. Un
+ * módulo apagado no es "oculto por falta de datos": fue una decisión manual,
+ * así que no se reporta acá.
+ */
+export const REPORT_MODULE_TO_LEAF: Record<string, string> = {
+  'Brand Colors': 'color.brand-colors',
+  'Semantic Colors': 'color.semantic-colors',
+}

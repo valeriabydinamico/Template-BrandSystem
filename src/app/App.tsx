@@ -27,6 +27,7 @@ import {
 
 import { MisComponentesPage } from './components/MisComponentesPage'
 import { RegistroPage } from './components/RegistroPage'
+import { useModuleConfig, type ModuleState } from './lib/moduleConfig'
 import { IntroduccionPage, type IntroTarget } from './components/IntroduccionPage'
 import { GlobalColorsPage } from './components/GlobalColorsPage'
 import { BrandColorsPage } from './components/BrandColorsPage'
@@ -336,11 +337,13 @@ function Sidebar({
   setGridsOpen,
   collapsed,
   setCollapsed,
+  enabled,
 }: {
   activePage: SidebarPage
   setActivePage: (p: SidebarPage) => void
   activeColorPage: ColorPage
   setActiveColorPage: (p: ColorPage) => void
+  enabled: ModuleState
   colorOpen: boolean
   setColorOpen: (fn: (o: boolean) => boolean) => void
   activeTypographyPage: TypographyPageId
@@ -364,6 +367,14 @@ function Sidebar({
         setOpen((o) => !o)
       }
     }
+
+  // Ajustes: un módulo apagado desaparece del sidebar. Si un grupo se queda
+  // sin ninguna sub-página prendida, el grupo entero desaparece (consecuencia
+  // natural, no hay switch de grupo aparte).
+  const visibleColorPages = colorPages.filter((p) => enabled[`color.${p.id}`] !== false)
+  const visibleTypographyPages = typographyPages.filter((p) => enabled[`typography.${p.id}`] !== false)
+  const visibleGridPages = gridPages.filter((p) => enabled[`grids.${p.id}`] !== false)
+  const visualStylesEnabled = enabled['visual-styles.page'] !== false
 
   return (
     <aside
@@ -408,82 +419,90 @@ function Sidebar({
           collapsed={collapsed}
         />
 
-        <NavGroup
-          Icon={Palette}
-          label="Color system"
-          groupActive={activePage === 'color'}
-          open={colorOpen}
-          onToggle={toggleGroup(setColorOpen)}
-          collapsed={collapsed}
-        >
-          {colorPages.map((p) => (
-            <NavSubItem
-              key={p.id}
-              label={p.label}
-              active={activePage === 'color' && activeColorPage === p.id}
-              onClick={() =>
-                startTransition(() => {
-                  setActivePage('color')
-                  setActiveColorPage(p.id)
-                })
-              }
-            />
-          ))}
-        </NavGroup>
+        {visibleColorPages.length > 0 && (
+          <NavGroup
+            Icon={Palette}
+            label="Color system"
+            groupActive={activePage === 'color'}
+            open={colorOpen}
+            onToggle={toggleGroup(setColorOpen)}
+            collapsed={collapsed}
+          >
+            {visibleColorPages.map((p) => (
+              <NavSubItem
+                key={p.id}
+                label={p.label}
+                active={activePage === 'color' && activeColorPage === p.id}
+                onClick={() =>
+                  startTransition(() => {
+                    setActivePage('color')
+                    setActiveColorPage(p.id)
+                  })
+                }
+              />
+            ))}
+          </NavGroup>
+        )}
 
-        <NavGroup
-          Icon={Type}
-          label="Typography"
-          groupActive={activePage === 'typography'}
-          open={typographyOpen}
-          onToggle={toggleGroup(setTypographyOpen)}
-          collapsed={collapsed}
-        >
-          {typographyPages.map((p) => (
-            <NavSubItem
-              key={p.id}
-              label={p.label}
-              active={activePage === 'typography' && activeTypographyPage === p.id}
-              onClick={() =>
-                startTransition(() => {
-                  setActivePage('typography')
-                  setActiveTypographyPage(p.id)
-                })
-              }
-            />
-          ))}
-        </NavGroup>
+        {visibleTypographyPages.length > 0 && (
+          <NavGroup
+            Icon={Type}
+            label="Typography"
+            groupActive={activePage === 'typography'}
+            open={typographyOpen}
+            onToggle={toggleGroup(setTypographyOpen)}
+            collapsed={collapsed}
+          >
+            {visibleTypographyPages.map((p) => (
+              <NavSubItem
+                key={p.id}
+                label={p.label}
+                active={activePage === 'typography' && activeTypographyPage === p.id}
+                onClick={() =>
+                  startTransition(() => {
+                    setActivePage('typography')
+                    setActiveTypographyPage(p.id)
+                  })
+                }
+              />
+            ))}
+          </NavGroup>
+        )}
 
-        <NavItem
-          Icon={Shapes}
-          label="Visual styles"
-          active={activePage === 'visual-styles'}
-          onClick={() => setActivePage('visual-styles')}
-          collapsed={collapsed}
-        />
+        {visualStylesEnabled && (
+          <NavItem
+            Icon={Shapes}
+            label="Visual styles"
+            active={activePage === 'visual-styles'}
+            onClick={() => setActivePage('visual-styles')}
+            collapsed={collapsed}
+          />
+        )}
 
-        <NavGroup
-          Icon={Grid3x3}
-          label="Grids"
-          groupActive={activePage === 'grids'}
-          open={gridsOpen}
-          onToggle={toggleGroup(setGridsOpen)}
-          collapsed={collapsed}
-        >
-          {gridPages.map((p) => (
-            <NavSubItem
-              key={p.id}
-              label={p.label}
-              active={activePage === 'grids' && activeGridPage === p.id}
-              onClick={() =>
-                startTransition(() => {
-                  setActivePage('grids')
-                  setActiveGridPage(p.id)
-                })
-              }
-            />
-          ))}
-        </NavGroup>
+        {visibleGridPages.length > 0 && (
+          <NavGroup
+            Icon={Grid3x3}
+            label="Grids"
+            groupActive={activePage === 'grids'}
+            open={gridsOpen}
+            onToggle={toggleGroup(setGridsOpen)}
+            collapsed={collapsed}
+          >
+            {visibleGridPages.map((p) => (
+              <NavSubItem
+                key={p.id}
+                label={p.label}
+                active={activePage === 'grids' && activeGridPage === p.id}
+                onClick={() =>
+                  startTransition(() => {
+                    setActivePage('grids')
+                    setActiveGridPage(p.id)
+                  })
+                }
+              />
+            ))}
+          </NavGroup>
+        )}
       </nav>
 
       {/* Utilidades */}
@@ -531,6 +550,7 @@ function Sidebar({
 }
 
 function AppShell() {
+  const { enabled, toggle, applyPreset } = useModuleConfig()
   const [activePage, setActivePage] = useState<SidebarPage>('introduccion')
   const [activeSection, setActiveSection] = useState<DemoSection>('buttons')
   const [activeColorPage, setActiveColorPage] = useState<ColorPage>('global-colors')
@@ -561,6 +581,27 @@ function AppShell() {
   useEffect(() => {
     mainRef.current?.scrollTo(0, 0)
   }, [activePage, activeColorPage, activeTypographyPage, activeGridPage])
+
+  // Si desde Ajustes se apaga la sub-página (o el grupo entero) que está
+  // activa en este momento, redirige a la primera que siga prendida — o a
+  // Introducción si el grupo entero quedó sin nada prendido.
+  useEffect(() => {
+    if (activePage === 'color' && enabled[`color.${activeColorPage}`] === false) {
+      const next = colorPages.find((p) => enabled[`color.${p.id}`] !== false)
+      next ? setActiveColorPage(next.id) : setActivePage('introduccion')
+    }
+    if (activePage === 'typography' && enabled[`typography.${activeTypographyPage}`] === false) {
+      const next = typographyPages.find((p) => enabled[`typography.${p.id}`] !== false)
+      next ? setActiveTypographyPage(next.id) : setActivePage('introduccion')
+    }
+    if (activePage === 'grids' && enabled[`grids.${activeGridPage}`] === false) {
+      const next = gridPages.find((p) => enabled[`grids.${p.id}`] !== false)
+      next ? setActiveGridPage(next.id) : setActivePage('introduccion')
+    }
+    if (activePage === 'visual-styles' && enabled['visual-styles.page'] === false) {
+      setActivePage('introduccion')
+    }
+  }, [enabled, activePage, activeColorPage, activeTypographyPage, activeGridPage])
 
   const current = sections.find(s => s.id === activeSection)!
 
@@ -601,6 +642,7 @@ function AppShell() {
         setGridsOpen={setGridsOpen}
         collapsed={collapsed}
         setCollapsed={setCollapsed}
+        enabled={enabled}
       />
 
       {/* Main content */}
@@ -610,9 +652,9 @@ function AppShell() {
         ) : activePage === 'mis-componentes' ? (
           <MisComponentesPage />
         ) : activePage === 'registro' ? (
-          <RegistroPage />
+          <RegistroPage enabled={enabled} />
         ) : activePage === 'ajustes' ? (
-          <AjustesPage />
+          <AjustesPage enabled={enabled} toggle={toggle} applyPreset={applyPreset} />
         ) : activePage === 'typography' ? (
           <div className="flex flex-col gap-xs">
             {activeTypographyPage === 'foundations' && <TypographyFoundationsPage />}

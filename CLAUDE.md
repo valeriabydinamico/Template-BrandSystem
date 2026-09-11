@@ -60,6 +60,30 @@ calcula solo (ej. ratio de contraste y nivel WCAG en `ColorCard` /
   mismo patrón:** Typography Foundations/System, Visual Styles, Grid
   System/Application.
 
+### Ajustes — prender/apagar módulos (capa manual, separada de la anterior)
+
+`AjustesPage` (icon button cog del sidebar) deja prender/apagar cada
+sub-página del catálogo con un switch — **independiente** de si sus datos
+están completos. Un módulo apagado desaparece del sidebar sin importar sus
+datos, y el **Registro de completado NO lo evalúa** (apagado a propósito ≠
+oculto por falta de datos).
+
+- `src/app/lib/moduleConfig.ts` — `MODULE_GROUPS` (grupo → sub-páginas,
+  cada una con un id namespaced: `color.brand-colors`, `visual-styles.page`…),
+  `LARGE_PRESET` (todo prendido) y `LIGHT_PRESET` (subset **representativo**
+  por ahora — Brand Colors, Semantic Colors, Typography System, Visual
+  Styles; falta definir el set real). `useModuleConfig()` persiste en
+  `localStorage` (`module-config`, por navegador, sin backend).
+- No hay switch de grupo: si todas las sub-páginas de un grupo quedan
+  apagadas, el grupo entero desaparece del sidebar como consecuencia natural
+  (mismo criterio que las secciones sin datos).
+- `App.tsx` (`Sidebar`) filtra `colorPages` / `typographyPages` / `gridPages`
+  por `enabled`; si la sub-página activa se apaga desde Ajustes, redirige a
+  la siguiente prendida del grupo o a Introducción.
+- `RegistroPage` recibe `enabled` y filtra `ALL_HIDDEN_ENTRIES` con
+  `REPORT_MODULE_TO_LEAF` (en `siteCompleteness.ts`) — al sumar un módulo
+  nuevo a la regla de completitud, agregar ahí su mapeo `module → leaf id`.
+
 ## Stack
 
 - React 18 + TypeScript
@@ -140,8 +164,8 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
     `ALL_HIDDEN_ENTRIES` de `src/app/lib/siteCompleteness.ts`. Se entra por el
     icon button (ClipboardList) del pie del sidebar, entre "Mis componentes" y
     "Ajustes".
-  - `AjustesPage` — placeholder vacío. Se entra por el icon button (cog) del pie
-    del sidebar.
+  - `AjustesPage` — panel de control de módulos (ver "Ajustes — prender/apagar
+    módulos"). Se entra por el icon button (cog) del pie del sidebar.
   - `components/demo/` — demos por categoría (Buttons, Inputs, Media, Feedback,
     Navigation, Toolbar, PromptChat). Nota: hoy `App.tsx` no las enruta.
   - `components/PageHeader/` — encabezado de página (IntroCard: eyebrow de
@@ -256,7 +280,9 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
   Colors y Semantic Colors. **Pendiente**: llevar Typography Foundations/System,
   Visual Styles y Grid System/Application al mismo patrón (datos en
   `src/app/data/`, reporte en `siteCompleteness.ts`, render condicional).
-- `AjustesPage` es placeholder vacío (icon button "cog" del sidebar).
+- `AjustesPage` ya tiene el panel de módulos (presets Large/Light + switches
+  por sub-página). Pendiente: definir el set real del preset Light (hoy es
+  representativo).
 - `GlobalColorsPage` sigue renderizando el frame crudo de `src/imports/` (no
   re-hecho con componentes propios como el resto).
 - Fuentes de ejemplo del Type System (Manrope / Source Serif 4 / JetBrains Mono)

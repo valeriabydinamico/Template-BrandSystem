@@ -1,8 +1,9 @@
 import { PageHeader } from './PageHeader'
 import { TokenTag } from './TokenTag'
 import { SectionHeader } from './docs/shared'
-import { ALL_HIDDEN_ENTRIES } from '../lib/siteCompleteness'
+import { ALL_HIDDEN_ENTRIES, REPORT_MODULE_TO_LEAF } from '../lib/siteCompleteness'
 import type { HiddenEntry } from '../lib/completeness'
+import type { ModuleState } from '../lib/moduleConfig'
 
 /* ────────────────────────────────────────────────────────────────────────────
  * Registro de completado — historial de qué se ocultó del sitio por falta de
@@ -86,9 +87,15 @@ function EmptyState() {
   )
 }
 
-export function RegistroPage() {
-  const partial = ALL_HIDDEN_ENTRIES.filter((e) => e.status === 'partial')
-  const missing = ALL_HIDDEN_ENTRIES.filter((e) => e.status === 'missing')
+export function RegistroPage({ enabled }: { enabled: ModuleState }) {
+  // Solo se evalúan los módulos prendidos en Ajustes — uno apagado fue una
+  // decisión manual, no "oculto por falta de datos", así que no se reporta.
+  const evaluated = ALL_HIDDEN_ENTRIES.filter((e) => {
+    const leaf = REPORT_MODULE_TO_LEAF[e.module]
+    return leaf ? enabled[leaf] !== false : true
+  })
+  const partial = evaluated.filter((e) => e.status === 'partial')
+  const missing = evaluated.filter((e) => e.status === 'missing')
   const partialByModule = groupByModule(partial)
   const missingByModule = groupByModule(missing)
 
@@ -99,12 +106,12 @@ export function RegistroPage() {
         title="Registro de completado"
         paragraphs={[
           'Historial de lo que el sitio ocultó por falta de datos en el brief de marca, y qué falta para completarlo.',
-          'Se recalcula automáticamente a partir de los mismos datos que arman cada página — no hace falta visitarlas para que aparezcan acá.',
+          'Solo evalúa los módulos prendidos en Ajustes — uno apagado fue una decisión manual, no un dato faltante, y no aparece acá.',
         ]}
       />
 
       <div className="flex w-full flex-col gap-[48px] px-[40px] py-[72px]">
-        {ALL_HIDDEN_ENTRIES.length === 0 && <EmptyState />}
+        {evaluated.length === 0 && <EmptyState />}
 
         {partial.length > 0 && (
           <section className="flex w-full flex-col gap-[24px]">
