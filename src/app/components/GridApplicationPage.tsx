@@ -87,6 +87,7 @@ function FormatTable({ formats }: { formats: FormatRow[] }) {
 /* ─── Wireframes (derivados de los formatos visibles) ─── */
 
 function WireframeCard({ data }: { data: FormatRow }) {
+  const cols = data.cols ?? 0
   return (
     <div className="flex w-full min-w-0 flex-col gap-[14px] rounded-[16px] border border-[#bac2cf] bg-white p-[20px]">
       <div className="flex flex-col gap-[2px]">
@@ -97,9 +98,16 @@ function WireframeCard({ data }: { data: FormatRow }) {
       </div>
       <div className="relative w-full overflow-clip rounded-[10px] border border-[#bac2cf] bg-[#f7f9fb] pb-[56%]">
         <span className="absolute inset-x-[9%] inset-y-[13%] rounded-[2px] border-2 border-[#ccdef2]" />
-        <span className="absolute inset-x-[13%] inset-y-[22%] flex gap-[4%]">
-          {[0, 1, 2, 3].map((i) => (
-            <span key={i} className="h-full flex-1 rounded-[1px]" style={{ backgroundColor: '#e0ebf7' }} />
+        {/* Cantidad de columnas dinámica — refleja el `cols` real de este
+            formato, no un número fijo. Las columnas de borde (margin) se
+            tiñen distinto para diferenciarlas del resto (gutter). */}
+        <span className="absolute inset-x-[13%] inset-y-[22%] flex gap-[2px]">
+          {Array.from({ length: cols }).map((_, i) => (
+            <span
+              key={i}
+              className="h-full flex-1 rounded-[1px]"
+              style={{ backgroundColor: i === 0 || i === cols - 1 ? '#f4d7c9' : '#e0ebf7' }}
+            />
           ))}
         </span>
       </div>
