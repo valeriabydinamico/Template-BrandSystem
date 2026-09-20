@@ -70,8 +70,10 @@ function moduleStateEquals(a: ModuleState, b: ModuleState) {
   return Object.keys(b).every((k) => (a[k] !== false) === (b[k] !== false))
 }
 
-/** Filas de switch de un grupo — sus sub-páginas si las tiene, o su propio id
- *  si es una página única (ver `ModuleGroupDef` en `moduleConfig.ts`). */
+/** Card de un grupo. Si tiene sub-páginas reales, el título va solo arriba y
+ *  cada sub-página es una fila con su switch. Si es una página única (sin
+ *  `leaves`), el switch va directo al lado del título — no hay sub-página
+ *  que nombrar dos veces. */
 function GroupCard({
   group,
   enabled,
@@ -81,12 +83,24 @@ function GroupCard({
   enabled: ModuleState
   toggle: (id: string) => void
 }) {
-  const rows = group.leaves ?? [{ id: group.id, label: group.label }]
+  if (!group.leaves) {
+    return (
+      <div className="flex w-full items-center justify-between gap-[16px] rounded-[16px] border border-[#e3e7ee] bg-[#fafbfc] px-[20px] py-[16px]">
+        <p className="font-bold text-[16px] leading-[20px] text-[#16181d]">{group.label}</p>
+        <Switch
+          checked={enabled[group.id] !== false}
+          onChange={() => toggle(group.id)}
+          label={group.label}
+        />
+      </div>
+    )
+  }
+
   return (
     <div className="flex w-full flex-col gap-[12px] rounded-[16px] border border-[#e3e7ee] bg-[#fafbfc] p-[20px]">
       <p className="font-bold text-[16px] leading-[20px] text-[#16181d]">{group.label}</p>
       <div className="flex w-full flex-col gap-[8px]">
-        {rows.map((leaf) => (
+        {group.leaves.map((leaf) => (
           <div
             key={leaf.id}
             className="flex w-full items-center justify-between gap-[16px] rounded-[10px] bg-white px-[16px] py-[12px]"
