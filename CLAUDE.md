@@ -211,9 +211,13 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
   - `RegistroPage` — **Registro de completado**: historial de lo que se ocultó
     por falta de datos de marca (ver "Regla de completitud de datos"), separado
     en Datos parciales / Sin datos con el detalle de qué falta. Lee
-    `ALL_HIDDEN_ENTRIES` de `src/app/lib/siteCompleteness.ts`. Se entra por el
-    icon button (ClipboardList) del pie del sidebar, entre "Mis componentes" y
-    "Ajustes".
+    `ALL_HIDDEN_ENTRIES` de `src/app/lib/siteCompleteness.ts`. También lista
+    **Páginas sin contenido** — módulos prendidos en Ajustes que hoy son
+    `PlaceholderPage` (el `PageHeader` no cuenta como contenido); usa
+    `emptyLeaves()` de `src/app/lib/moduleConfig.ts`, que compara
+    `ALL_LEAF_IDS` contra `LEAVES_WITH_CONTENT` (actualizar ese set al sumarle
+    contenido real a una página). Se entra por el icon button (ClipboardList)
+    del pie del sidebar, entre "Mis componentes" y "Ajustes".
   - `AjustesPage` — panel de control de módulos (ver "Ajustes — prender/apagar
     módulos"). Se entra por el icon button (cog) del pie del sidebar.
   - `PlaceholderPage` — página genérica para cualquier módulo del catálogo sin

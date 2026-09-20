@@ -142,6 +142,49 @@ export const ALL_LEAF_IDS: string[] = CATEGORIES.flatMap((c) =>
   c.groups.flatMap((g) => (g.leaves ? g.leaves.map((l) => l.id) : [g.id])),
 )
 
+/**
+ * Hojas con contenido real (una página propia, no `PlaceholderPage`). El
+ * resto de `ALL_LEAF_IDS` se renderiza con `PlaceholderPage` (solo
+ * `PageHeader` + "[agregar descripción]") — ver "Arquitectura del catálogo"
+ * en `CLAUDE.md`. Actualizar esta lista al construir el contenido real de
+ * una página nueva.
+ */
+export const LEAVES_WITH_CONTENT = new Set<string>([
+  'color.global-colors',
+  'color.brand-colors',
+  'color.semantic-colors',
+  'typography.foundations',
+  'typography.system',
+  'grids.system',
+  'grids.application',
+  'visual-styles.page',
+])
+
+export interface EmptyLeaf {
+  id: string
+  label: string
+  categoryLabel: string
+}
+
+/** Hojas prendidas (`enabled`) que hoy no tienen contenido real — ver
+ *  `LEAVES_WITH_CONTENT`. El `PageHeader` no cuenta como contenido: una
+ *  página con solo `PageHeader` sigue "sin contenido". Usado por
+ *  `RegistroPage`. */
+export function emptyLeaves(enabled: ModuleState): EmptyLeaf[] {
+  const result: EmptyLeaf[] = []
+  for (const category of CATEGORIES) {
+    for (const group of category.groups) {
+      const leaves = group.leaves ?? [{ id: group.id, label: group.label }]
+      for (const leaf of leaves) {
+        if (LEAVES_WITH_CONTENT.has(leaf.id)) continue
+        if (enabled[leaf.id] === false) continue
+        result.push({ id: leaf.id, label: leaf.label, categoryLabel: category.label })
+      }
+    }
+  }
+  return result
+}
+
 /** Info de una hoja (dato de la categoría/grupo, usado por `PlaceholderPage` y
  *  por cualquier página que solo necesite saber "dónde vive" un id). */
 export function findLeafInfo(id: string): { categoryLabel: string; label: string } | undefined {

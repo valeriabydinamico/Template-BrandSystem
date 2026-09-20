@@ -2,8 +2,8 @@ import { PageHeader } from './PageHeader'
 import { TokenTag } from './TokenTag'
 import { SectionHeader } from './docs/shared'
 import { ALL_HIDDEN_ENTRIES, REPORT_MODULE_TO_LEAF } from '../lib/siteCompleteness'
+import { emptyLeaves, type EmptyLeaf, type ModuleState } from '../lib/moduleConfig'
 import type { HiddenEntry } from '../lib/completeness'
-import type { ModuleState } from '../lib/moduleConfig'
 
 /* ────────────────────────────────────────────────────────────────────────────
  * Registro de completado — historial de qué se ocultó del sitio por falta de
@@ -80,9 +80,36 @@ function EmptyState() {
     <div className="flex w-full flex-col items-center justify-center gap-[8px] rounded-[16px] border border-dashed border-[#c4c9d4] bg-[#f7f8fa] p-[48px] text-center">
       <p className="font-semibold text-[16px] text-[#16181d]">Todo completo</p>
       <p className="max-w-[420px] font-normal text-[14px] leading-[20px] text-[#576175]">
-        No hay módulos ocultos por falta de datos. Todo lo documentado en el sitio tiene sus campos
-        obligatorios completos.
+        No hay módulos ocultos por falta de datos ni páginas sin contenido. Todo lo documentado en
+        el sitio tiene sus campos obligatorios completos.
       </p>
+    </div>
+  )
+}
+
+function groupByCategory(leaves: EmptyLeaf[]) {
+  const map = new Map<string, EmptyLeaf[]>()
+  for (const l of leaves) {
+    if (!map.has(l.categoryLabel)) map.set(l.categoryLabel, [])
+    map.get(l.categoryLabel)!.push(l)
+  }
+  return map
+}
+
+function EmptyPagesBlock({ category, leaves }: { category: string; leaves: EmptyLeaf[] }) {
+  return (
+    <div className="flex w-full flex-col gap-[16px] rounded-[16px] border border-[#e3e7ee] bg-[#fafbfc] p-[24px]">
+      <p className="font-bold text-[20px] leading-[26px] text-[#16181d]">{category}</p>
+      <div className="flex w-full flex-wrap gap-[8px]">
+        {leaves.map((l) => (
+          <span
+            key={l.id}
+            className="rounded-[999px] border border-[#e3e7ee] bg-white px-[14px] py-[8px] font-medium text-[13px] leading-[18px] text-[#16181d]"
+          >
+            {l.label}
+          </span>
+        ))}
+      </div>
     </div>
   )
 }
@@ -99,6 +126,11 @@ export function RegistroPage({ enabled }: { enabled: ModuleState }) {
   const partialByModule = groupByModule(partial)
   const missingByModule = groupByModule(missing)
 
+  // Páginas prendidas que todavía no tienen contenido real (solo
+  // PageHeader) — el PageHeader no cuenta como contenido.
+  const withoutContent = emptyLeaves(enabled)
+  const withoutContentByCategory = groupByCategory(withoutContent)
+
   return (
     <div className="flex w-full flex-col items-start bg-white">
       <PageHeader
@@ -111,7 +143,21 @@ export function RegistroPage({ enabled }: { enabled: ModuleState }) {
       />
 
       <div className="flex w-full flex-col gap-[48px] px-[40px] py-[72px]">
-        {evaluated.length === 0 && <EmptyState />}
+        {evaluated.length === 0 && withoutContent.length === 0 && <EmptyState />}
+
+        {withoutContent.length > 0 && (
+          <section className="flex w-full flex-col gap-[24px]">
+            <SectionHeader
+              title="📄 Páginas sin contenido"
+              description="El módulo está prendido pero todavía no tiene contenido real — solo muestra el encabezado (PageHeader), que no cuenta como contenido."
+            />
+            <div className="flex w-full flex-col gap-[16px]">
+              {[...withoutContentByCategory.entries()].map(([category, leaves]) => (
+                <EmptyPagesBlock key={category} category={category} leaves={leaves} />
+              ))}
+            </div>
+          </section>
+        )}
 
         {partial.length > 0 && (
           <section className="flex w-full flex-col gap-[24px]">
