@@ -10,6 +10,7 @@ import { Note } from './Note'
 import { ColorCard } from './ColorCard'
 import { SemanticColorCard } from './SemanticColorCard'
 import { WireframeCard } from './WireframeCard'
+import { PhotoCategoryCard } from './PhotoCategoryCard'
 import { DocNote, MetaRow, SectionHeader, TypePreview } from './docs/shared'
 import { FONT } from './typography/shared'
 
@@ -112,6 +113,7 @@ const SECTIONS = [
   { id: 'color-card', name: 'ColorCard' },
   { id: 'semantic-color-card', name: 'SemanticColorCard' },
   { id: 'wireframe-card', name: 'WireframeCard' },
+  { id: 'photo-category-card', name: 'PhotoCategoryCard' },
   { id: 'section-header', name: 'SectionHeader' },
   { id: 'doc-note', name: 'DocNote' },
   { id: 'type-preview', name: 'TypePreview' },
@@ -457,6 +459,24 @@ export function MisComponentesPage() {
           <Example label="el wireframe se dibuja según `cols`, `margin` y `gutter` del formato">
             <CardSlot width={280}>
               <WireframeCard channel="WEB" format="Desktop" size="1440×1024" cols={12} margin={80} gutter={24} />
+            </CardSlot>
+          </Example>
+        </Section>
+
+        <Section
+          id="photo-category-card"
+          name="PhotoCategoryCard"
+          description="Documenta una categoría del sistema fotográfico de marca: foto de referencia, nombre, descripción, uso recomendado, tono emocional y pills de contexto. Sin foto todavía (llegan por upload del cliente, nunca stock de relleno), muestra un placeholder neutro."
+        >
+          <Example label="sin foto todavía → placeholder neutro">
+            <CardSlot width={340}>
+              <PhotoCategoryCard
+                title="Personas y lifestyle"
+                description="Fotografía de personas en situaciones cotidianas, cercanas y creíbles. Debe transmitir naturalidad, optimismo y contexto humano sin sentirse posada o genérica."
+                usage="Campañas de captación, redes sociales, hero banners, mensajes de cercanía."
+                tone="Cálido, optimista, cercano."
+                tags={['Campañas', 'RRSS', 'Hero']}
+              />
             </CardSlot>
           </Example>
         </Section>

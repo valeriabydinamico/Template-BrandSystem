@@ -278,6 +278,19 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
     cantidad real de columnas (`cols`) dibujadas como barras — nunca un
     número fijo. Las barras de borde se tiñen distinto sugiriendo el margin.
     La usa `GridApplicationPage`.
+  - `components/PhotoCategoryCard/` — documenta una categoría del sistema
+    fotográfico de marca: foto + nombre, descripción, uso recomendado, tono
+    emocional y pills de contexto. Arquitectura de info tomada del board de
+    Figma "15 - Sistema Fotográfico" (fileKey `muVJlf3hw1JM155GJlUnTd`, nodo
+    `16349:159`). `image` es opcional — sin foto todavía muestra un
+    placeholder neutro (ícono + "Sin foto todavía"); **nunca** usar fotos de
+    stock como relleno, las fotos reales de marca llegan por upload del
+    cliente. Pendiente: página real "Photography & Image Direction" (hoy
+    `PlaceholderPage`) — cuando lleguen las fotos, armar
+    `src/app/data/photography.ts` con el mismo patrón de completitud que el
+    resto (campos opcionales + `RequiredField`, `image` incluido como
+    obligatorio ya que es un campo de marca, no algo que el componente
+    calcule solo).
 - `src/app/data/` — datos de marca de las páginas que ya siguen la regla de
   completitud (`brandColors.ts`, `semanticColors.ts`, `typographyFoundations.ts`,
   `typographySystem.ts`, `visualStyles.ts`, `gridApplication.ts`): campos

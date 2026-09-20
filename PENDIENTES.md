@@ -12,3 +12,18 @@ hasta que se pida explícitamente.
   comprimido, donde hoy el ícono del grupo solo muestra el label del grupo
   (ej. "Color System") y no se ve qué sub-páginas tiene hasta abrir el
   flyout.
+
+## Photography & Image Direction
+
+- Ya existe el componente `PhotoCategoryCard` (ver handbook) con la
+  arquitectura de info tomada de Figma (nodo `16349:159`, board "15 -
+  Sistema Fotográfico"). Falta construir la página real: cuando lleguen las
+  fotos de marca (por upload del cliente), armar `src/app/data/photography.ts`
+  con el mismo patrón de completitud del resto (campos opcionales +
+  `RequiredField`, `image` obligatorio) y reemplazar el `PlaceholderPage` de
+  "Photography & Image Direction" por el contenido real.
+- El board completo de Figma tiene 5 secciones (Categorías fotográficas,
+  Dirección visual, Uso según contexto, Integración en layouts, Stock/IA/
+  gobernanza) — hoy solo se tomó la arquitectura de la primera card
+  (`PhotoCategoryCard`). Al construir la página real, revisar el resto del
+  board para las demás secciones.
