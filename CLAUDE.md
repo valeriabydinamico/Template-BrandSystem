@@ -233,9 +233,20 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
     `text` / `border` / `background` / `background-border`. Ratios y nivel WCAG
     se calculan solos; ruta con `disabled` → pastilla `N/A`.
   - `components/Badge/` — píldora de etiqueta de uso
-  - `components/TokenTag/` — píldora gris de ruta/token; recorta con "…" +
-    tooltip con el texto completo si no entra. Usar siempre para ese tipo de
-    etiqueta. Prop `tone`: `default` (#e6eef8) / `plain` (blanco).
+  - `components/TokenTag/` — píldora gris de ruta/token; recorta con "…" y,
+    si está recortado, envuelve la píldora en `Tooltip` para mostrar el texto
+    completo. Usar siempre para ese tipo de etiqueta. Prop `tone`: `default`
+    (#e6eef8) / `plain` (blanco).
+  - `components/Tooltip/` — tooltip propio del dashboard (reemplaza el
+    `title` nativo del navegador en TODA la app, no solo el sidebar): fondo
+    `#1c1f26`, borde `#262b35`, texto `#e3e7ee` — mismo lenguaje dark que el
+    sidebar, se ve igual sobre página clara u oscura. Portal a `body` +
+    `position: fixed` (posición calculada con `getBoundingClientRect`) para
+    no quedar recortado por un ancestro con `overflow: hidden`. Prop
+    `placement`: `top` (por defecto) o `right` (usado por `IconButton` del
+    sidebar). Lo usan `TokenTag` (cuando el texto se recorta) e `IconButton`
+    del sidebar (`App.tsx`). Al agregar un tooltip nuevo en cualquier página,
+    usar este componente — no el atributo `title` nativo.
 - `src/app/data/` — datos de marca de las páginas que ya siguen la regla de
   completitud (`brandColors.ts`, `semanticColors.ts`): campos opcionales +
   su lista de `RequiredField`. Ver "Regla de completitud de datos".

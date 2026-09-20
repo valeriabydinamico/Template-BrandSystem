@@ -1,4 +1,5 @@
 import { useLayoutEffect, useRef, useState } from 'react'
+import { Tooltip } from '../Tooltip'
 
 export interface TokenTagProps {
   /** Ruta o token a mostrar (texto mono) */
@@ -18,8 +19,8 @@ export interface TokenTagProps {
  * TokenTag — etiqueta gris de ruta/token (aparece al pie de las ColorCards).
  *
  * Si el texto no entra en el ancho disponible se recorta con "…" y, al pasar
- * el cursor, muestra el texto completo en un tooltip. El tooltip solo aparece
- * cuando el texto está realmente recortado.
+ * el cursor, muestra el texto completo en un `Tooltip`. El tooltip solo
+ * aparece cuando el texto está realmente recortado.
  *
  * Medidas: fondo #e6eef8 · radio 6 · padding 8/12 · alto 38 · sin sombra ·
  * texto Inter mono 12/14 #16181d.
@@ -36,14 +37,22 @@ export function TokenTag({
   useLayoutEffect(() => {
     const el = textRef.current
     if (!el) return
-    const check = () => setIsTruncated(el.scrollWidth > el.clientWidth + 1)
+    const check = () => {
+      // Al recortarse, este `<p>` queda envuelto en un `Tooltip` — React lo
+      // desmonta y monta uno nuevo (cambia el tipo raíz del árbol). Este
+      // ResizeObserver sigue viendo el nodo viejo, ya desconectado del DOM,
+      // y dispara una última medición en 0x0 que revertiría el estado a
+      // `false` si no se ignora.
+      if (!el.isConnected) return
+      setIsTruncated(el.scrollWidth > el.clientWidth + 1)
+    }
     check()
     const ro = new ResizeObserver(check)
     ro.observe(el)
     return () => ro.disconnect()
   }, [children])
 
-  return (
+  const pill = (
     <div
       className={`flex h-[38px] max-w-full shrink-0 flex-col items-start justify-center rounded-[6px] px-[8px] py-[12px] ${
         fit ? 'w-fit' : 'w-full'
@@ -51,11 +60,18 @@ export function TokenTag({
     >
       <p
         ref={textRef}
-        title={isTruncated ? children : undefined}
         className="w-full truncate font-mono font-normal text-[12px] leading-[14px] text-[#16181d]"
       >
         {children}
       </p>
     </div>
+  )
+
+  if (!isTruncated) return pill
+
+  return (
+    <Tooltip label={children} wrapperClassName={fit ? 'w-fit max-w-full' : 'w-full'}>
+      {pill}
+    </Tooltip>
   )
 }
