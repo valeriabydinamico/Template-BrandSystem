@@ -4,6 +4,8 @@ import { GovernanceFooter } from './GovernanceFooter'
 import { MetaFooter } from './MetaFooter'
 import { FONT } from './typography/shared'
 import { DocNote, MetaRow, SectionHeader, TypePreview } from './docs/shared'
+import { typographyFoundationsReports } from '../lib/siteCompleteness'
+import type { TypeSpecEntry } from '../data/typographyFoundations'
 import typeBadgeIcon from '@/assets/type-badge-icon.svg'
 
 /* ────────────────────────────────────────────────────────────────────────────
@@ -12,6 +14,12 @@ import typeBadgeIcon from '@/assets/type-badge-icon.svg'
  * Base tipográfica configurable: familias de marca, tipografía funcional y
  * comportamiento tipográfico de los CTA. La configuración de ejemplo del master
  * es Manrope / Source Serif 4 / Inter (se sustituye por proyecto).
+ *
+ * Datos de marca en `src/app/data/typographyFoundations.ts`; reporte de
+ * completitud en `src/app/lib/siteCompleteness.ts` (`typographyFoundationsReports`).
+ * Un rol sin todos sus campos obligatorios se oculta (ver "Regla de
+ * completitud de datos" en CLAUDE.md); el `previewText`/`previewStyle` y las
+ * labels de fila (`ROW_LABELS`) son estructurales, no datos de marca.
  *
  * Responsive: mismo punto de quiebre que Brand/Semantic Colors (1600px).
  *   < 1600  → cards apiladas
@@ -24,17 +32,47 @@ interface SpecRow {
   valueStyle?: CSSProperties
 }
 
-interface TypeSpec {
-  title: string
-  optional?: boolean
-  description: string
-  previewText: string
-  previewStyle: CSSProperties
-  rows: SpecRow[]
+/** Labels de fila por tipo de card — estructural, no varía por proyecto. */
+const ROW_LABELS = {
+  brand: { family: 'Familia configurada', weights: 'Pesos aprobados', role: 'Rol principal', usage: 'Uso recomendado' },
+  cta: { family: 'Fuente tipográfica', weights: 'Weight', role: 'Prioridad', usage: 'Ejemplos' },
+} as const
+
+/** Preview de ejemplo por rol — contenido ilustrativo, no dato de marca. */
+const PREVIEW: Record<string, { text: string; style: CSSProperties }> = {
+  'Tipografía primaria de marca': {
+    text: 'Build trust through every interaction.',
+    style: { fontFamily: FONT.brand, fontWeight: 600, fontSize: 30, lineHeight: '38px' },
+  },
+  'Tipografía secundaria de marca': {
+    text: 'Ideas deserve room to breathe.',
+    style: { fontFamily: FONT.editorial, fontWeight: 500, fontSize: 30, lineHeight: '38px' },
+  },
+  'Tipografía funcional': {
+    text: 'Clear, readable interfaces for every task.',
+    style: { fontFamily: FONT.functional, fontWeight: 400, fontSize: 22, lineHeight: '30px' },
+  },
+  'CTA de producto': {
+    text: 'Continue',
+    style: { fontFamily: FONT.functional, fontWeight: 600, fontSize: 18, lineHeight: '24px' },
+  },
+  'CTA de comunicación': {
+    text: 'Discover the story',
+    style: { fontFamily: FONT.brand, fontWeight: 600, fontSize: 18, lineHeight: '24px' },
+  },
 }
 
 /** Card de especificación de una familia / rol tipográfico. */
-function TypeSpecCard({ spec }: { spec: TypeSpec }) {
+function TypeSpecCard({ spec, kind }: { spec: TypeSpecEntry; kind: 'brand' | 'cta' }) {
+  const labels = ROW_LABELS[kind]
+  const preview = spec.title ? PREVIEW[spec.title] : undefined
+  const rows: SpecRow[] = [
+    { label: labels.family, value: spec.family!, valueStyle: preview ? { fontFamily: preview.style.fontFamily, fontWeight: 600 } : undefined },
+    { label: labels.weights, value: spec.weights! },
+    { label: labels.role, value: spec.role! },
+    { label: labels.usage, value: spec.usage! },
+  ]
+
   return (
     <div className="flex w-full min-w-0 flex-col gap-[16px] rounded-[16px] border border-[#b9c3ce] bg-white p-[28px]">
       <div className="flex flex-wrap items-center gap-[12px]">
@@ -45,89 +83,15 @@ function TypeSpecCard({ spec }: { spec: TypeSpec }) {
           </span>
         )}
       </div>
-      <p className="w-full font-normal text-[15px] leading-[22px] text-[#5f6b78]">
-        {spec.description}
-      </p>
-      <TypePreview text={spec.previewText} style={spec.previewStyle} />
+      <p className="w-full font-normal text-[15px] leading-[22px] text-[#5f6b78]">{spec.description}</p>
+      {preview && <TypePreview text={preview.text} style={preview.style} />}
       <div className="flex w-full flex-col gap-[8px]">
-        {spec.rows.map((r) => (
+        {rows.map((r) => (
           <MetaRow key={r.label} label={r.label} value={r.value} valueStyle={r.valueStyle} />
         ))}
       </div>
     </div>
   )
-}
-
-/* ─── Datos (Figma · configuración de ejemplo) ─── */
-
-const BRAND_PRIMARY: TypeSpec = {
-  title: 'Tipografía primaria de marca',
-  description:
-    'Familia principal para titulares de marca, campañas, storytelling y comunicación editorial.',
-  previewText: 'Build trust through every interaction.',
-  previewStyle: { fontFamily: FONT.brand, fontWeight: 600, fontSize: 30, lineHeight: '38px' },
-  rows: [
-    { label: 'Familia configurada', value: 'Manrope', valueStyle: { fontFamily: FONT.brand, fontWeight: 600 } },
-    { label: 'Pesos aprobados', value: 'Medium · Semi Bold · Bold' },
-    { label: 'Rol principal', value: 'Marca / Jerarquía editorial' },
-    { label: 'Uso recomendado', value: 'Display · Headlines · Campaigns · Storytelling' },
-  ],
-}
-
-const BRAND_SECONDARY: TypeSpec = {
-  title: 'Tipografía secundaria de marca',
-  optional: true,
-  description:
-    'Familia complementaria para ampliar la expresión de marca sin competir con la primaria.',
-  previewText: 'Ideas deserve room to breathe.',
-  previewStyle: { fontFamily: FONT.editorial, fontWeight: 500, fontSize: 30, lineHeight: '38px' },
-  rows: [
-    { label: 'Familia configurada', value: 'Source Serif 4', valueStyle: { fontFamily: FONT.editorial, fontWeight: 500 } },
-    { label: 'Pesos aprobados', value: 'Regular · Medium · Semi Bold' },
-    { label: 'Rol principal', value: 'Editorial / Storytelling complementario' },
-    { label: 'Uso recomendado', value: 'Subtitles · Quotes · Editorial moments' },
-  ],
-}
-
-const FUNCTIONAL: TypeSpec = {
-  title: 'Tipografía funcional',
-  description:
-    'Tipografía obligatoria para contenido funcional y lectura continua. Puede coincidir o no con la tipografía de marca.',
-  previewText: 'Clear, readable interfaces for every task.',
-  previewStyle: { fontFamily: FONT.functional, fontWeight: 400, fontSize: 22, lineHeight: '30px' },
-  rows: [
-    { label: 'Familia configurada', value: 'Inter', valueStyle: { fontFamily: FONT.functional, fontWeight: 600 } },
-    { label: 'Pesos aprobados', value: 'Regular · Medium · Semi Bold · Bold' },
-    { label: 'Rol principal', value: 'UI / Lectura / Producto' },
-    { label: 'Uso recomendado', value: 'Body · Forms · Tables · Metadata · Disclaimers · Navigation' },
-  ],
-}
-
-const CTA_PRODUCT: TypeSpec = {
-  title: 'CTA de producto',
-  description:
-    'Acciones funcionales dentro de producto, navegación, formularios y flujos digitales.',
-  previewText: 'Continue',
-  previewStyle: { fontFamily: FONT.functional, fontWeight: 600, fontSize: 18, lineHeight: '24px' },
-  rows: [
-    { label: 'Fuente tipográfica', value: 'Inter', valueStyle: { fontFamily: FONT.functional, fontWeight: 600 } },
-    { label: 'Weight', value: 'Semi Bold' },
-    { label: 'Prioridad', value: 'Legibilidad y claridad de acción' },
-    { label: 'Ejemplos', value: 'Buttons · Links · Tabs · Navigation' },
-  ],
-}
-
-const CTA_COMMUNICATION: TypeSpec = {
-  title: 'CTA de comunicación',
-  description: 'Acciones en landings, campañas y piezas digitales de comunicación.',
-  previewText: 'Discover the story',
-  previewStyle: { fontFamily: FONT.brand, fontWeight: 600, fontSize: 18, lineHeight: '24px' },
-  rows: [
-    { label: 'Fuente tipográfica', value: 'Manrope', valueStyle: { fontFamily: FONT.brand, fontWeight: 600 } },
-    { label: 'Weight', value: 'Semi Bold' },
-    { label: 'Prioridad', value: 'Expresión de marca + legibilidad' },
-    { label: 'Ejemplos', value: 'Campaign CTA · Landing CTA · Promotional links' },
-  ],
 }
 
 const GOVERNANCE_RULES = [
@@ -144,6 +108,11 @@ const ROW_2UP = 'flex w-full items-stretch gap-[16px] max-[1600px]:flex-col min-
 const COL_2UP = 'min-w-0 max-[1600px]:w-full min-[1600px]:flex-1'
 
 export function TypographyFoundationsPage() {
+  const { brandPrimary, brandSecondary, functional, ctaProduct, ctaCommunication } = typographyFoundationsReports
+
+  const hasBrandFamilies = brandPrimary.visible.length > 0 || brandSecondary.visible.length > 0
+  const hasCta = ctaProduct.visible.length > 0 || ctaCommunication.visible.length > 0
+
   return (
     <div className="flex w-full flex-col items-start bg-white">
       <PageHeader
@@ -159,43 +128,59 @@ export function TypographyFoundationsPage() {
       />
 
       <div className="flex w-full flex-col gap-[44px] px-[40px] py-[72px]">
-        <section className="flex w-full flex-col gap-[24px]">
-          <SectionHeader
-            title="Tipografías de marca"
-            description="Configuración de ejemplo para construir la voz visual de marca: Manrope como familia primaria y Source Serif 4 como apoyo editorial opcional."
-          />
-          <div className={ROW_2UP}>
-            <div className={COL_2UP}>
-              <TypeSpecCard spec={BRAND_PRIMARY} />
+        {hasBrandFamilies && (
+          <section className="flex w-full flex-col gap-[24px]">
+            <SectionHeader
+              title="Tipografías de marca"
+              description="Configuración de ejemplo para construir la voz visual de marca: Manrope como familia primaria y Source Serif 4 como apoyo editorial opcional."
+            />
+            <div className={ROW_2UP}>
+              {brandPrimary.visible.map((spec) => (
+                <div key={spec.title} className={COL_2UP}>
+                  <TypeSpecCard spec={spec} kind="brand" />
+                </div>
+              ))}
+              {brandSecondary.visible.map((spec) => (
+                <div key={spec.title} className={COL_2UP}>
+                  <TypeSpecCard spec={spec} kind="brand" />
+                </div>
+              ))}
             </div>
-            <div className={COL_2UP}>
-              <TypeSpecCard spec={BRAND_SECONDARY} />
-            </div>
-          </div>
-        </section>
+          </section>
+        )}
 
-        <section className="flex w-full flex-col gap-[24px]">
-          <SectionHeader
-            title="Tipografía funcional"
-            description="Familia funcional para lectura, interfaces y producto. Debe priorizar legibilidad, consistencia y rendimiento en tamaños pequeños."
-          />
-          <TypeSpecCard spec={FUNCTIONAL} />
-        </section>
+        {functional.visible.length > 0 && (
+          <section className="flex w-full flex-col gap-[24px]">
+            <SectionHeader
+              title="Tipografía funcional"
+              description="Familia funcional para lectura, interfaces y producto. Debe priorizar legibilidad, consistencia y rendimiento en tamaños pequeños."
+            />
+            {functional.visible.map((spec) => (
+              <TypeSpecCard key={spec.title} spec={spec} kind="brand" />
+            ))}
+          </section>
+        )}
 
-        <section className="flex w-full flex-col gap-[24px]">
-          <SectionHeader
-            title="Tipografía para CTA & Buttons"
-            description="Define el comportamiento tipográfico de acciones sin asumir que todos los CTAs pertenecen a la misma familia o canal."
-          />
-          <div className={ROW_2UP}>
-            <div className={COL_2UP}>
-              <TypeSpecCard spec={CTA_PRODUCT} />
+        {hasCta && (
+          <section className="flex w-full flex-col gap-[24px]">
+            <SectionHeader
+              title="Tipografía para CTA & Buttons"
+              description="Define el comportamiento tipográfico de acciones sin asumir que todos los CTAs pertenecen a la misma familia o canal."
+            />
+            <div className={ROW_2UP}>
+              {ctaProduct.visible.map((spec) => (
+                <div key={spec.title} className={COL_2UP}>
+                  <TypeSpecCard spec={spec} kind="cta" />
+                </div>
+              ))}
+              {ctaCommunication.visible.map((spec) => (
+                <div key={spec.title} className={COL_2UP}>
+                  <TypeSpecCard spec={spec} kind="cta" />
+                </div>
+              ))}
             </div>
-            <div className={COL_2UP}>
-              <TypeSpecCard spec={CTA_COMMUNICATION} />
-            </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         <DocNote title="QA interno — Prueba de dos líneas">
           Cuando se modifique manualmente el line-height de una familia, validar siempre el resultado

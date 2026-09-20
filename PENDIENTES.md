@@ -1,4 +1,4 @@
-# TODO — Tareas pendientes
+# Pendientes
 
 Notas de cosas a implementar más adelante. Solo se anota acá; no se ejecuta
 hasta que se pida explícitamente.

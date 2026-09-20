@@ -4,6 +4,8 @@ import { GovernanceRule } from './GovernanceRule'
 import { MetaFooter } from './MetaFooter'
 import { TokenTag } from './TokenTag'
 import { DocNote, SectionHeader } from './docs/shared'
+import { gridApplicationReports } from '../lib/siteCompleteness'
+import { WIREFRAME_REFS, type FormatRow } from '../data/gridApplication'
 import layoutGridsBadgeIcon from '@/assets/layout-grids-badge-icon.svg'
 
 /* ────────────────────────────────────────────────────────────────────────────
@@ -13,34 +15,13 @@ import layoutGridsBadgeIcon from '@/assets/layout-grids-badge-icon.svg'
  * reglas de alineación. Reutiliza PageHeader / GovernanceFooter / GovernanceRule
  * / MetaFooter / TokenTag. Responsive: breakpoint 1600 (+ la tabla scrollea
  * horizontal dentro de su contenedor en pantallas angostas).
+ *
+ * Datos de marca en `src/app/data/gridApplication.ts`; reporte de
+ * completitud en `src/app/lib/siteCompleteness.ts` (`gridApplicationReports`).
+ * Los wireframes se derivan de los formatos visibles (`WIREFRAME_REFS`), no
+ * son una lista de datos aparte — si el formato referenciado está oculto, el
+ * wireframe también lo está.
  * ────────────────────────────────────────────────────────────────────────── */
-
-interface FormatRow {
-  channel: string
-  format: string
-  size: string
-  cols: number
-  margin: number
-  gutter: number
-  safe: string
-  token: string
-  goal: string
-}
-
-const FORMATS: FormatRow[] = [
-  { channel: 'WEB', format: 'Desktop', size: '1440×1024', cols: 12, margin: 80, gutter: 24, safe: 'H:80 / V:80', token: 'Layout Grid / Reference / Web / Desktop', goal: 'Sitio web · layouts amplios' },
-  { channel: 'WEB', format: 'Tablet', size: '768×1024', cols: 8, margin: 32, gutter: 24, safe: 'H:32 / V:32', token: 'Layout Grid / Reference / Web / Tablet', goal: 'Web responsive · tablet' },
-  { channel: 'WEB', format: 'Mobile', size: '390×844', cols: 4, margin: 16, gutter: 16, safe: 'H:16 / V:16', token: 'Layout Grid / Reference / Web / Mobile', goal: 'Web responsive · mobile' },
-  { channel: 'SOCIAL', format: 'Feed Portrait', size: '1080×1350', cols: 6, margin: 64, gutter: 24, safe: 'H:64 / V:64', token: 'Layout Grid / Reference / Social / Feed Portrait', goal: 'Publicación vertical de feed' },
-  { channel: 'SOCIAL', format: 'Square', size: '1080×1080', cols: 6, margin: 64, gutter: 24, safe: 'H:64 / V:64', token: 'Layout Grid / Reference / Social / Square', goal: 'Publicación cuadrada' },
-  { channel: 'SOCIAL', format: 'Story', size: '1080×1920', cols: 6, margin: 64, gutter: 24, safe: 'H:64 / V:104', token: 'Layout Grid / Reference / Social / Story', goal: 'Story vertical full-screen' },
-  { channel: 'SOCIAL', format: 'Reels + TikTok', size: '1080×1920', cols: 6, margin: 64, gutter: 24, safe: 'H:64 / V:104', token: 'Layout Grid / Reference / Social / Reels + TikTok', goal: 'Video corto vertical' },
-  { channel: 'SOCIAL', format: 'LinkedIn Landscape', size: '1200×627', cols: 12, margin: 64, gutter: 24, safe: 'H:64 / V:64', token: 'Layout Grid / Reference / Social / LinkedIn Landscape', goal: 'Publicación horizontal profesional' },
-  { channel: 'VIDEO', format: 'YouTube Thumbnail', size: '1280×720', cols: 12, margin: 64, gutter: 24, safe: 'H:64 / V:64', token: 'Layout Grid / Reference / Video / YouTube Thumbnail', goal: 'Thumbnail / portada 16:9' },
-  { channel: 'EMAIL', format: 'Desktop', size: '600×variable', cols: 4, margin: 24, gutter: 16, safe: 'H:24 / V:24', token: 'Layout Grid / Reference / Email / Desktop', goal: 'Contenido de email base' },
-  { channel: 'DISPLAY', format: 'Landscape', size: '1920×1080', cols: 12, margin: 96, gutter: 24, safe: 'H:96 / V:96', token: 'Layout Grid / Reference / Display / Landscape', goal: 'Pantalla / display 16:9' },
-  { channel: 'DISPLAY', format: 'Portrait', size: '1080×1920', cols: 6, margin: 80, gutter: 24, safe: 'H:80 / V:96', token: 'Layout Grid / Reference / Display / Portrait', goal: 'Pantalla / display vertical' },
-]
 
 const TH = 'whitespace-nowrap px-[14px] py-[14px] text-left font-semibold text-[12px] uppercase leading-[16px] tracking-[0.4px] text-[#59667d]'
 const TD = 'px-[14px] py-[12px] align-middle text-[13px] leading-[18px] text-[#1c212b]'
@@ -53,7 +34,7 @@ function ColsBadge({ n }: { n: number }) {
   )
 }
 
-function FormatTable() {
+function FormatTable({ formats }: { formats: FormatRow[] }) {
   return (
     <div className="w-full overflow-x-auto rounded-[12px] border border-[#d5dadf]">
       <table className="w-full min-w-[1120px] border-collapse">
@@ -71,8 +52,8 @@ function FormatTable() {
           </tr>
         </thead>
         <tbody>
-          {FORMATS.map((r, i) => {
-            const sameChannel = i > 0 && FORMATS[i - 1].channel === r.channel
+          {formats.map((r, i) => {
+            const sameChannel = i > 0 && formats[i - 1].channel === r.channel
             return (
               <tr key={r.token} className="border-b border-[#e3e7ec] last:border-b-0">
                 <td className={`${TD} bg-[#f7f9fb] font-semibold text-[#3d5e87]`}>
@@ -83,7 +64,7 @@ function FormatTable() {
                   {r.size}
                 </td>
                 <td className={TD}>
-                  <ColsBadge n={r.cols} />
+                  <ColsBadge n={r.cols!} />
                 </td>
                 <td className={`${TD} font-mono text-[12px] text-[#59667d]`}>{r.margin}</td>
                 <td className={`${TD} font-mono text-[12px] text-[#59667d]`}>{r.gutter}</td>
@@ -91,7 +72,7 @@ function FormatTable() {
                   {r.safe}
                 </td>
                 <td className={TD}>
-                  <TokenTag fit>{r.token}</TokenTag>
+                  <TokenTag fit>{r.token!}</TokenTag>
                 </td>
                 <td className={`${TD} text-[#59667d]`}>{r.goal}</td>
               </tr>
@@ -103,30 +84,16 @@ function FormatTable() {
   )
 }
 
-/* ─── Wireframes ─── */
+/* ─── Wireframes (derivados de los formatos visibles) ─── */
 
-interface Wireframe {
-  channel: string
-  title: string
-  size: string
-  gridSpec: string
-}
-
-const WIREFRAMES: Wireframe[] = [
-  { channel: 'WEB', title: 'Desktop', size: '1440×1024', gridSpec: '12 col · M80 · G24' },
-  { channel: 'SOCIAL', title: 'Feed Portrait', size: '1080×1350', gridSpec: '6 col · M64 · G24' },
-  { channel: 'VIDEO', title: '16:9', size: '1280×720', gridSpec: '12 col · M64 · G24' },
-  { channel: 'DISPLAY', title: 'Portrait', size: '1080×1920', gridSpec: '6 col · M80 · G24' },
-]
-
-function WireframeCard({ data }: { data: Wireframe }) {
+function WireframeCard({ data }: { data: FormatRow }) {
   return (
     <div className="flex w-full min-w-0 flex-col gap-[14px] rounded-[16px] border border-[#bac2cf] bg-white p-[20px]">
       <div className="flex flex-col gap-[2px]">
         <span className="font-semibold text-[11px] uppercase leading-[14px] tracking-[0.5px] text-[#3d5e87]">
           {data.channel}
         </span>
-        <p className="font-bold text-[16px] leading-[22px] text-[#1c212b]">{data.title}</p>
+        <p className="font-bold text-[16px] leading-[22px] text-[#1c212b]">{data.format}</p>
       </div>
       <div className="relative w-full overflow-clip rounded-[10px] border border-[#bac2cf] bg-[#f7f9fb] pb-[56%]">
         <span className="absolute inset-x-[9%] inset-y-[13%] rounded-[2px] border-2 border-[#ccdef2]" />
@@ -138,7 +105,7 @@ function WireframeCard({ data }: { data: Wireframe }) {
       </div>
       <div className="flex flex-wrap gap-x-[12px] gap-y-[2px] font-mono text-[11px] leading-[15px] text-[#1c212b]">
         <span>{data.size}</span>
-        <span className="text-[#59667d]">{data.gridSpec}</span>
+        <span className="text-[#59667d]">{`${data.cols} col · M${data.margin} · G${data.gutter}`}</span>
       </div>
     </div>
   )
@@ -165,6 +132,11 @@ const GOVERNANCE_RULES = [
 ]
 
 export function GridApplicationPage() {
+  const { formats } = gridApplicationReports
+  const wireframes = WIREFRAME_REFS.map((ref) =>
+    formats.visible.find((f) => f.channel === ref.channel && f.format === ref.format),
+  ).filter((f): f is FormatRow => f !== undefined)
+
   return (
     <div className="flex w-full flex-col items-start bg-white">
       <PageHeader
@@ -180,30 +152,34 @@ export function GridApplicationPage() {
       />
 
       <div className="flex w-full flex-col gap-[64px] px-[40px] py-[72px]">
-        <section className="flex w-full flex-col gap-[24px]">
-          <SectionHeader
-            title="01. Formatos de referencia y estructura base"
-            description="Base inicial de formatos comunes. Debe adaptarse al proyecto: el objetivo es acelerar la configuración, no imponer un set universal de canales."
-          />
-          <FormatTable />
-          <DocNote title="Referencia configurable">
-            Estas medidas y grids funcionan como punto de partida del master. Antes de usar un formato
-            en producción, valida las especificaciones vigentes de la plataforma y las necesidades
-            reales del cliente.
-          </DocNote>
-        </section>
+        {formats.visible.length > 0 && (
+          <section className="flex w-full flex-col gap-[24px]">
+            <SectionHeader
+              title="01. Formatos de referencia y estructura base"
+              description="Base inicial de formatos comunes. Debe adaptarse al proyecto: el objetivo es acelerar la configuración, no imponer un set universal de canales."
+            />
+            <FormatTable formats={formats.visible} />
+            <DocNote title="Referencia configurable">
+              Estas medidas y grids funcionan como punto de partida del master. Antes de usar un formato
+              en producción, valida las especificaciones vigentes de la plataforma y las necesidades
+              reales del cliente.
+            </DocNote>
+          </section>
+        )}
 
-        <section className="flex w-full flex-col gap-[24px]">
-          <SectionHeader
-            title="02. Wireframes estructurales"
-            description="Ejemplos neutros por familia para explicar grid, content zone y safe zone sin introducir decisiones visuales de una marca específica."
-          />
-          <div className="grid grid-cols-1 gap-[16px] min-[560px]:grid-cols-2 min-[1200px]:grid-cols-4">
-            {WIREFRAMES.map((w) => (
-              <WireframeCard key={`${w.channel}-${w.title}`} data={w} />
-            ))}
-          </div>
-        </section>
+        {wireframes.length > 0 && (
+          <section className="flex w-full flex-col gap-[24px]">
+            <SectionHeader
+              title="02. Wireframes estructurales"
+              description="Ejemplos neutros por familia para explicar grid, content zone y safe zone sin introducir decisiones visuales de una marca específica."
+            />
+            <div className="grid grid-cols-1 gap-[16px] min-[560px]:grid-cols-2 min-[1200px]:grid-cols-4">
+              {wireframes.map((w) => (
+                <WireframeCard key={`${w.channel}-${w.format}`} data={w} />
+              ))}
+            </div>
+          </section>
+        )}
 
         <section className="flex w-full flex-col gap-[24px]">
           <SectionHeader

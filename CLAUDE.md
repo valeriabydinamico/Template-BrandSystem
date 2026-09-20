@@ -61,9 +61,17 @@ calcula solo (ej. ratio de contraste y nivel WCAG en `ColorCard` /
   importa su reporte de `siteCompleteness.ts` y renderiza solo `.visible`;
   una sección/`Group` sin nada visible retorna `null` (o no se agrega al
   array de secciones a renderizar).
-- **Hoy implementado en:** Brand Colors, Semantic Colors. **Pendiente con el
-  mismo patrón:** Typography Foundations/System, Visual Styles, Grid
-  System/Application.
+- **Hoy implementado en:** Brand Colors, Semantic Colors, Typography
+  Foundations, Typography System, Visual Styles, Grid Application. **Sin
+  implementar** (no tiene datos de marca configurables, es contenido
+  estructural/educativo): Grid System.
+- **Regla en vigor desde ahora:** cuando se complete el contenido real de
+  cualquier página nueva del catálogo (las que hoy son `PlaceholderPage`),
+  seguir siempre este mismo patrón — nunca hardcodear los datos directo en
+  el componente de la página. Ver el ejemplo completo en
+  `src/app/data/gridApplication.ts` + `GridApplicationPage.tsx` (incluye el
+  caso de datos derivados: los wireframes se calculan desde los formatos
+  visibles, no son una lista aparte).
 
 ### Ajustes — prender/apagar módulos (capa manual, separada de la anterior)
 
@@ -178,23 +186,37 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
   - `BrandColorsPage` — documenta "02 Brand Colors" de Figma con Tailwind +
     componentes propios (hecho, sin Astra)
   - `SemanticColorsPage` — documentada (secciones + gobernanza + meta-footer)
-  - `TypographyFoundationsPage` / `TypographySystemPage` — grupo "Typography" del
-    sidebar (icono `Type`). Traídas de Figma (nodos 196:6664 / 154:8196).
-    Documentan la **configuración de ejemplo** del Type System (Manrope /
-    Source Serif 4 / Inter). Reutilizan `PageHeader`, `GovernanceFooter`,
-    `MetaFooter`, `TokenTag` + los helpers de `components/docs/shared.tsx`. Icono
-    de módulo en `src/assets/type-badge-icon.svg`. Responsive con breakpoint 1600
-    (+ la tabla de jerarquía colapsa a cards por debajo de 1180).
-  - `VisualStylesPage` — ítem "Visual styles" del sidebar (icono `Shapes`).
-    Traída de Figma (nodo 214:2446). Documenta spacing / border radius / borders
-    / shadows / sizing con token cards (preview + valor + `TokenTag` + uso).
-    Reutiliza `PageHeader` / `GovernanceFooter` / `MetaFooter` / `TokenTag`.
-    Icono de módulo en `src/assets/visual-styles-badge-icon.svg`. Responsive 1600.
-  - `GridSystemPage` / `GridApplicationPage` — grupo "Grids" del sidebar (icono
-    `Grid3x3`, módulo "Layout Grids"). Traídas de Figma (nodos 2162:33104 /
-    2162:33595). System = anatomía de la grilla + baseline global; Application =
-    tabla de formatos de referencia (scroll-x en su contenedor), wireframes por
-    familia y reglas de alineación (`GovernanceRule`). Icono de módulo en
+  - `TypographyFoundationsPage` / `TypographySystemPage` — grupo "Typography
+    System" del sidebar (icono `Type`). Traídas de Figma (nodos 196:6664 /
+    154:8196). Documentan la **configuración de ejemplo** del Type System
+    (Manrope / Source Serif 4 / Inter). Reutilizan `PageHeader`,
+    `GovernanceFooter`, `MetaFooter`, `TokenTag` + los helpers de
+    `components/docs/shared.tsx`. Datos de marca en `src/app/data/`
+    (`typographyFoundations.ts`, `typographySystem.ts`) + reporte de
+    completitud — renderizan solo `.visible`. `GUIDE`/`RECOMMENDATIONS`
+    (System) y las labels de fila `ROW_LABELS`/`PREVIEW` (Foundations) son
+    estructurales, no datos de marca. Icono de módulo en
+    `src/assets/type-badge-icon.svg`. Responsive con breakpoint 1600 (+ la
+    tabla de jerarquía colapsa a cards por debajo de 1180).
+  - `VisualStylesPage` — ítem "Visual Styles" del sidebar (icono `Shapes`).
+    Traída de Figma (nodo 214:2446). Documenta spacing / border radius /
+    borders / shadows / sizing con token cards (preview + valor + `TokenTag`
+    + uso). Datos de marca en `src/app/data/visualStyles.ts` + reporte de
+    completitud — renderiza solo `.visible`; los tamaños de ícono
+    (`ICON_SIZES`) quedan estructurales (escala técnica fija, no decisión de
+    marca por ítem). Reutiliza `PageHeader` / `GovernanceFooter` /
+    `MetaFooter` / `TokenTag`. Icono de módulo en
+    `src/assets/visual-styles-badge-icon.svg`. Responsive 1600.
+  - `GridSystemPage` / `GridApplicationPage` — grupo "Layout & Grid" del
+    sidebar (icono `Grid3x3`). Traídas de Figma (nodos 2162:33104 /
+    2162:33595). System = anatomía de la grilla + baseline global (contenido
+    estructural/educativo, sin datos de marca configurables, no pasa por el
+    motor de completitud). Application = tabla de formatos de referencia
+    (scroll-x en su contenedor), wireframes por familia y reglas de
+    alineación (`GovernanceRule`); datos de marca en
+    `src/app/data/gridApplication.ts` + reporte de completitud — los
+    wireframes se derivan de los formatos visibles (`WIREFRAME_REFS`), no son
+    una lista de datos aparte. Icono de módulo en
     `src/assets/layout-grids-badge-icon.svg`. Responsive 1600.
   - `components/docs/shared.tsx` — helpers de layout de TODAS las páginas de
     documentación (NO son componentes del sistema): `SectionHeader`, `DocNote`
@@ -252,8 +274,11 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
     del sidebar (`App.tsx`). Al agregar un tooltip nuevo en cualquier página,
     usar este componente — no el atributo `title` nativo.
 - `src/app/data/` — datos de marca de las páginas que ya siguen la regla de
-  completitud (`brandColors.ts`, `semanticColors.ts`): campos opcionales +
-  su lista de `RequiredField`. Ver "Regla de completitud de datos".
+  completitud (`brandColors.ts`, `semanticColors.ts`, `typographyFoundations.ts`,
+  `typographySystem.ts`, `visualStyles.ts`, `gridApplication.ts`): campos
+  opcionales + su lista de `RequiredField`. Ver "Regla de completitud de
+  datos" — **este es el patrón a seguir siempre** que se complete el
+  contenido real de una página nueva.
 - `src/app/lib/completeness.ts` — motor genérico de completitud
   (`evaluateSection`, `evaluateItem`).
 - `src/app/lib/siteCompleteness.ts` — agrega los reportes de completitud de
@@ -355,9 +380,10 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
   Components, Templates, Brand Ops) son `PlaceholderPage` — ver
   "Arquitectura del catálogo".
 - Regla de completitud de datos (ver sección arriba) implementada en Brand
-  Colors y Semantic Colors. **Pendiente**: llevar Typography Foundations/System,
-  Visual Styles y Grid System/Application al mismo patrón (datos en
-  `src/app/data/`, reporte en `siteCompleteness.ts`, render condicional).
+  Colors, Semantic Colors, Typography Foundations, Typography System, Visual
+  Styles y Grid Application. Grid System queda afuera a propósito (sin datos
+  de marca configurables). Este es el patrón a seguir para cualquier página
+  nueva que se complete de acá en adelante.
 - `AjustesPage` ya tiene el panel de módulos (presets Large/Light + switches
   por sub-página). Pendiente: definir el set real del preset Light (hoy es
   representativo).
