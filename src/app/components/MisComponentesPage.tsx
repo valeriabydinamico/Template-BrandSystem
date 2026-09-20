@@ -454,11 +454,10 @@ export function MisComponentesPage() {
           name="WireframeCard"
           description="Documenta un formato de referencia de Layout Grids: canal + nombre, medida y un wireframe neutro con la cantidad real de columnas dibujadas como barras (las de borde se tiñen distinto, sugiriendo el margin)."
         >
-          <Example label="12 columnas vs. 6 columnas — la cantidad de barras sigue a `cols`">
-            <div className="grid w-full grid-cols-1 gap-[16px] min-[560px]:grid-cols-2">
+          <Example label="el wireframe se dibuja según `cols`, `margin` y `gutter` del formato">
+            <CardSlot width={280}>
               <WireframeCard channel="WEB" format="Desktop" size="1440×1024" cols={12} margin={80} gutter={24} />
-              <WireframeCard channel="SOCIAL" format="Feed Portrait" size="1080×1350" cols={6} margin={64} gutter={24} />
-            </div>
+            </CardSlot>
           </Example>
         </Section>
 
