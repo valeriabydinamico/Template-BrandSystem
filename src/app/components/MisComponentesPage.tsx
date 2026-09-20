@@ -12,6 +12,7 @@ import { SemanticColorCard } from './SemanticColorCard'
 import { WireframeCard } from './WireframeCard'
 import { PhotoCategoryCard } from './PhotoCategoryCard'
 import { ImageCriteriaCard } from './ImageCriteriaCard'
+import { ComparisonCard } from './ComparisonCard'
 import { DocNote, MetaRow, SectionHeader, TypePreview } from './docs/shared'
 import { FONT } from './typography/shared'
 
@@ -116,6 +117,7 @@ const SECTIONS = [
   { id: 'wireframe-card', name: 'WireframeCard' },
   { id: 'photo-category-card', name: 'PhotoCategoryCard' },
   { id: 'image-criteria-card', name: 'ImageCriteriaCard' },
+  { id: 'comparison-card', name: 'ComparisonCard' },
   { id: 'section-header', name: 'SectionHeader' },
   { id: 'doc-note', name: 'DocNote' },
   { id: 'type-preview', name: 'TypePreview' },
@@ -197,13 +199,18 @@ export function MisComponentesPage() {
         <Section
           id="badge"
           name="Badge"
-          description="Píldora de etiqueta de uso. Prop `size`: `default` (38px) o `sm` — versión chica para contextos compactos, ej. las pills de `PhotoCategoryCard`."
+          description="Píldora de etiqueta de uso. Prop `size`: `default` (38px) o `sm`. Prop `tone`: `brand` (por defecto, azul), `error`, `success` o `warning` — mismos colores que los roles de estado de Semantic Colors."
         >
           <Example label="default">
             <Badge>CTA's</Badge>
           </Example>
           <Example label="sm">
             <Badge size="sm">Hero</Badge>
+          </Example>
+          <Example label="tone — error / success / warning">
+            <Badge tone="error">Evitar</Badge>
+            <Badge tone="success">Correcto</Badge>
+            <Badge tone="warning">Advertencia</Badge>
           </Example>
           <Example label="uso real — lista de casos de uso de un rol cromático">
             <Badge>CTA's</Badge>
@@ -285,14 +292,30 @@ export function MisComponentesPage() {
         <Section
           id="note"
           name="Note"
-          description="Nota informativa que aparece bajo las grillas de tokens del Color System para aclarar decisiones de diseño (qué puede cambiar por proyecto, cómo se comporta un estado…)."
+          description="Nota/banner informativo. Prop `tone`: `warning` (por defecto, aparece bajo las grillas de tokens del Color System), `error` o `success` — mismo lenguaje visual, cambia color e ícono."
         >
-          <Example label="icono + texto">
+          <Example label="warning (por defecto)">
             <div className="w-full max-w-[720px]">
               <Note>
                 El rol de acción principal debe apuntar al color de marca configurado para cada
                 proyecto. Su valor puede cambiar sin alterar el nombre ni la intención del token
                 semántico.
+              </Note>
+            </div>
+          </Example>
+          <Example label="error — ej. debajo de un ComparisonCard">
+            <div className="w-full max-w-[720px]">
+              <Note tone="error">
+                <strong className="font-bold">Evitar:</strong> cortes incómodos, rostros demasiado
+                pegados al borde, sujetos sin respiro o fondos que dificulten la lectura.
+              </Note>
+            </div>
+          </Example>
+          <Example label="success">
+            <div className="w-full max-w-[720px]">
+              <Note tone="success">
+                <strong className="font-bold">Recomendado:</strong> punto focal claro, recorte que
+                protege caras, manos y elementos críticos.
               </Note>
             </div>
           </Example>
@@ -503,6 +526,18 @@ export function MisComponentesPage() {
                 avoid="Flash directo, sombras duras"
               />
             </CardSlot>
+          </Example>
+        </Section>
+
+        <Section
+          id="comparison-card"
+          name="ComparisonCard"
+          description="Documenta la forma correcta e incorrecta de usar algo (un logo, una foto, un color…) comparando dos imágenes lado a lado, cada una con su pill Correcto/Evitar. Combinar con Note tone='error' debajo para explicar el motivo."
+        >
+          <Example label="sin imágenes todavía → placeholder neutro en ambos lados">
+            <div className="w-full max-w-[520px]">
+              <ComparisonCard />
+            </div>
           </Example>
         </Section>
 

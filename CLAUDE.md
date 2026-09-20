@@ -260,7 +260,10 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
     se calculan solos; ruta con `disabled` → pastilla `N/A`.
   - `components/Badge/` — píldora de etiqueta de uso. Prop `size`: `default`
     (38px, Figma · 02 Brand Colors) o `sm` (28px) — la usan las pills de
-    `PhotoCategoryCard`
+    `PhotoCategoryCard`. Prop `tone`: `brand` (por defecto, azul) / `error` /
+    `success` / `warning` — mismos colores que los roles de estado de
+    Semantic Colors; las pills "Correcto"/"Evitar" de `ComparisonCard` usan
+    `tone="success"` / `tone="error"`.
   - `components/TokenTag/` — píldora gris de ruta/token; recorta con "…" y,
     si está recortado, envuelve la píldora en `Tooltip` para mostrar el texto
     completo. Usar siempre para ese tipo de etiqueta. Prop `tone`: `default`
@@ -323,9 +326,20 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
   - `components/MetaFooter/` — barra final (metadato de versión + pastilla de
     estado). Props `label` + `status`. Lo usan las mismas páginas que
     `GovernanceFooter`.
-  - `components/Note/` — nota informativa (fondo crema + borde e icono naranja
-    `#ad5301`, texto regular 14/20, padding 12, gap 8) bajo las grillas de tokens
-    del Color System. El icono se alinea a la 1ª línea (centrado si es 1 línea).
+  - `components/Note/` — nota/banner informativo (texto regular 14/20,
+    padding 12, gap 8). Prop `tone`: `warning` (por defecto, fondo crema +
+    icono naranja `#ad5301`, bajo las grillas de tokens del Color System),
+    `error` (rojo, ✕) o `success` (verde, ✓) — mismo lenguaje, cambia
+    color/ícono. El icono se alinea a la 1ª línea (centrado si es 1 línea).
+  - `components/ComparisonCard/` — documenta la forma correcta e incorrecta
+    de usar algo (logo, foto, color…) comparando dos imágenes lado a lado,
+    cada una con su pill "Correcto" (`Badge tone="success"`) / "Evitar"
+    (`Badge tone="error"`). Arquitectura de info del board de Figma "15 -
+    Sistema Fotográfico" → "04. Integración fotográfica en layouts" (nodo
+    `16349:437`), generalizada — en Figma son mockups de producto, acá
+    siempre son dos imágenes sin asumir el tipo de asset. Ambas imágenes
+    opcionales, mismo placeholder neutro que el resto. Combinar con
+    `Note tone="error"` debajo para explicar el motivo.
 - `src/imports/` — **código generado por Figma Make**. Frames, SVGs (`svg-*.ts`) e
   imágenes. No editar a mano salvo necesidad puntual; se re-genera desde Figma.
 - `src/assets/` — assets propios / exportados de Figma (SVGs, imágenes)

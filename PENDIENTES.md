@@ -24,6 +24,9 @@ hasta que se pida explícitamente.
   - `ImageCriteriaCard` (nodo `16349:266`) — criterio con imagen + Do/Don't;
     genérico, no exclusivo de fotografía (aplica a dirección visual,
     características, forma de uso).
+  - `ComparisonCard` (nodo `16349:437`) — forma correcta e incorrecta de
+    usar algo (logo, foto, color…), dos imágenes lado a lado con pills
+    Correcto/Evitar. También genérico.
   Falta construir la página real: cuando lleguen las fotos de marca (por
   upload del cliente), armar `src/app/data/photography.ts` con el mismo
   patrón de completitud del resto (campos opcionales + `RequiredField`,
@@ -31,6 +34,9 @@ hasta que se pida explícitamente.
   por el contenido real.
 - El board completo de Figma tiene 5 secciones (Categorías fotográficas,
   Dirección visual, Uso según contexto, Integración en layouts, Stock/IA/
-  gobernanza) — hoy solo se tomó la arquitectura de las primeras dos cards.
-  Al construir la página real, revisar el resto del board para las demás
-  secciones.
+  gobernanza) — hoy solo se tomó la arquitectura de tres cards
+  (`PhotoCategoryCard`, `ImageCriteriaCard`, `ComparisonCard`). Al construir
+  la página real, revisar el resto del board para las demás secciones.
+- `Badge` y `Note` ahora tienen tonos `error`/`success`(/`warning` en
+  `Badge`) — reusarlos en vez de inventar estilos nuevos cuando la página
+  real de Photography necesite pills o banners de estado.
