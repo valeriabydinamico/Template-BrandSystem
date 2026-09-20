@@ -457,7 +457,7 @@ function Sidebar({
   return (
     <aside
       className={`flex shrink-0 flex-col border-r border-[#262b35] bg-[#16181d] transition-[width] duration-200 ${
-        collapsed ? 'w-[64px]' : 'w-[264px]'
+        collapsed ? 'w-[68px]' : 'w-[264px]'
       }`}
     >
       {/* Marca */}
@@ -483,7 +483,7 @@ function Sidebar({
 
       {/* Navegación */}
       <nav
-        className={`sidebar-scroll flex flex-1 flex-col gap-[2px] overflow-y-auto px-[12px] py-[16px] ${
+        className={`sidebar-scroll flex flex-1 flex-col gap-[2px] overflow-x-hidden overflow-y-auto px-[12px] py-[16px] ${
           collapsed ? 'items-center' : ''
         }`}
       >
