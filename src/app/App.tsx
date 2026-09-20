@@ -507,7 +507,7 @@ function Sidebar({
 
           return (
             <div key={category.id} className="contents">
-              <div className={`my-[4px] h-px shrink-0 bg-[#262b35] ${collapsed ? 'w-[32px]' : 'w-full'}`} />
+              <div className={`my-[16px] h-px shrink-0 bg-[#262b35] ${collapsed ? 'w-[32px]' : 'w-full'}`} />
               {!collapsed && <NavEyebrow>{category.label}</NavEyebrow>}
 
               {category.groups.map((group) => {
