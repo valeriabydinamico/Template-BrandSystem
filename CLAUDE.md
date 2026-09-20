@@ -258,7 +258,9 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
     (`color/text/*`, `color/ui/border/*`, `color/background/*`…). Variantes
     `text` / `border` / `background` / `background-border`. Ratios y nivel WCAG
     se calculan solos; ruta con `disabled` → pastilla `N/A`.
-  - `components/Badge/` — píldora de etiqueta de uso
+  - `components/Badge/` — píldora de etiqueta de uso. Prop `size`: `default`
+    (38px, Figma · 02 Brand Colors) o `sm` (28px) — la usan las pills de
+    `PhotoCategoryCard`
   - `components/TokenTag/` — píldora gris de ruta/token; recorta con "…" y,
     si está recortado, envuelve la píldora en `Tooltip` para mostrar el texto
     completo. Usar siempre para ese tipo de etiqueta. Prop `tone`: `default`

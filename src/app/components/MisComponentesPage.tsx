@@ -195,9 +195,15 @@ export function MisComponentesPage() {
         <Section
           id="badge"
           name="Badge"
-          description="Píldora de etiqueta de uso. Se usa en listas para enumerar los casos de uso de un rol cromático."
+          description="Píldora de etiqueta de uso. Prop `size`: `default` (38px) o `sm` — versión chica para contextos compactos, ej. las pills de `PhotoCategoryCard`."
         >
-          <Example label="varias etiquetas">
+          <Example label="default">
+            <Badge>CTA's</Badge>
+          </Example>
+          <Example label="sm">
+            <Badge size="sm">Hero</Badge>
+          </Example>
+          <Example label="uso real — lista de casos de uso de un rol cromático">
             <Badge>CTA's</Badge>
             <Badge>Headers</Badge>
             <Badge>Hero surfaces</Badge>

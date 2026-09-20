@@ -1,4 +1,5 @@
 import { Image as ImageIcon } from 'lucide-react'
+import { Badge } from '../Badge'
 
 export interface PhotoCategoryCardProps {
   /** Foto real de la categoría. Si falta, se muestra un placeholder — las
@@ -22,14 +23,6 @@ function PhotoPlaceholder() {
       <ImageIcon className="size-[32px] text-[#8a94a8]" strokeWidth={1.5} />
       <p className="font-medium text-[13px] leading-[16px] text-[#8a94a8]">Sin foto todavía</p>
     </div>
-  )
-}
-
-function Pill({ children }: { children: string }) {
-  return (
-    <span className="flex items-center justify-center rounded-[999px] border border-[#e0e7f0] bg-[#eef1f5] px-[16px] py-[5px] font-medium text-[14px] leading-[16.5px] text-[#16181d]">
-      {children}
-    </span>
   )
 }
 
@@ -71,7 +64,9 @@ export function PhotoCategoryCard({ image, title, description, usage, tone, tags
         </div>
         <div className="flex flex-wrap items-center gap-[6px]">
           {tags.map((tag) => (
-            <Pill key={tag}>{tag}</Pill>
+            <Badge key={tag} size="sm">
+              {tag}
+            </Badge>
           ))}
         </div>
       </div>
