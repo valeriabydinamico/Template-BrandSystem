@@ -336,10 +336,15 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
     cada una con su pill "Correcto" (`Badge tone="success"`) / "Evitar"
     (`Badge tone="error"`). Arquitectura de info del board de Figma "15 -
     Sistema Fotográfico" → "04. Integración fotográfica en layouts" (nodo
-    `16349:437`), generalizada — en Figma son mockups de producto, acá
-    siempre son dos imágenes sin asumir el tipo de asset. Ambas imágenes
-    opcionales, mismo placeholder neutro que el resto. Combinar con
-    `Note tone="error"` debajo para explicar el motivo.
+    `16349:437`, "IntegrationCard"), generalizada — en Figma son mockups de
+    producto, acá siempre son dos imágenes sin asumir el tipo de asset.
+    Ambas imágenes opcionales, mismo placeholder neutro que el resto.
+  - `components/ComparisonExampleCard/` — la card completa del mismo
+    "IntegrationCard" de Figma: `ComparisonCard` arriba + título del
+    criterio, descripción y un banner `Note tone="error"` abajo explicando
+    qué evitar (todo dentro de un único card blanco). Usar `ComparisonCard`
+    solo (sin este wrapper) cuando no haga falta título/descripción/nota —
+    ej. dentro de un layout ya armado.
 - `src/imports/` — **código generado por Figma Make**. Frames, SVGs (`svg-*.ts`) e
   imágenes. No editar a mano salvo necesidad puntual; se re-genera desde Figma.
 - `src/assets/` — assets propios / exportados de Figma (SVGs, imágenes)

@@ -27,6 +27,8 @@ hasta que se pida explícitamente.
   - `ComparisonCard` (nodo `16349:437`) — forma correcta e incorrecta de
     usar algo (logo, foto, color…), dos imágenes lado a lado con pills
     Correcto/Evitar. También genérico.
+  - `ComparisonExampleCard` (mismo nodo, "IntegrationCard" completo) —
+    `ComparisonCard` + título/descripción/banner de advertencia, todo junto.
   Falta construir la página real: cuando lleguen las fotos de marca (por
   upload del cliente), armar `src/app/data/photography.ts` con el mismo
   patrón de completitud del resto (campos opcionales + `RequiredField`,
@@ -34,9 +36,10 @@ hasta que se pida explícitamente.
   por el contenido real.
 - El board completo de Figma tiene 5 secciones (Categorías fotográficas,
   Dirección visual, Uso según contexto, Integración en layouts, Stock/IA/
-  gobernanza) — hoy solo se tomó la arquitectura de tres cards
-  (`PhotoCategoryCard`, `ImageCriteriaCard`, `ComparisonCard`). Al construir
-  la página real, revisar el resto del board para las demás secciones.
+  gobernanza) — hoy solo se tomó la arquitectura de cuatro cards
+  (`PhotoCategoryCard`, `ImageCriteriaCard`, `ComparisonCard`,
+  `ComparisonExampleCard`). Al construir la página real, revisar el resto
+  del board para las demás secciones.
 - `Badge` y `Note` ahora tienen tonos `error`/`success`(/`warning` en
   `Badge`) — reusarlos en vez de inventar estilos nuevos cuando la página
   real de Photography necesite pills o banners de estado.

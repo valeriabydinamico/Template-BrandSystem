@@ -13,6 +13,7 @@ import { WireframeCard } from './WireframeCard'
 import { PhotoCategoryCard } from './PhotoCategoryCard'
 import { ImageCriteriaCard } from './ImageCriteriaCard'
 import { ComparisonCard } from './ComparisonCard'
+import { ComparisonExampleCard } from './ComparisonExampleCard'
 import { DocNote, MetaRow, SectionHeader, TypePreview } from './docs/shared'
 import { FONT } from './typography/shared'
 
@@ -118,6 +119,7 @@ const SECTIONS = [
   { id: 'photo-category-card', name: 'PhotoCategoryCard' },
   { id: 'image-criteria-card', name: 'ImageCriteriaCard' },
   { id: 'comparison-card', name: 'ComparisonCard' },
+  { id: 'comparison-example-card', name: 'ComparisonExampleCard' },
   { id: 'section-header', name: 'SectionHeader' },
   { id: 'doc-note', name: 'DocNote' },
   { id: 'type-preview', name: 'TypePreview' },
@@ -537,6 +539,22 @@ export function MisComponentesPage() {
           <Example label="sin imágenes todavía → placeholder neutro en ambos lados">
             <div className="w-full max-w-[520px]">
               <ComparisonCard />
+            </div>
+          </Example>
+        </Section>
+
+        <Section
+          id="comparison-example-card"
+          name="ComparisonExampleCard"
+          description="La card completa de 'así sí / así no': ComparisonCard arriba, y abajo título del criterio, descripción y un banner de advertencia (Note tone='error'). Arquitectura de info del board de Figma 'IntegrationCard' (nodo 16349:437)."
+        >
+          <Example label="sin imágenes todavía → placeholder neutro en ambos lados">
+            <div className="w-full max-w-[520px]">
+              <ComparisonExampleCard
+                title="1. Foco y recorte"
+                description="La foto debe tener un punto focal claro: rostro, producto, acción o situación. El recorte debe proteger caras, manos, producto financiero y cualquier elemento crítico."
+                warning="Cortes incómodos, rostros demasiado pegados al borde, sujetos sin respiro o fondos que dificulten la lectura."
+              />
             </div>
           </Example>
         </Section>
