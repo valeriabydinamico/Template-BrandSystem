@@ -1,8 +1,9 @@
 import { PageHeader } from './PageHeader'
 import {
-  MODULE_GROUPS,
+  CATEGORIES,
   LARGE_PRESET,
   LIGHT_PRESET,
+  type ModuleGroupDef,
   type ModuleState,
 } from '../lib/moduleConfig'
 
@@ -69,6 +70,42 @@ function moduleStateEquals(a: ModuleState, b: ModuleState) {
   return Object.keys(b).every((k) => (a[k] !== false) === (b[k] !== false))
 }
 
+/** Filas de switch de un grupo — sus sub-páginas si las tiene, o su propio id
+ *  si es una página única (ver `ModuleGroupDef` en `moduleConfig.ts`). */
+function GroupCard({
+  group,
+  enabled,
+  toggle,
+}: {
+  group: ModuleGroupDef
+  enabled: ModuleState
+  toggle: (id: string) => void
+}) {
+  const rows = group.leaves ?? [{ id: group.id, label: group.label }]
+  return (
+    <div className="flex w-full flex-col gap-[12px] rounded-[16px] border border-[#e3e7ee] bg-[#fafbfc] p-[20px]">
+      <p className="font-bold text-[16px] leading-[20px] text-[#16181d]">{group.label}</p>
+      <div className="flex w-full flex-col gap-[8px]">
+        {rows.map((leaf) => (
+          <div
+            key={leaf.id}
+            className="flex w-full items-center justify-between gap-[16px] rounded-[10px] bg-white px-[16px] py-[12px]"
+          >
+            <span className="font-medium text-[14px] leading-[20px] text-[#292e38]">
+              {leaf.label}
+            </span>
+            <Switch
+              checked={enabled[leaf.id] !== false}
+              onChange={() => toggle(leaf.id)}
+              label={leaf.label}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 export function AjustesPage({
   enabled,
   toggle,
@@ -118,42 +155,22 @@ export function AjustesPage({
 
         <div className="h-px w-full shrink-0 bg-[#eef2f8]" />
 
-        <section className="flex w-full flex-col gap-[24px]">
-          <div className="flex flex-col gap-[4px]">
-            <h2 className="font-bold text-[22px] leading-[28px] text-[#16181d]">Módulos</h2>
-            <p className="font-normal text-[14px] leading-[20px] text-[#576175]">
-              Control fino por sub-página.
-            </p>
-          </div>
+        {CATEGORIES.map((category) => (
+          <section key={category.id} className="flex w-full flex-col gap-[24px]">
+            <div className="flex flex-col gap-[4px]">
+              <h2 className="font-bold text-[22px] leading-[28px] text-[#16181d]">{category.label}</h2>
+              <p className="font-normal text-[14px] leading-[20px] text-[#576175]">
+                Control fino por página.
+              </p>
+            </div>
 
-          <div className="flex w-full flex-col gap-[16px]">
-            {MODULE_GROUPS.map((group) => (
-              <div
-                key={group.id}
-                className="flex w-full flex-col gap-[12px] rounded-[16px] border border-[#e3e7ee] bg-[#fafbfc] p-[20px]"
-              >
-                <p className="font-bold text-[16px] leading-[20px] text-[#16181d]">{group.label}</p>
-                <div className="flex w-full flex-col gap-[8px]">
-                  {group.leaves.map((leaf) => (
-                    <div
-                      key={leaf.id}
-                      className="flex w-full items-center justify-between gap-[16px] rounded-[10px] bg-white px-[16px] py-[12px]"
-                    >
-                      <span className="font-medium text-[14px] leading-[20px] text-[#292e38]">
-                        {leaf.label}
-                      </span>
-                      <Switch
-                        checked={enabled[leaf.id] !== false}
-                        onChange={() => toggle(leaf.id)}
-                        label={leaf.label}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
+            <div className="flex w-full flex-col gap-[16px]">
+              {category.groups.map((group) => (
+                <GroupCard key={group.id} group={group} enabled={enabled} toggle={toggle} />
+              ))}
+            </div>
+          </section>
+        ))}
       </div>
     </div>
   )

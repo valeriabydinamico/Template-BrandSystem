@@ -1,63 +1,162 @@
 import { useEffect, useState } from 'react'
 
 /**
- * Configuración de módulos/sub-páginas — controla qué partes del catálogo
- * están prendidas. Es una capa de control MANUAL, separada de la regla de
+ * Configuración de módulos/páginas — controla qué partes del catálogo están
+ * prendidas. Es una capa de control MANUAL, separada de la regla de
  * completitud de datos (`completeness.ts` / `siteCompleteness.ts`): un
  * módulo apagado acá se oculta sin importar si sus datos están completos, y
  * el Registro de completado directamente no lo evalúa (no está "oculto por
  * falta de datos", está apagado a propósito).
+ *
+ * Árbol completo (ver `BRAND-SYSTEM-ARQUITECTURA.md`, la numeración del
+ * documento es solo de referencia, no estructura real):
+ *   Categoría (Strategy / Foundations / Components / Templates / Brand Ops)
+ *     → grupo/página (algunos con sub-páginas propias, ej. "Color System";
+ *       el resto son una página única, ej. "Visual Styles" o cualquier
+ *       página nueva sin construir todavía)
+ *       → hoja togglable individual.
+ *
+ * Los ids namespaced (`color.brand-colors`, `strategy.posicionamiento`…) son
+ * la clave persistida en `localStorage` y la que usa `RegistroPage` — no
+ * renombrar un id existente sin migrar `REPORT_MODULE_TO_LEAF` (en
+ * `siteCompleteness.ts`) y sin que el usuario pierda su configuración
+ * guardada.
  *
  * Página de control: `AjustesPage`. Persistencia: `localStorage` (por
  * navegador, sin backend — igual que `sidebar-collapsed`).
  */
 
 export interface LeafModule {
-  /** Id único, namespaced por grupo (`color.brand-colors`, `visual-styles.page`…). */
   id: string
   label: string
 }
 
 export interface ModuleGroupDef {
+  /**
+   * Id del grupo. Si el grupo NO tiene `leaves`, este id también es el id de
+   * toggle (página única, ej. `visual-styles.page`, `strategy.posicionamiento`).
+   */
   id: string
   label: string
-  leaves: LeafModule[]
+  /** Presente solo cuando el grupo tiene sub-páginas reales (Color System,
+   *  Typography System, Layout & Grid). Si falta, el grupo es una página
+   *  única togglable por su propio `id`. */
+  leaves?: LeafModule[]
 }
 
-export const MODULE_GROUPS: ModuleGroupDef[] = [
+export interface CategoryDef {
+  id: string
+  label: string
+  groups: ModuleGroupDef[]
+}
+
+export const CATEGORIES: CategoryDef[] = [
   {
-    id: 'color',
-    label: 'Color System',
-    leaves: [
-      { id: 'color.global-colors', label: 'Global Colors' },
-      { id: 'color.brand-colors', label: 'Brand Colors' },
-      { id: 'color.semantic-colors', label: 'Semantic Colors' },
+    id: 'strategy',
+    label: 'Strategy',
+    groups: [
+      { id: 'strategy.publico-objetivo', label: 'Público Objetivo' },
+      { id: 'strategy.enfoque-de-marca', label: 'Enfoque de marca' },
+      { id: 'strategy.principios-de-marca', label: 'Principios de Marca' },
+      { id: 'strategy.posicionamiento', label: 'Posicionamiento' },
+      { id: 'strategy.esencia-personalidad', label: 'Esencia y personalidad' },
+      { id: 'strategy.concepto-creativo', label: 'Concepto creativo' },
+      { id: 'strategy.verbal-identity', label: 'Verbal Identity' },
     ],
   },
   {
-    id: 'typography',
-    label: 'Typography',
-    leaves: [
-      { id: 'typography.foundations', label: 'Typography Foundations' },
-      { id: 'typography.system', label: 'Typography System' },
+    id: 'foundations',
+    label: 'Foundations',
+    groups: [
+      {
+        id: 'color',
+        label: 'Color System',
+        leaves: [
+          { id: 'color.global-colors', label: 'Global Colors' },
+          { id: 'color.brand-colors', label: 'Brand Colors' },
+          { id: 'color.semantic-colors', label: 'Semantic Colors' },
+        ],
+      },
+      {
+        id: 'typography',
+        label: 'Typography System',
+        leaves: [
+          { id: 'typography.foundations', label: 'Typography Foundations' },
+          { id: 'typography.system', label: 'Typography System' },
+        ],
+      },
+      {
+        id: 'grids',
+        label: 'Layout & Grid',
+        leaves: [
+          { id: 'grids.system', label: 'Grid System' },
+          { id: 'grids.application', label: 'Grid Application' },
+        ],
+      },
+      { id: 'visual-styles.page', label: 'Visual Styles' },
+      { id: 'foundations.spacing-system', label: 'Spacing System' },
+      { id: 'foundations.bordes-radius', label: 'Bordes & Radius' },
+      { id: 'foundations.elevation-shadows', label: 'Elevation & Shadows' },
+      { id: 'foundations.photography', label: 'Photography & Image Direction' },
+      { id: 'foundations.motion-principles', label: 'Motion Principles' },
     ],
   },
   {
-    id: 'visual-styles',
-    label: 'Visual Styles',
-    leaves: [{ id: 'visual-styles.page', label: 'Visual Styles' }],
+    id: 'components',
+    label: 'Components',
+    groups: [
+      { id: 'components.logos', label: 'Logos' },
+      { id: 'components.buttons-ctas', label: 'Buttons & CTAs' },
+      { id: 'components.content-blocks', label: 'Content Blocks' },
+      { id: 'components.navigation', label: 'Navigation' },
+      { id: 'components.cards', label: 'Cards' },
+      { id: 'components.forms-inputs', label: 'Forms & Inputs' },
+      { id: 'components.tags-badges-labels', label: 'Tags, Badges & Labels' },
+      { id: 'components.visual-system', label: 'Visual system' },
+      { id: 'components.icons-illustrations', label: 'Icons & Illustrations' },
+    ],
   },
   {
-    id: 'grids',
-    label: 'Grids',
-    leaves: [
-      { id: 'grids.system', label: 'Grid System' },
-      { id: 'grids.application', label: 'Grid Application' },
+    id: 'templates',
+    label: 'Templates',
+    groups: [
+      { id: 'templates.rrss', label: 'RRSS' },
+      { id: 'templates.web', label: 'WEB' },
+      { id: 'templates.presentacion', label: 'Presentación' },
+      { id: 'templates.mailers', label: 'Mailers' },
+    ],
+  },
+  {
+    id: 'brand-ops',
+    label: 'Brand Ops',
+    groups: [
+      { id: 'brand-ops.governance', label: 'Governance' },
+      { id: 'brand-ops.training-adoption', label: 'Training & Adoption' },
+      { id: 'brand-ops.requests-support', label: 'Requests & Support' },
+      { id: 'brand-ops.health-evolution', label: 'Health & Evolution' },
     ],
   },
 ]
 
-export const ALL_LEAF_IDS: string[] = MODULE_GROUPS.flatMap((g) => g.leaves.map((l) => l.id))
+export const ALL_LEAF_IDS: string[] = CATEGORIES.flatMap((c) =>
+  c.groups.flatMap((g) => (g.leaves ? g.leaves.map((l) => l.id) : [g.id])),
+)
+
+/** Info de una hoja (dato de la categoría/grupo, usado por `PlaceholderPage` y
+ *  por cualquier página que solo necesite saber "dónde vive" un id). */
+export function findLeafInfo(id: string): { categoryLabel: string; label: string } | undefined {
+  for (const category of CATEGORIES) {
+    for (const group of category.groups) {
+      if (group.leaves) {
+        const leaf = group.leaves.find((l) => l.id === id)
+        if (leaf) return { categoryLabel: category.label, label: leaf.label }
+      } else if (group.id === id) {
+        return { categoryLabel: category.label, label: group.label }
+      }
+    }
+  }
+  return undefined
+}
 
 /**
  * Preset "Light" — representativo por ahora (a definir el set real más

@@ -4,13 +4,18 @@ Guía para cualquier sesión de Claude Code que trabaje en este repo.
 
 ## Qué es
 
-Sitio de documentación de un **design system** ("Template - BrandSystem"),
-exportado desde **Figma Make**. Documenta las decisiones estructurales de la
-marca — **Color System** (Global / Brand / Semantic), **Typography**
-(Foundations / System), **Visual Styles** y **Layout Grids** (System /
-Application) — más una **Introducción** y un **handbook** de componentes propios.
-Single-page app en React, sin routing real (la navegación es state en
-`src/app/App.tsx`).
+De ahora en más nos referimos a este sitio como **el dashboard**. Documenta
+las decisiones estructurales de un **Brand System** ("Template -
+BrandSystem"), exportado originalmente desde **Figma Make**. Single-page app
+en React, sin routing real (la navegación es state en `src/app/App.tsx`).
+
+El sidebar se organiza en **categorías** (ver
+`BRAND-SYSTEM-ARQUITECTURA.md` y "Arquitectura del catálogo (categorías del
+sidebar)" más abajo): **Strategy**, **Foundations** (donde viven Color
+System, Typography System, Layout & Grid, Visual Styles y el resto de
+fundamentos), **Components**, **Templates** y **Brand Ops**. Cada categoría
+agrupa páginas — algunas con sub-páginas propias (ej. Color System), la
+mayoría páginas únicas.
 
 Cada página de documentación sigue la misma estructura traída de Figma:
 `PageHeader` (IntroCard) → secciones con cards/tokens en vivo → `GovernanceFooter`
@@ -62,27 +67,72 @@ calcula solo (ej. ratio de contraste y nivel WCAG en `ColorCard` /
 
 ### Ajustes — prender/apagar módulos (capa manual, separada de la anterior)
 
-`AjustesPage` (icon button cog del sidebar) deja prender/apagar cada
-sub-página del catálogo con un switch — **independiente** de si sus datos
-están completos. Un módulo apagado desaparece del sidebar sin importar sus
-datos, y el **Registro de completado NO lo evalúa** (apagado a propósito ≠
-oculto por falta de datos).
+`AjustesPage` (icon button cog del sidebar) deja prender/apagar cada página
+del catálogo con un switch — **independiente** de si sus datos están
+completos. Un módulo apagado desaparece del sidebar sin importar sus datos, y
+el **Registro de completado NO lo evalúa** (apagado a propósito ≠ oculto por
+falta de datos).
 
-- `src/app/lib/moduleConfig.ts` — `MODULE_GROUPS` (grupo → sub-páginas,
-  cada una con un id namespaced: `color.brand-colors`, `visual-styles.page`…),
-  `LARGE_PRESET` (todo prendido) y `LIGHT_PRESET` (subset **representativo**
-  por ahora — Brand Colors, Semantic Colors, Typography System, Visual
-  Styles; falta definir el set real). `useModuleConfig()` persiste en
-  `localStorage` (`module-config`, por navegador, sin backend).
-- No hay switch de grupo: si todas las sub-páginas de un grupo quedan
-  apagadas, el grupo entero desaparece del sidebar como consecuencia natural
-  (mismo criterio que las secciones sin datos).
+- `src/app/lib/moduleConfig.ts` — `CATEGORIES` (categoría → grupo/página →
+  hoja, ver "Arquitectura del catálogo" abajo), cada hoja con un id
+  namespaced (`color.brand-colors`, `strategy.posicionamiento`,
+  `visual-styles.page`…), `LARGE_PRESET` (todo prendido) y `LIGHT_PRESET`
+  (subset **representativo** por ahora — Brand Colors, Semantic Colors,
+  Typography System, Visual Styles; falta definir el set real).
+  `useModuleConfig()` persiste en `localStorage` (`module-config`, por
+  navegador, sin backend).
+- No hay switch de grupo/categoría: si todas las sub-páginas de un grupo (o
+  todos los grupos de una categoría) quedan apagados, el grupo/categoría
+  entero desaparece del sidebar como consecuencia natural (mismo criterio que
+  las secciones sin datos).
 - `App.tsx` (`Sidebar`) filtra `colorPages` / `typographyPages` / `gridPages`
   por `enabled`; si la sub-página activa se apaga desde Ajustes, redirige a
-  la siguiente prendida del grupo o a Introducción.
+  la siguiente prendida del grupo o a Introducción. Las páginas sin
+  sub-páginas (Visual Styles y toda página nueva/`PlaceholderPage`) se
+  togglean por su propio id de grupo.
 - `RegistroPage` recibe `enabled` y filtra `ALL_HIDDEN_ENTRIES` con
   `REPORT_MODULE_TO_LEAF` (en `siteCompleteness.ts`) — al sumar un módulo
   nuevo a la regla de completitud, agregar ahí su mapeo `module → leaf id`.
+
+## Arquitectura del catálogo (categorías del sidebar)
+
+Fuente: `BRAND-SYSTEM-ARQUITECTURA.md` (documento del cliente; su numeración
+es solo de referencia/orden, no estructura real — no hay campos obligatorios
+a nivel de categoría ni cantidad fija de páginas por categoría).
+
+El sidebar agrupa las páginas en 5 categorías (`CATEGORIES` en
+`moduleConfig.ts`), en este orden: **Strategy**, **Foundations**,
+**Components**, **Templates**, **Brand Ops**. Cada categoría es un
+`NavEyebrow` en el sidebar; desaparece si todas sus páginas están apagadas
+desde Ajustes.
+
+- Dentro de una categoría, un grupo puede ser:
+  - **Con sub-páginas reales** (`leaves` en `ModuleGroupDef`): hoy solo
+    Color System, Typography System y Layout & Grid, dentro de Foundations.
+    Cada uno tiene su propio `NavGroup` hardcodeado en `Sidebar` (`App.tsx`)
+    con su estado de sub-página activa (`activeColorPage`,
+    `activeTypographyPage`, `activeGridPage`) y sus componentes reales.
+  - **Página única** (sin `leaves`, togglable por el `id` del grupo): el
+    resto — Visual Styles (contenido real) y toda página que todavía no
+    tiene contenido (`PlaceholderPage`, ver abajo).
+- **Páginas sin contenido real todavía**: se renderizan con
+  `src/app/components/PlaceholderPage.tsx` — un `PageHeader` genérico con
+  `paragraphs: ['[agregar descripción]']` hasta que se les sume contenido
+  real (en ese momento se reemplaza `PlaceholderPage` por una página propia,
+  mismo patrón que Brand Colors o Visual Styles). `App.tsx` las rutea todas
+  por un único `SidebarPage` genérico (`'placeholder'` +
+  `activePlaceholderId`, resuelto a label/categoría con `findLeafInfo()` de
+  `moduleConfig.ts`) — no crear un `SidebarPage` dedicado por cada una.
+- Íconos de sidebar para páginas placeholder: `LEAF_ICONS` en `App.tsx`
+  (mapa `leaf id → LucideIcon`). Al construir el contenido real de una
+  página, está bien mantener el mismo ícono o cambiarlo si el diseño lo pide.
+- **Hoy con contenido real**: Color System (Global/Brand/Semantic),
+  Typography System (Foundations/System), Visual Styles, Layout & Grid
+  (System/Application) — todas dentro de Foundations. **Todo el resto de
+  `BRAND-SYSTEM-ARQUITECTURA.md`** (Strategy completo; Spacing System,
+  Bordes & Radius, Elevation & Shadows, Photography & Image Direction,
+  Motion Principles de Foundations; Components completo; Templates completo;
+  Brand Ops completo) son `PlaceholderPage` pendientes de contenido.
 
 ## Stack
 
@@ -166,6 +216,9 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
     "Ajustes".
   - `AjustesPage` — panel de control de módulos (ver "Ajustes — prender/apagar
     módulos"). Se entra por el icon button (cog) del pie del sidebar.
+  - `PlaceholderPage` — página genérica para cualquier módulo del catálogo sin
+    contenido real todavía (ver "Arquitectura del catálogo"). Un solo
+    componente reutilizado por todas las páginas pendientes.
   - `components/demo/` — demos por categoría (Buttons, Inputs, Media, Feedback,
     Navigation, Toolbar, PromptChat). Nota: hoy `App.tsx` no las enruta.
   - `components/PageHeader/` — encabezado de página (IntroCard: eyebrow de
@@ -235,7 +288,8 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
   El pie del sidebar son icon buttons: "Mis componentes" (Layers), "Ajustes"
   (cog) y comprimir/expandir (`PanelLeftClose`/`Open`). Comprimido = rail de
   64px (solo iconos); el estado se guarda en `localStorage` (`sidebar-collapsed`).
-  Comprimido, los grupos (`NavGroup`: Color system / Typography / Grids) abren un
+  Comprimido, los grupos (`NavGroup`: Color System / Typography System /
+  Layout & Grid) abren un
   **menú flotante** (`createPortal` a `body`, `position: fixed`) con sus
   sub-páginas; cierra al elegir una, click fuera o Escape. Al cambiar de página
   el `<main>` vuelve a `scrollTop 0`.
@@ -274,8 +328,11 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
 
 ## Trabajo en curso
 
-- Documentadas: Global / Brand / Semantic Colors, Typography (×2), Visual Styles,
-  Grids (×2), Introducción, handbook.
+- Documentadas con contenido real: Global / Brand / Semantic Colors,
+  Typography (×2), Visual Styles, Grids (×2), Introducción, handbook. Todo lo
+  demás de `BRAND-SYSTEM-ARQUITECTURA.md` (Strategy, resto de Foundations,
+  Components, Templates, Brand Ops) son `PlaceholderPage` — ver
+  "Arquitectura del catálogo".
 - Regla de completitud de datos (ver sección arriba) implementada en Brand
   Colors y Semantic Colors. **Pendiente**: llevar Typography Foundations/System,
   Visual Styles y Grid System/Application al mismo patrón (datos en

@@ -22,12 +22,48 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   ClipboardList,
+  Target,
+  Compass,
+  ScrollText,
+  MapPin,
+  Sparkles,
+  Wand2,
+  MessageCircle,
+  Ruler,
+  Square,
+  Sun,
+  Camera,
+  PlayCircle,
+  Award,
+  MousePointerClick,
+  LayoutList,
+  Navigation,
+  CreditCard,
+  FormInput,
+  Tag,
+  Component,
+  Image,
+  Share2,
+  Globe,
+  Presentation,
+  Mail,
+  ShieldCheck,
+  GraduationCap,
+  LifeBuoy,
+  HeartPulse,
   type LucideIcon,
 } from 'lucide-react'
 
 import { MisComponentesPage } from './components/MisComponentesPage'
 import { RegistroPage } from './components/RegistroPage'
-import { useModuleConfig, type ModuleState } from './lib/moduleConfig'
+import { PlaceholderPage } from './components/PlaceholderPage'
+import {
+  CATEGORIES,
+  findLeafInfo,
+  useModuleConfig,
+  type ModuleGroupDef,
+  type ModuleState,
+} from './lib/moduleConfig'
 import { IntroduccionPage, type IntroTarget } from './components/IntroduccionPage'
 import { GlobalColorsPage } from './components/GlobalColorsPage'
 import { BrandColorsPage } from './components/BrandColorsPage'
@@ -53,6 +89,7 @@ type SidebarPage =
   | 'visual-styles'
   | 'grids'
   | 'color'
+  | 'placeholder'
 type ColorPage = 'global-colors' | 'brand-colors' | 'semantic-colors'
 type TypographyPageId = 'foundations' | 'system'
 type GridPageId = 'system' | 'application'
@@ -80,6 +117,41 @@ const gridPages: { id: GridPageId; label: string }[] = [
   { id: 'system', label: 'System' },
   { id: 'application', label: 'Application' },
 ]
+
+/** Icono por leaf id — cubre "Visual Styles" y toda página nueva sin
+ *  contenido real todavía (ver `moduleConfig.ts` → `CATEGORIES`). */
+const LEAF_ICONS: Record<string, LucideIcon> = {
+  'visual-styles.page': Shapes,
+  'foundations.spacing-system': Ruler,
+  'foundations.bordes-radius': Square,
+  'foundations.elevation-shadows': Sun,
+  'foundations.photography': Camera,
+  'foundations.motion-principles': PlayCircle,
+  'strategy.publico-objetivo': Target,
+  'strategy.enfoque-de-marca': Compass,
+  'strategy.principios-de-marca': ScrollText,
+  'strategy.posicionamiento': MapPin,
+  'strategy.esencia-personalidad': Sparkles,
+  'strategy.concepto-creativo': Wand2,
+  'strategy.verbal-identity': MessageCircle,
+  'components.logos': Award,
+  'components.buttons-ctas': MousePointerClick,
+  'components.content-blocks': LayoutList,
+  'components.navigation': Navigation,
+  'components.cards': CreditCard,
+  'components.forms-inputs': FormInput,
+  'components.tags-badges-labels': Tag,
+  'components.visual-system': Component,
+  'components.icons-illustrations': Image,
+  'templates.rrss': Share2,
+  'templates.web': Globe,
+  'templates.presentacion': Presentation,
+  'templates.mailers': Mail,
+  'brand-ops.governance': ShieldCheck,
+  'brand-ops.training-adoption': GraduationCap,
+  'brand-ops.requests-support': LifeBuoy,
+  'brand-ops.health-evolution': HeartPulse,
+}
 
 const sections: { id: DemoSection; label: string; icon: React.ReactNode }[] = [
   { id: 'buttons', label: 'Buttons & Actions', icon: <Zap className="size-full" strokeWidth={1.5} /> },
@@ -338,12 +410,16 @@ function Sidebar({
   collapsed,
   setCollapsed,
   enabled,
+  activePlaceholderId,
+  setActivePlaceholderId,
 }: {
   activePage: SidebarPage
   setActivePage: (p: SidebarPage) => void
   activeColorPage: ColorPage
   setActiveColorPage: (p: ColorPage) => void
   enabled: ModuleState
+  activePlaceholderId: string | null
+  setActivePlaceholderId: (id: string) => void
   colorOpen: boolean
   setColorOpen: (fn: (o: boolean) => boolean) => void
   activeTypographyPage: TypographyPageId
@@ -409,8 +485,6 @@ function Sidebar({
           collapsed ? 'items-center' : ''
         }`}
       >
-        {!collapsed && <NavEyebrow>Contenido</NavEyebrow>}
-
         <NavItem
           Icon={Home}
           label="Introducción"
@@ -419,90 +493,139 @@ function Sidebar({
           collapsed={collapsed}
         />
 
-        {visibleColorPages.length > 0 && (
-          <NavGroup
-            Icon={Palette}
-            label="Color system"
-            groupActive={activePage === 'color'}
-            open={colorOpen}
-            onToggle={toggleGroup(setColorOpen)}
-            collapsed={collapsed}
-          >
-            {visibleColorPages.map((p) => (
-              <NavSubItem
-                key={p.id}
-                label={p.label}
-                active={activePage === 'color' && activeColorPage === p.id}
-                onClick={() =>
-                  startTransition(() => {
-                    setActivePage('color')
-                    setActiveColorPage(p.id)
-                  })
-                }
-              />
-            ))}
-          </NavGroup>
-        )}
+        {CATEGORIES.map((category) => {
+          const isGroupVisible = (group: ModuleGroupDef) => {
+            if (group.id === 'color') return visibleColorPages.length > 0
+            if (group.id === 'typography') return visibleTypographyPages.length > 0
+            if (group.id === 'grids') return visibleGridPages.length > 0
+            if (group.leaves) return group.leaves.some((l) => enabled[l.id] !== false)
+            return enabled[group.id] !== false
+          }
+          if (!category.groups.some(isGroupVisible)) return null
 
-        {visibleTypographyPages.length > 0 && (
-          <NavGroup
-            Icon={Type}
-            label="Typography"
-            groupActive={activePage === 'typography'}
-            open={typographyOpen}
-            onToggle={toggleGroup(setTypographyOpen)}
-            collapsed={collapsed}
-          >
-            {visibleTypographyPages.map((p) => (
-              <NavSubItem
-                key={p.id}
-                label={p.label}
-                active={activePage === 'typography' && activeTypographyPage === p.id}
-                onClick={() =>
-                  startTransition(() => {
-                    setActivePage('typography')
-                    setActiveTypographyPage(p.id)
-                  })
-                }
-              />
-            ))}
-          </NavGroup>
-        )}
+          return (
+            <div key={category.id} className="contents">
+              {!collapsed && <NavEyebrow>{category.label}</NavEyebrow>}
 
-        {visualStylesEnabled && (
-          <NavItem
-            Icon={Shapes}
-            label="Visual styles"
-            active={activePage === 'visual-styles'}
-            onClick={() => setActivePage('visual-styles')}
-            collapsed={collapsed}
-          />
-        )}
+              {category.groups.map((group) => {
+                if (!isGroupVisible(group)) return null
 
-        {visibleGridPages.length > 0 && (
-          <NavGroup
-            Icon={Grid3x3}
-            label="Grids"
-            groupActive={activePage === 'grids'}
-            open={gridsOpen}
-            onToggle={toggleGroup(setGridsOpen)}
-            collapsed={collapsed}
-          >
-            {visibleGridPages.map((p) => (
-              <NavSubItem
-                key={p.id}
-                label={p.label}
-                active={activePage === 'grids' && activeGridPage === p.id}
-                onClick={() =>
-                  startTransition(() => {
-                    setActivePage('grids')
-                    setActiveGridPage(p.id)
-                  })
+                if (group.id === 'color') {
+                  return (
+                    <NavGroup
+                      key={group.id}
+                      Icon={Palette}
+                      label={group.label}
+                      groupActive={activePage === 'color'}
+                      open={colorOpen}
+                      onToggle={toggleGroup(setColorOpen)}
+                      collapsed={collapsed}
+                    >
+                      {visibleColorPages.map((p) => (
+                        <NavSubItem
+                          key={p.id}
+                          label={p.label}
+                          active={activePage === 'color' && activeColorPage === p.id}
+                          onClick={() =>
+                            startTransition(() => {
+                              setActivePage('color')
+                              setActiveColorPage(p.id)
+                            })
+                          }
+                        />
+                      ))}
+                    </NavGroup>
+                  )
                 }
-              />
-            ))}
-          </NavGroup>
-        )}
+
+                if (group.id === 'typography') {
+                  return (
+                    <NavGroup
+                      key={group.id}
+                      Icon={Type}
+                      label={group.label}
+                      groupActive={activePage === 'typography'}
+                      open={typographyOpen}
+                      onToggle={toggleGroup(setTypographyOpen)}
+                      collapsed={collapsed}
+                    >
+                      {visibleTypographyPages.map((p) => (
+                        <NavSubItem
+                          key={p.id}
+                          label={p.label}
+                          active={activePage === 'typography' && activeTypographyPage === p.id}
+                          onClick={() =>
+                            startTransition(() => {
+                              setActivePage('typography')
+                              setActiveTypographyPage(p.id)
+                            })
+                          }
+                        />
+                      ))}
+                    </NavGroup>
+                  )
+                }
+
+                if (group.id === 'grids') {
+                  return (
+                    <NavGroup
+                      key={group.id}
+                      Icon={Grid3x3}
+                      label={group.label}
+                      groupActive={activePage === 'grids'}
+                      open={gridsOpen}
+                      onToggle={toggleGroup(setGridsOpen)}
+                      collapsed={collapsed}
+                    >
+                      {visibleGridPages.map((p) => (
+                        <NavSubItem
+                          key={p.id}
+                          label={p.label}
+                          active={activePage === 'grids' && activeGridPage === p.id}
+                          onClick={() =>
+                            startTransition(() => {
+                              setActivePage('grids')
+                              setActiveGridPage(p.id)
+                            })
+                          }
+                        />
+                      ))}
+                    </NavGroup>
+                  )
+                }
+
+                if (group.id === 'visual-styles.page') {
+                  return (
+                    <NavItem
+                      key={group.id}
+                      Icon={Shapes}
+                      label={group.label}
+                      active={activePage === 'visual-styles'}
+                      onClick={() => setActivePage('visual-styles')}
+                      collapsed={collapsed}
+                    />
+                  )
+                }
+
+                // Página genérica sin contenido real todavía (`PlaceholderPage`).
+                const Icon = LEAF_ICONS[group.id] ?? BookOpen
+                return (
+                  <NavItem
+                    key={group.id}
+                    Icon={Icon}
+                    label={group.label}
+                    active={activePage === 'placeholder' && activePlaceholderId === group.id}
+                    onClick={() => {
+                      setActivePage('placeholder')
+                      setActivePlaceholderId(group.id)
+                    }}
+                    collapsed={collapsed}
+                  />
+                )
+              })}
+            </div>
+          )
+        })}
       </nav>
 
       {/* Utilidades */}
@@ -560,6 +683,7 @@ function AppShell() {
   const [typographyOpen, setTypographyOpen] = useState(false)
   const [activeGridPage, setActiveGridPage] = useState<GridPageId>('system')
   const [gridsOpen, setGridsOpen] = useState(false)
+  const [activePlaceholderId, setActivePlaceholderId] = useState<string | null>(null)
   const [collapsed, setCollapsed] = useState(() => {
     try {
       return localStorage.getItem('sidebar-collapsed') === '1'
@@ -601,7 +725,10 @@ function AppShell() {
     if (activePage === 'visual-styles' && enabled['visual-styles.page'] === false) {
       setActivePage('introduccion')
     }
-  }, [enabled, activePage, activeColorPage, activeTypographyPage, activeGridPage])
+    if (activePage === 'placeholder' && activePlaceholderId && enabled[activePlaceholderId] === false) {
+      setActivePage('introduccion')
+    }
+  }, [enabled, activePage, activeColorPage, activeTypographyPage, activeGridPage, activePlaceholderId])
 
   const current = sections.find(s => s.id === activeSection)!
 
@@ -643,6 +770,8 @@ function AppShell() {
         collapsed={collapsed}
         setCollapsed={setCollapsed}
         enabled={enabled}
+        activePlaceholderId={activePlaceholderId}
+        setActivePlaceholderId={setActivePlaceholderId}
       />
 
       {/* Main content */}
@@ -655,6 +784,11 @@ function AppShell() {
           <RegistroPage enabled={enabled} />
         ) : activePage === 'ajustes' ? (
           <AjustesPage enabled={enabled} toggle={toggle} applyPreset={applyPreset} />
+        ) : activePage === 'placeholder' && activePlaceholderId ? (
+          (() => {
+            const info = findLeafInfo(activePlaceholderId)
+            return <PlaceholderPage module={info?.categoryLabel ?? 'Sistema'} title={info?.label ?? ''} />
+          })()
         ) : activePage === 'typography' ? (
           <div className="flex flex-col gap-xs">
             {activeTypographyPage === 'foundations' && <TypographyFoundationsPage />}
