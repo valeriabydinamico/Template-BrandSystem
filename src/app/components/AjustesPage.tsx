@@ -1,8 +1,12 @@
+import { useState } from 'react'
+import { Search, X } from 'lucide-react'
 import { PageHeader } from './PageHeader'
 import {
   CATEGORIES,
   LARGE_PRESET,
   LIGHT_PRESET,
+  NONE_PRESET,
+  type CategoryDef,
   type ModuleGroupDef,
   type ModuleState,
 } from '../lib/moduleConfig'
@@ -70,6 +74,25 @@ function moduleStateEquals(a: ModuleState, b: ModuleState) {
   return Object.keys(b).every((k) => (a[k] !== false) === (b[k] !== false))
 }
 
+/** Filtra un grupo por nombre: si el nombre del grupo matchea, se devuelve
+ *  completo; si no, solo con las sub-páginas cuyo nombre matchea (o `null`
+ *  si ninguna). Grupos sin `leaves` (página única) solo matchean por su
+ *  propio nombre. */
+function filterGroup(group: ModuleGroupDef, query: string): ModuleGroupDef | null {
+  if (!query) return group
+  const q = query.toLowerCase()
+  if (group.label.toLowerCase().includes(q)) return group
+  if (!group.leaves) return null
+  const leaves = group.leaves.filter((leaf) => leaf.label.toLowerCase().includes(q))
+  return leaves.length > 0 ? { ...group, leaves } : null
+}
+
+function filterCategory(category: CategoryDef, query: string): ModuleGroupDef[] {
+  return category.groups
+    .map((group) => filterGroup(group, query))
+    .filter((group): group is ModuleGroupDef => group !== null)
+}
+
 /** Card de un grupo. Si tiene sub-páginas reales, el título va solo arriba y
  *  cada sub-página es una fila con su switch. Si es una página única (sin
  *  `leaves`), el switch va directo al lado del título — no hay sub-página
@@ -131,6 +154,13 @@ export function AjustesPage({
 }) {
   const isLarge = moduleStateEquals(enabled, LARGE_PRESET)
   const isLight = moduleStateEquals(enabled, LIGHT_PRESET)
+  const isNone = moduleStateEquals(enabled, NONE_PRESET)
+  const [query, setQuery] = useState('')
+
+  const filteredCategories = CATEGORIES.map((category) => ({
+    category,
+    groups: filterCategory(category, query.trim()),
+  })).filter(({ groups }) => groups.length > 0)
 
   return (
     <div className="flex w-full flex-col items-start bg-white">
@@ -151,7 +181,7 @@ export function AjustesPage({
               Un punto de partida — después se puede seguir ajustando módulo por módulo.
             </p>
           </div>
-          <div className="grid w-full grid-cols-1 gap-[16px] min-[640px]:grid-cols-2">
+          <div className="grid w-full grid-cols-1 gap-[16px] min-[640px]:grid-cols-3">
             <PresetButton
               label="Large"
               description="Prende todos los módulos y sub-páginas del catálogo."
@@ -164,12 +194,48 @@ export function AjustesPage({
               active={isLight}
               onClick={() => applyPreset(LIGHT_PRESET)}
             />
+            <PresetButton
+              label="Deshabilitar todo"
+              description="Apaga todos los módulos y sub-páginas del catálogo de una sola vez."
+              active={isNone}
+              onClick={() => applyPreset(NONE_PRESET)}
+            />
           </div>
         </section>
 
         <div className="h-px w-full shrink-0 bg-[#eef2f8]" />
 
-        {CATEGORIES.map((category) => (
+        <div className="relative flex w-full items-center">
+          <Search className="pointer-events-none absolute left-[14px] size-[16px] text-[#8a94a8]" strokeWidth={2} />
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Buscar módulo por nombre…"
+            className="w-full rounded-[12px] border border-[#e3e7ee] bg-[#fafbfc] py-[12px] pl-[40px] pr-[40px] font-normal text-[14px] leading-[20px] text-[#16181d] outline-none placeholder:text-[#8a94a8] focus:border-[#004c97]"
+          />
+          {query && (
+            <button
+              type="button"
+              onClick={() => setQuery('')}
+              aria-label="Limpiar búsqueda"
+              className="absolute right-[10px] flex size-[24px] items-center justify-center rounded-[8px] text-[#8a94a8] hover:bg-[#eef2f8] hover:text-[#576175]"
+            >
+              <X className="size-[16px]" strokeWidth={2} />
+            </button>
+          )}
+        </div>
+
+        {filteredCategories.length === 0 && (
+          <div className="flex w-full flex-col items-center justify-center gap-[8px] rounded-[16px] border border-dashed border-[#c4c9d4] bg-[#f7f8fa] p-[48px] text-center">
+            <p className="font-semibold text-[16px] text-[#16181d]">Sin resultados</p>
+            <p className="max-w-[420px] font-normal text-[14px] leading-[20px] text-[#576175]">
+              Ningún módulo o sub-página coincide con "{query}".
+            </p>
+          </div>
+        )}
+
+        {filteredCategories.map(({ category, groups }) => (
           <section key={category.id} className="flex w-full flex-col gap-[24px]">
             <div className="flex flex-col gap-[4px]">
               <h2 className="font-bold text-[22px] leading-[28px] text-[#16181d]">{category.label}</h2>
@@ -179,7 +245,7 @@ export function AjustesPage({
             </div>
 
             <div className="flex w-full flex-col gap-[16px]">
-              {category.groups.map((group) => (
+              {groups.map((group) => (
                 <GroupCard key={group.id} group={group} enabled={enabled} toggle={toggle} />
               ))}
             </div>

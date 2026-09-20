@@ -220,6 +220,8 @@ function presetFrom(enabledIds: string[]): ModuleState {
 
 export const LARGE_PRESET: ModuleState = presetFrom(ALL_LEAF_IDS)
 export const LIGHT_PRESET: ModuleState = presetFrom(LIGHT_PRESET_IDS)
+/** Preset "Deshabilitar todo" — apaga todo el catálogo de una. */
+export const NONE_PRESET: ModuleState = presetFrom([])
 
 const STORAGE_KEY = 'module-config'
 

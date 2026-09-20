@@ -84,11 +84,15 @@ falta de datos).
 - `src/app/lib/moduleConfig.ts` — `CATEGORIES` (categoría → grupo/página →
   hoja, ver "Arquitectura del catálogo" abajo), cada hoja con un id
   namespaced (`color.brand-colors`, `strategy.posicionamiento`,
-  `visual-styles.page`…), `LARGE_PRESET` (todo prendido) y `LIGHT_PRESET`
+  `visual-styles.page`…), `LARGE_PRESET` (todo prendido), `LIGHT_PRESET`
   (subset **representativo** por ahora — Brand Colors, Semantic Colors,
-  Typography System, Visual Styles; falta definir el set real).
-  `useModuleConfig()` persiste en `localStorage` (`module-config`, por
-  navegador, sin backend).
+  Typography System, Visual Styles; falta definir el set real) y
+  `NONE_PRESET` (todo apagado). `useModuleConfig()` persiste en
+  `localStorage` (`module-config`, por navegador, sin backend).
+- `AjustesPage` tiene un buscador (filtra por nombre de grupo o de
+  sub-página, case-insensitive) entre los presets y la lista de categorías —
+  si el nombre del grupo matchea se muestra completo, si no, solo las
+  sub-páginas cuyo nombre matchea.
 - No hay switch de grupo/categoría: si todas las sub-páginas de un grupo (o
   todos los grupos de una categoría) quedan apagados, el grupo/categoría
   entero desaparece del sidebar como consecuencia natural (mismo criterio que
