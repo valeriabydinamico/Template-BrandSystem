@@ -9,6 +9,7 @@ import { TokenTag } from './TokenTag'
 import { Note } from './Note'
 import { ColorCard } from './ColorCard'
 import { SemanticColorCard } from './SemanticColorCard'
+import { WireframeCard } from './WireframeCard'
 import { DocNote, MetaRow, SectionHeader, TypePreview } from './docs/shared'
 import { FONT } from './typography/shared'
 
@@ -110,6 +111,7 @@ const SECTIONS = [
   { id: 'note', name: 'Note' },
   { id: 'color-card', name: 'ColorCard' },
   { id: 'semantic-color-card', name: 'SemanticColorCard' },
+  { id: 'wireframe-card', name: 'WireframeCard' },
   { id: 'section-header', name: 'SectionHeader' },
   { id: 'doc-note', name: 'DocNote' },
   { id: 'type-preview', name: 'TypePreview' },
@@ -444,6 +446,19 @@ export function MisComponentesPage() {
                 reference="color/primitive/ink/100"
               />
             </CardSlot>
+          </Example>
+        </Section>
+
+        <Section
+          id="wireframe-card"
+          name="WireframeCard"
+          description="Documenta un formato de referencia de Layout Grids: canal + nombre, medida y un wireframe neutro con la cantidad real de columnas dibujadas como barras (las de borde se tiñen distinto, sugiriendo el margin)."
+        >
+          <Example label="12 columnas vs. 6 columnas — la cantidad de barras sigue a `cols`">
+            <div className="grid w-full grid-cols-1 gap-[16px] min-[560px]:grid-cols-2">
+              <WireframeCard channel="WEB" format="Desktop" size="1440×1024" cols={12} margin={80} gutter={24} />
+              <WireframeCard channel="SOCIAL" format="Feed Portrait" size="1080×1350" cols={6} margin={64} gutter={24} />
+            </div>
           </Example>
         </Section>
 

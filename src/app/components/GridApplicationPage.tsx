@@ -3,6 +3,7 @@ import { GovernanceFooter } from './GovernanceFooter'
 import { GovernanceRule } from './GovernanceRule'
 import { MetaFooter } from './MetaFooter'
 import { TokenTag } from './TokenTag'
+import { WireframeCard } from './WireframeCard'
 import { DocNote, SectionHeader } from './docs/shared'
 import { gridApplicationReports } from '../lib/siteCompleteness'
 import { WIREFRAME_REFS, type FormatRow } from '../data/gridApplication'
@@ -13,8 +14,8 @@ import layoutGridsBadgeIcon from '@/assets/layout-grids-badge-icon.svg'
  *
  * Formatos de referencia (tabla), wireframes estructurales por familia y
  * reglas de alineación. Reutiliza PageHeader / GovernanceFooter / GovernanceRule
- * / MetaFooter / TokenTag. Responsive: breakpoint 1600 (+ la tabla scrollea
- * horizontal dentro de su contenedor en pantallas angostas).
+ * / MetaFooter / TokenTag / WireframeCard. Responsive: breakpoint 1600 (+ la
+ * tabla scrollea horizontal dentro de su contenedor en pantallas angostas).
  *
  * Datos de marca en `src/app/data/gridApplication.ts`; reporte de
  * completitud en `src/app/lib/siteCompleteness.ts` (`gridApplicationReports`).
@@ -84,41 +85,6 @@ function FormatTable({ formats }: { formats: FormatRow[] }) {
   )
 }
 
-/* ─── Wireframes (derivados de los formatos visibles) ─── */
-
-function WireframeCard({ data }: { data: FormatRow }) {
-  const cols = data.cols ?? 0
-  return (
-    <div className="flex w-full min-w-0 flex-col gap-[14px] rounded-[16px] border border-[#bac2cf] bg-white p-[20px]">
-      <div className="flex flex-col gap-[2px]">
-        <span className="font-semibold text-[11px] uppercase leading-[14px] tracking-[0.5px] text-[#3d5e87]">
-          {data.channel}
-        </span>
-        <p className="font-bold text-[16px] leading-[22px] text-[#1c212b]">{data.format}</p>
-      </div>
-      <div className="relative w-full overflow-clip rounded-[10px] border border-[#bac2cf] bg-[#f7f9fb] pb-[56%]">
-        <span className="absolute inset-x-[9%] inset-y-[13%] rounded-[2px] border-2 border-[#ccdef2]" />
-        {/* Cantidad de columnas dinámica — refleja el `cols` real de este
-            formato, no un número fijo. Las columnas de borde (margin) se
-            tiñen distinto para diferenciarlas del resto (gutter). */}
-        <span className="absolute inset-x-[13%] inset-y-[22%] flex gap-[2px]">
-          {Array.from({ length: cols }).map((_, i) => (
-            <span
-              key={i}
-              className="h-full flex-1 rounded-[1px]"
-              style={{ backgroundColor: i === 0 || i === cols - 1 ? '#f4d7c9' : '#e0ebf7' }}
-            />
-          ))}
-        </span>
-      </div>
-      <div className="flex flex-wrap gap-x-[12px] gap-y-[2px] font-mono text-[11px] leading-[15px] text-[#1c212b]">
-        <span>{data.size}</span>
-        <span className="text-[#59667d]">{`${data.cols} col · M${data.margin} · G${data.gutter}`}</span>
-      </div>
-    </div>
-  )
-}
-
 /* ─── Reglas de alineación ─── */
 
 const ALIGNMENT_RULES = [
@@ -183,7 +149,15 @@ export function GridApplicationPage() {
             />
             <div className="grid grid-cols-1 gap-[16px] min-[560px]:grid-cols-2 min-[1200px]:grid-cols-4">
               {wireframes.map((w) => (
-                <WireframeCard key={`${w.channel}-${w.format}`} data={w} />
+                <WireframeCard
+                  key={`${w.channel}-${w.format}`}
+                  channel={w.channel!}
+                  format={w.format!}
+                  size={w.size!}
+                  cols={w.cols!}
+                  margin={w.margin!}
+                  gutter={w.gutter!}
+                />
               ))}
             </div>
           </section>

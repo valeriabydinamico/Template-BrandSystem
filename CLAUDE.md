@@ -273,6 +273,11 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
     sidebar). Lo usan `TokenTag` (cuando el texto se recorta) e `IconButton`
     del sidebar (`App.tsx`). Al agregar un tooltip nuevo en cualquier página,
     usar este componente — no el atributo `title` nativo.
+  - `components/WireframeCard/` — documenta un formato de referencia de
+    Layout Grids: canal + nombre, medida y un wireframe neutro con la
+    cantidad real de columnas (`cols`) dibujadas como barras — nunca un
+    número fijo. Las barras de borde se tiñen distinto sugiriendo el margin.
+    La usa `GridApplicationPage`.
 - `src/app/data/` — datos de marca de las páginas que ya siguen la regla de
   completitud (`brandColors.ts`, `semanticColors.ts`, `typographyFoundations.ts`,
   `typographySystem.ts`, `visualStyles.ts`, `gridApplication.ts`): campos
