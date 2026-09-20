@@ -226,7 +226,7 @@ function IconButton({
 
 function NavEyebrow({ children }: { children: React.ReactNode }) {
   return (
-    <p className="px-[12px] pb-[4px] pt-[6px] font-semibold text-[11px] uppercase leading-[14px] tracking-[0.6px] text-[#8a94a8]">
+    <p className="px-[12px] pb-[6px] pt-[20px] font-semibold text-[11px] uppercase leading-[14px] tracking-[0.6px] text-[#8a94a8]">
       {children}
     </p>
   )
