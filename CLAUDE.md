@@ -138,7 +138,7 @@ desde Ajustes.
   Typography System (Foundations/System), Visual Styles, Layout & Grid
   (System/Application) — todas dentro de Foundations. **Todo el resto de
   `BRAND-SYSTEM-ARQUITECTURA.md`** (Strategy completo; Spacing System,
-  Bordes & Radius, Elevation & Shadows, Photography & Image Direction,
+  Bordes & Radius, Elevation & Shadows, Photography,
   Motion Principles de Foundations; Components completo; Templates completo;
   Brand Ops completo) son `PlaceholderPage` pendientes de contenido.
 
@@ -287,12 +287,21 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
     `16349:159`). `image` es opcional — sin foto todavía muestra un
     placeholder neutro (ícono + "Sin foto todavía"); **nunca** usar fotos de
     stock como relleno, las fotos reales de marca llegan por upload del
-    cliente. Pendiente: página real "Photography & Image Direction" (hoy
+    cliente. Pendiente: página real "Photography" (hoy
     `PlaceholderPage`) — cuando lleguen las fotos, armar
     `src/app/data/photography.ts` con el mismo patrón de completitud que el
     resto (campos opcionales + `RequiredField`, `image` incluido como
     obligatorio ya que es un campo de marca, no algo que el componente
     calcule solo).
+  - `components/ImageCriteriaCard/` — documenta un criterio con imagen
+    (dirección visual, características, forma de uso…): nombre +
+    descripción, foto de referencia y un par de tags Do (verde) / Don't
+    (rojo). Genérico — no exclusivo de fotografía, cualquier sección que
+    necesite "así sí / así no" con imagen puede reusarlo. Arquitectura de
+    info del mismo board de Figma que `PhotoCategoryCard`, sección "02.
+    Dirección visual" (nodo `16349:266`). `image` opcional con el mismo
+    placeholder neutro —
+    mismo criterio: nunca fotos de stock de relleno.
 - `src/app/data/` — datos de marca de las páginas que ya siguen la regla de
   completitud (`brandColors.ts`, `semanticColors.ts`, `typographyFoundations.ts`,
   `typographySystem.ts`, `visualStyles.ts`, `gridApplication.ts`): campos

@@ -97,7 +97,7 @@ export const CATEGORIES: CategoryDef[] = [
       { id: 'foundations.spacing-system', label: 'Spacing System' },
       { id: 'foundations.bordes-radius', label: 'Bordes & Radius' },
       { id: 'foundations.elevation-shadows', label: 'Elevation & Shadows' },
-      { id: 'foundations.photography', label: 'Photography & Image Direction' },
+      { id: 'foundations.photography', label: 'Photography' },
       { id: 'foundations.motion-principles', label: 'Motion Principles' },
     ],
   },

@@ -13,17 +13,24 @@ hasta que se pida explícitamente.
   (ej. "Color System") y no se ve qué sub-páginas tiene hasta abrir el
   flyout.
 
-## Photography & Image Direction
+## Photography
 
-- Ya existe el componente `PhotoCategoryCard` (ver handbook) con la
-  arquitectura de info tomada de Figma (nodo `16349:159`, board "15 -
-  Sistema Fotográfico"). Falta construir la página real: cuando lleguen las
-  fotos de marca (por upload del cliente), armar `src/app/data/photography.ts`
-  con el mismo patrón de completitud del resto (campos opcionales +
-  `RequiredField`, `image` obligatorio) y reemplazar el `PlaceholderPage` de
-  "Photography & Image Direction" por el contenido real.
+- Módulo renombrado de "Photography & Image Direction" a "Photography"
+  (`foundations.photography` en `moduleConfig.ts`).
+- Ya existen dos componentes con la arquitectura de info tomada de Figma
+  (board "15 - Sistema Fotográfico"):
+  - `PhotoCategoryCard` (nodo `16349:159`) — categoría fotográfica: foto +
+    nombre, descripción, uso recomendado, tono emocional, pills.
+  - `ImageCriteriaCard` (nodo `16349:266`) — criterio con imagen + Do/Don't;
+    genérico, no exclusivo de fotografía (aplica a dirección visual,
+    características, forma de uso).
+  Falta construir la página real: cuando lleguen las fotos de marca (por
+  upload del cliente), armar `src/app/data/photography.ts` con el mismo
+  patrón de completitud del resto (campos opcionales + `RequiredField`,
+  `image` obligatorio) y reemplazar el `PlaceholderPage` de "Photography"
+  por el contenido real.
 - El board completo de Figma tiene 5 secciones (Categorías fotográficas,
   Dirección visual, Uso según contexto, Integración en layouts, Stock/IA/
-  gobernanza) — hoy solo se tomó la arquitectura de la primera card
-  (`PhotoCategoryCard`). Al construir la página real, revisar el resto del
-  board para las demás secciones.
+  gobernanza) — hoy solo se tomó la arquitectura de las primeras dos cards.
+  Al construir la página real, revisar el resto del board para las demás
+  secciones.

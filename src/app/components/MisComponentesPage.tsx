@@ -11,6 +11,7 @@ import { ColorCard } from './ColorCard'
 import { SemanticColorCard } from './SemanticColorCard'
 import { WireframeCard } from './WireframeCard'
 import { PhotoCategoryCard } from './PhotoCategoryCard'
+import { ImageCriteriaCard } from './ImageCriteriaCard'
 import { DocNote, MetaRow, SectionHeader, TypePreview } from './docs/shared'
 import { FONT } from './typography/shared'
 
@@ -114,6 +115,7 @@ const SECTIONS = [
   { id: 'semantic-color-card', name: 'SemanticColorCard' },
   { id: 'wireframe-card', name: 'WireframeCard' },
   { id: 'photo-category-card', name: 'PhotoCategoryCard' },
+  { id: 'image-criteria-card', name: 'ImageCriteriaCard' },
   { id: 'section-header', name: 'SectionHeader' },
   { id: 'doc-note', name: 'DocNote' },
   { id: 'type-preview', name: 'TypePreview' },
@@ -482,6 +484,23 @@ export function MisComponentesPage() {
                 usage="Campañas de captación, redes sociales, hero banners, mensajes de cercanía."
                 tone="Cálido, optimista, cercano."
                 tags={['Campañas', 'RRSS', 'Hero']}
+              />
+            </CardSlot>
+          </Example>
+        </Section>
+
+        <Section
+          id="image-criteria-card"
+          name="ImageCriteriaCard"
+          description="Documenta un criterio con imagen (dirección visual, características, forma de uso…): nombre + descripción, foto de referencia y un par de tags Do/Don't. Genérico — no exclusivo de fotografía. Sin foto todavía, muestra el mismo placeholder neutro que PhotoCategoryCard."
+        >
+          <Example label="sin foto todavía → placeholder neutro">
+            <CardSlot width={340}>
+              <ImageCriteriaCard
+                title="Paleta de luz"
+                description="Luz natural difusa o artificial suave. Evitar luz dura, flash directo y sombras demasiado marcadas. Preferir luz lateral o frontal difuminada."
+                recommended="Luz suave, difusa, natural"
+                avoid="Flash directo, sombras duras"
               />
             </CardSlot>
           </Example>
