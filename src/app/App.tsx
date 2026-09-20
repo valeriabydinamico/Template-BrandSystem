@@ -195,6 +195,11 @@ function navItemClass(active: boolean) {
   }`
 }
 
+/** Tooltip propio (dark, mismo lenguaje que el sidebar) — reemplaza el
+ *  `title` nativo del navegador, que se ve fuera de lugar sobre el rail
+ *  comprimido. Portal a `body` + `position: fixed`: el `nav` tiene
+ *  `overflow-x-hidden` (ver fix del scroll horizontal) y recortaría un
+ *  tooltip posicionado con `absolute` dentro suyo. */
 function IconButton({
   label,
   active,
@@ -208,21 +213,48 @@ function IconButton({
   className?: string
   children: React.ReactNode
 }) {
+  const [show, setShow] = useState(false)
+  const [pos, setPos] = useState({ top: 0, left: 0 })
+  const btnRef = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    if (!show) return
+    const r = btnRef.current?.getBoundingClientRect()
+    if (r) setPos({ top: r.top + r.height / 2, left: r.right + 10 })
+  }, [show])
+
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      title={label}
-      aria-label={label}
-      aria-pressed={active}
-      className={`flex size-[34px] shrink-0 items-center justify-center rounded-[10px] transition-colors ${
-        active
-          ? 'bg-[#1677d8]/20 text-[#8fc7ff]'
-          : 'text-[#8a94a8] hover:bg-white/[0.06] hover:text-[#e3e7ee]'
-      } ${className}`}
-    >
-      {children}
-    </button>
+    <span className={`inline-flex ${className}`}>
+      <button
+        ref={btnRef}
+        type="button"
+        onClick={onClick}
+        onMouseEnter={() => setShow(true)}
+        onMouseLeave={() => setShow(false)}
+        onFocus={() => setShow(true)}
+        onBlur={() => setShow(false)}
+        aria-label={label}
+        aria-pressed={active}
+        className={`flex size-[34px] shrink-0 items-center justify-center rounded-[10px] transition-colors ${
+          active
+            ? 'bg-[#1677d8]/20 text-[#8fc7ff]'
+            : 'text-[#8a94a8] hover:bg-white/[0.06] hover:text-[#e3e7ee]'
+        }`}
+      >
+        {children}
+      </button>
+      {show &&
+        createPortal(
+          <span
+            role="tooltip"
+            style={{ position: 'fixed', top: pos.top, left: pos.left, transform: 'translateY(-50%)' }}
+            className="pointer-events-none z-[70] whitespace-nowrap rounded-[8px] border border-[#262b35] bg-[#1c1f26] px-[10px] py-[6px] text-[12px] font-medium text-[#e3e7ee] shadow-[0_8px_20px_rgba(0,0,0,0.35)]"
+          >
+            {label}
+          </span>,
+          document.body,
+        )}
+    </span>
   )
 }
 
