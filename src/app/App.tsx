@@ -175,11 +175,13 @@ function MisComponentesHeader() {
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
- * Sidebar — Tailwind puro, alineado con la UI de la documentación
- * (mismo lenguaje que PageHeader / GovernanceFooter):
- *   superficie #fafbfc · borde #e3e7ee · headings #2f3945 · texto #576175 ·
- *   labels apagados #8a94a8 · caja de icono #596879 · activo = pastilla brand
- *   #e1f0ff / texto #004c97 (tokens reales de Brand Colors).
+ * Sidebar — Tailwind puro. Es la única superficie **dark** del dashboard (el
+ * resto de las páginas siguen en claro): fondo #16181d (mismo token
+ * `color/background/inverse` que usa `SemanticColorCard` para "on-dark") ·
+ * borde #262b35 · texto #aab3c2 · labels apagados #8a94a8 · caja de icono de
+ * marca #596879 (neutro, funciona igual en claro/oscuro) · activo = pastilla
+ * azul translúcida `#1677d8`/20 con texto #8fc7ff (blue/300, token real de
+ * Brand/Semantic Colors para estados "on-dark").
  * ────────────────────────────────────────────────────────────────────────── */
 
 const NAV_ITEM =
@@ -188,8 +190,8 @@ const NAV_ITEM =
 function navItemClass(active: boolean) {
   return `${NAV_ITEM} ${
     active
-      ? 'bg-[#e1f0ff] font-semibold text-[#004c97]'
-      : 'font-medium text-[#576175] hover:bg-[#eef2f8]'
+      ? 'bg-[#1677d8]/20 font-semibold text-[#8fc7ff]'
+      : 'font-medium text-[#aab3c2] hover:bg-white/[0.06]'
   }`
 }
 
@@ -215,8 +217,8 @@ function IconButton({
       aria-pressed={active}
       className={`flex size-[34px] shrink-0 items-center justify-center rounded-[10px] transition-colors ${
         active
-          ? 'bg-[#e1f0ff] text-[#004c97]'
-          : 'text-[#8a94a8] hover:bg-[#eef2f8] hover:text-[#576175]'
+          ? 'bg-[#1677d8]/20 text-[#8fc7ff]'
+          : 'text-[#8a94a8] hover:bg-white/[0.06] hover:text-[#e3e7ee]'
       } ${className}`}
     >
       {children}
@@ -326,7 +328,7 @@ function NavGroup({
             <div
               ref={panelRef}
               style={{ position: 'fixed', top: pos.top, left: pos.left }}
-              className="z-[60] flex min-w-[184px] flex-col gap-[1px] rounded-[12px] border border-[#e3e7ee] bg-white p-[6px] shadow-[0_10px_30px_rgba(62,73,88,0.18)]"
+              className="z-[60] flex min-w-[184px] flex-col gap-[1px] rounded-[12px] border border-[#262b35] bg-[#16181d] p-[6px] shadow-[0_10px_30px_rgba(0,0,0,0.4)]"
             >
               <p className="px-[10px] pb-[4px] pt-[6px] font-semibold text-[11px] uppercase leading-[14px] tracking-[0.6px] text-[#8a94a8]">
                 {label}
@@ -346,10 +348,10 @@ function NavGroup({
         onClick={onToggle}
         className={`${NAV_ITEM} ${
           groupActive && !open
-            ? 'bg-[#e1f0ff] font-semibold text-[#004c97]'
+            ? 'bg-[#1677d8]/20 font-semibold text-[#8fc7ff]'
             : groupActive
-              ? 'font-semibold text-[#004c97] hover:bg-[#eef2f8]'
-              : 'font-medium text-[#576175] hover:bg-[#eef2f8]'
+              ? 'font-semibold text-[#8fc7ff] hover:bg-white/[0.06]'
+              : 'font-medium text-[#aab3c2] hover:bg-white/[0.06]'
         }`}
       >
         <Icon className="size-[18px] shrink-0" strokeWidth={1.75} />
@@ -361,7 +363,7 @@ function NavGroup({
         />
       </button>
       {open && (
-        <div className="my-[2px] ml-[27px] flex flex-col gap-[1px] border-l border-[#e3e7ee] pl-[11px]">
+        <div className="my-[2px] ml-[27px] flex flex-col gap-[1px] border-l border-[#262b35] pl-[11px]">
           {children}
         </div>
       )}
@@ -383,8 +385,8 @@ function NavSubItem({
       onClick={onClick}
       className={`w-full cursor-pointer rounded-[8px] px-[12px] py-[7px] text-left text-[13px] leading-[18px] transition-colors ${
         active
-          ? 'bg-[#e1f0ff] font-semibold text-[#004c97]'
-          : 'font-medium text-[#576175] hover:bg-[#eef2f8]'
+          ? 'bg-[#1677d8]/20 font-semibold text-[#8fc7ff]'
+          : 'font-medium text-[#aab3c2] hover:bg-white/[0.06]'
       }`}
     >
       {label}
@@ -454,13 +456,13 @@ function Sidebar({
 
   return (
     <aside
-      className={`flex shrink-0 flex-col border-r border-[#e3e7ee] bg-[#fafbfc] transition-[width] duration-200 ${
+      className={`flex shrink-0 flex-col border-r border-[#262b35] bg-[#16181d] transition-[width] duration-200 ${
         collapsed ? 'w-[64px]' : 'w-[264px]'
       }`}
     >
       {/* Marca */}
       <div
-        className={`flex shrink-0 items-center border-b border-[#eef2f8] py-[20px] ${
+        className={`flex shrink-0 items-center border-b border-[#262b35] py-[20px] ${
           collapsed ? 'justify-center px-0' : 'gap-[12px] px-[20px]'
         }`}
       >
@@ -472,7 +474,7 @@ function Sidebar({
             <span className="font-semibold text-[11px] uppercase leading-[14px] tracking-[0.6px] text-[#8a94a8]">
               Design System
             </span>
-            <span className="truncate font-bold text-[15px] leading-[20px] text-[#2f3945]">
+            <span className="truncate font-bold text-[15px] leading-[20px] text-[#f1f4f7]">
               BrandSystem
             </span>
           </div>
@@ -505,7 +507,7 @@ function Sidebar({
 
           return (
             <div key={category.id} className="contents">
-              <div className={`my-[4px] h-px shrink-0 bg-[#e3e7ee] ${collapsed ? 'w-[32px]' : 'w-full'}`} />
+              <div className={`my-[4px] h-px shrink-0 bg-[#262b35] ${collapsed ? 'w-[32px]' : 'w-full'}`} />
               {!collapsed && <NavEyebrow>{category.label}</NavEyebrow>}
 
               {category.groups.map((group) => {
@@ -631,7 +633,7 @@ function Sidebar({
 
       {/* Utilidades */}
       <div
-        className={`flex shrink-0 gap-[4px] border-t border-[#eef2f8] px-[12px] py-[12px] ${
+        className={`flex shrink-0 gap-[4px] border-t border-[#262b35] px-[12px] py-[12px] ${
           collapsed ? 'flex-col items-center' : 'items-center'
         }`}
       >

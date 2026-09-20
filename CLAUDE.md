@@ -281,18 +281,24 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
   de demos, no enrutada) y `useTheme`, y su CSS (`@figma/astraui/styles.css`)
   sigue importado en `index.css`. No romper eso sin migrarlo. Si un componente de
   Astra resuelve bien un caso, se puede usar — pero no es el camino por defecto.
-- `ForceLightTheme` fuerza tema claro al montar (vía `useTheme`).
-- **El sidebar (`Sidebar` en `App.tsx`) ya está en Tailwind puro**, alineado con
-  la UI de la documentación (superficie `#fafbfc`, borde `#e3e7ee`, caja de icono
-  `#596879`, activo = pastilla `#e1f0ff` / texto `#004c97`). `main` es `bg-white`.
-  El pie del sidebar son icon buttons: "Mis componentes" (Layers), "Ajustes"
+- `ForceLightTheme` fuerza tema claro al montar (vía `useTheme`) — aplica al
+  contenido (`main`), no al sidebar (ver debajo).
+- **El sidebar (`Sidebar` en `App.tsx`) ya está en Tailwind puro** y es la
+  **única superficie dark** del dashboard (todo el resto sigue en claro):
+  fondo `#16181d` (mismo token `color/background/inverse` que usa
+  `SemanticColorCard` para "on-dark"), borde `#262b35`, texto inactivo
+  `#aab3c2`, labels apagados `#8a94a8`, caja de icono de marca `#596879`
+  (neutro, funciona en claro y oscuro), activo = pastilla `#1677d8`/20 con
+  texto `#8fc7ff` (blue/300 — token real de Brand/Semantic Colors para
+  "on-dark"). `main` es `bg-white`. El pie del sidebar son icon buttons: "Mis
+  componentes" (Layers), "Registro de completado" (ClipboardList), "Ajustes"
   (cog) y comprimir/expandir (`PanelLeftClose`/`Open`). Comprimido = rail de
   64px (solo iconos); el estado se guarda en `localStorage` (`sidebar-collapsed`).
   Comprimido, los grupos (`NavGroup`: Color System / Typography System /
   Layout & Grid) abren un
-  **menú flotante** (`createPortal` a `body`, `position: fixed`) con sus
-  sub-páginas; cierra al elegir una, click fuera o Escape. Al cambiar de página
-  el `<main>` vuelve a `scrollTop 0`.
+  **menú flotante** (`createPortal` a `body`, `position: fixed`, también
+  dark) con sus sub-páginas; cierra al elegir una, click fuera o Escape. Al
+  cambiar de página el `<main>` vuelve a `scrollTop 0`.
 - Si en algún momento se quiere sacar Astra del todo: falta reescribir el
   `ThemeProvider`/`ForceLightTheme` y la rama de demos de `App.tsx`, quitar el
   import de `@figma/astraui/styles.css`, y migrar
