@@ -483,7 +483,7 @@ function Sidebar({
 
       {/* Navegación */}
       <nav
-        className={`flex flex-1 flex-col gap-[2px] overflow-y-auto px-[12px] py-[16px] ${
+        className={`sidebar-scroll flex flex-1 flex-col gap-[2px] overflow-y-auto px-[12px] py-[16px] ${
           collapsed ? 'items-center' : ''
         }`}
       >
