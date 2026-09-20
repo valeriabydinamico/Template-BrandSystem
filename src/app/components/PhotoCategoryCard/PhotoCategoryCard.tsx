@@ -49,18 +49,18 @@ export function PhotoCategoryCard({ image, title, description, usage, tone, tags
       )}
       <div className="flex w-full flex-col gap-[14px] p-[20px]">
         <p className="font-bold text-[24px] leading-[26px] text-[#16181d]">{title}</p>
-        <p className="font-normal text-[16px] leading-[20px] text-[#576175]">{description}</p>
+        <p className="font-normal text-[14px] leading-[20px] text-[#576175]">{description}</p>
         <div className="flex flex-col gap-[6px]">
           <p className="font-semibold text-[13px] uppercase leading-[16.5px] tracking-[0.5px] text-[#16181d]">
             Uso recomendado
           </p>
-          <p className="font-normal text-[16px] leading-[20px] text-[#576175]">{usage}</p>
+          <p className="font-normal text-[14px] leading-[20px] text-[#576175]">{usage}</p>
         </div>
         <div className="flex flex-col gap-[6px]">
           <p className="font-semibold text-[13px] uppercase leading-[16.5px] tracking-[0.5px] text-[#16181d]">
             Tono emocional
           </p>
-          <p className="font-normal italic text-[16px] leading-[20px] text-[#576175]">{tone}</p>
+          <p className="font-normal italic text-[14px] leading-[20px] text-[#576175]">{tone}</p>
         </div>
         <div className="flex flex-wrap items-center gap-[6px]">
           {tags.map((tag) => (
