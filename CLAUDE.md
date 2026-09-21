@@ -25,6 +25,84 @@ viewport (igual que Brand Colors).
 Proyecto original en Figma:
 https://www.figma.com/design/i8FTndoqsyBd5GyaRme2nR/Template---BrandSystem
 
+## Cómo incorporar documentación/contenido nuevo
+
+**Regla global, aplica siempre que llegue documentación nueva** (con o sin
+formato, desde Figma, Notion o cualquier otra fuente). Dos conceptos que NO
+son lo mismo:
+
+- **UI** = los componentes propios y el lenguaje visual del dashboard
+  (`PageHeader` → secciones → `GovernanceFooter` → `MetaFooter`, `ColorCard`,
+  patrón de completitud de datos, nomenclatura de tokens/rutas, etc.). **Se
+  mantiene en el 100% de los casos** — la única forma en que cambia es una
+  **decisión explícita y separada de cambiar la UI de la app**, nunca como
+  efecto secundario de incorporar contenido/documentación nueva. La fuente
+  del contenido (Figma, Notion, lo que sea) nunca dicta la UI.
+- **Formato** = la forma de **agrupar y jerarquizar el contenido**: qué
+  secciones/grupos existen, cómo se agrupan los ítems entre sí, qué orden o
+  jerarquía tienen. Esto sí puede variar según la fuente — es lo único que
+  entra en juego en las reglas de abajo.
+
+El contenido nunca se pega ni se traduce tal cual: siempre se aplica la UI
+del dashboard sobre el contenido recibido, sea cual sea su formato de origen.
+
+- **Página nueva (hoy `PlaceholderPage`, sin contenido real):** el brief
+  llega como una **estructura mínima de agrupación de información** (el
+  formato: qué secciones/grupos tiene, qué campos por ítem) — la tarea es
+  aplicar la UI y el patrón de completitud sobre ese formato dado, no
+  inventar una agrupación distinta a la acordada.
+- **Página que YA tiene contenido real documentado:**
+  - Si el contenido nuevo viene de **Figma** (trae su propio formato de
+    agrupación): **preguntar siempre**, antes de tocar nada, si se mantiene
+    el formato actual de la página o si se adopta el formato nuevo que trae
+    ese diseño. La UI se mantiene en ambos casos — lo que se pregunta es
+    solo el formato (agrupación/jerarquía), nunca la UI.
+  - Si el contenido nuevo viene de **Notion** (texto plano, sin formato
+    real): no hace falta preguntar — se adapta directamente imitando el
+    formato de agrupación de contenido de páginas ya documentadas similares
+    (mismos criterios de sección/card/campo que el resto del sitio).
+
+**Excepción (solo de formato):** todo lo anterior aplica siempre, **salvo
+que se indique explícitamente desde el principio** que hay que aplicar un
+formato nuevo — en ese caso se sigue esa instrucción directa en vez de
+preguntar o de mantener el formato actual. Esta excepción es exclusiva del
+**formato** (agrupación/jerarquía) — la UI del dashboard **no tiene
+excepción acá**: se mantiene igual sea cual sea el formato elegido, y solo
+cambia si en algún momento se decide explícitamente cambiar la UI de la app
+(una decisión aparte, no relacionada con incorporar contenido).
+
+## Nomenclatura de tokens/rutas
+
+**Todo `token` (o campo equivalente: "Dónde encontrarlo" en Grid
+Application) sigue el esquema:**
+
+```
+<página>/<subpágina>/<sección>/<paleta si tiene>/<tono>
+```
+
+- Un solo separador entre niveles: `/`. Dentro de cada segmento, palabras
+  unidas con `_` (snake_case) — nunca guion medio ni mezclar los dos.
+- `<página>` = el grupo del sidebar en snake_case (`color_system`,
+  `typography_system`, `layout_grids`, `visual_styles`). `<subpágina>` = la
+  sub-página concreta (`global`, `brand`, `semantic`, `foundations`,
+  `system`, `application`) — se omite si la página no tiene sub-páginas
+  (Visual Styles).
+- `<sección>` = la sección visible en la página (ej. `state`, `action_support`,
+  `spacing`). `<paleta>` = la familia/grupo dentro de esa sección si existe
+  más de una (ej. `cta_primary`, `brand_primary`); se omite si la sección ya
+  es una única familia (ej. Focus en Semantic Colors).
+- `<tono>` = el ítem puntual (el paso de escala, el rol, el tamaño…).
+- **Dónde se genera:** en Semantic Colors, Typography System, Visual Styles y
+  Grid Application el token sigue siendo un campo obligatorio hardcodeado en
+  `src/app/data/*.ts` (cae bajo la regla de completitud de abajo), pero su
+  *valor* debe construirse siguiendo este mismo esquema en vez de un nombre
+  de token de diseño libre — ver esos archivos para el patrón exacto por
+  sección. Si algún módulo nuevo termina generando el token en código en vez
+  de pedirlo como dato, seguir el mismo esquema ahí también.
+- Los `id` de DOM para el buscador del sidebar (`slugify(token)`) se derivan
+  automáticamente del token, así que cambiar el token también cambia el
+  ancla — no hace falta tocarlos por separado.
+
 ## Regla de completitud de datos (dinámico por brief de marca)
 
 **Regla super importante, nunca pasarla por alto:** el sitio se completa con
@@ -63,8 +141,9 @@ calcula solo (ej. ratio de contraste y nivel WCAG en `ColorCard` /
   array de secciones a renderizar).
 - **Hoy implementado en:** Brand Colors, Semantic Colors, Typography
   Foundations, Typography System, Visual Styles, Grid Application. **Sin
-  implementar** (no tiene datos de marca configurables, es contenido
-  estructural/educativo): Grid System.
+  implementar:** Global Colors (sigue con el import crudo de Figma, ver
+  "Estructura" abajo) y Grid System (no tiene datos de marca configurables,
+  es contenido estructural/educativo).
 - **Regla en vigor desde ahora:** cuando se complete el contenido real de
   cualquier página nueva del catálogo (las que hoy son `PlaceholderPage`),
   seguir siempre este mismo patrón — nunca hardcodear los datos directo en
@@ -231,7 +310,10 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
     este sistema" (principios) + "Cómo está organizado" (4 module cards
     clicables → `onNavigate` cablea a color / typography / visual-styles / grids).
     En Tailwind puro. Icono en `src/assets/brand-system-badge-icon.svg`.
-  - `GlobalColorsPage` — renderiza `src/imports/01GlobalColors-1` (generado por Figma)
+  - `GlobalColorsPage` — renderiza `src/imports/01GlobalColors-1` (generado
+    por Figma, colores del master template). Se probó migrarla a componentes
+    propios con la paleta de un cliente ("Myntex"), pero se revirtió a
+    pedido — volver a intentarlo solo si se pide explícitamente.
   - `BrandColorsPage` — documenta "02 Brand Colors" de Figma con Tailwind +
     componentes propios (hecho, sin Astra)
   - `SemanticColorsPage` — documentada (secciones + gobernanza + meta-footer)
@@ -288,7 +370,15 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
     `emptyLeaves()` de `src/app/lib/moduleConfig.ts`, que compara
     `ALL_LEAF_IDS` contra `LEAVES_WITH_CONTENT` (actualizar ese set al sumarle
     contenido real a una página). Se entra por el icon button (ClipboardList)
-    del pie del sidebar, entre "Mis componentes" y "Ajustes".
+    del pie del sidebar, entre "Mis componentes" e "Informe".
+  - `InformePage` — **Informe**: historial de mejoras estructurales/
+    funcionales del dashboard en sí (sidebar, buscador, Ajustes, convenciones
+    de datos…) — separado del contenido de marca que documenta cada página y
+    de `RegistroPage` (que reporta completitud de datos, no features). Lista
+    hardcodeada en el propio componente (`MEJORAS`/`PENDIENTES`), se
+    actualiza a mano cada vez que se cierra un cambio relevante — no se
+    calcula de ningún reporte. Se entra por el icon button (FileText) del
+    pie del sidebar, entre "Registro de completado" y "Ajustes".
   - `AjustesPage` — panel de control de módulos (ver "Ajustes — prender/apagar
     módulos"). Se entra por el icon button (cog) del pie del sidebar.
   - `PlaceholderPage` — página genérica para cualquier módulo del catálogo sin
@@ -486,8 +576,6 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
 - `AjustesPage` ya tiene el panel de módulos (presets Large/Light + switches
   por sub-página). Pendiente: definir el set real del preset Light (hoy es
   representativo).
-- `GlobalColorsPage` sigue renderizando el frame crudo de `src/imports/` (no
-  re-hecho con componentes propios como el resto).
 - Fuentes de ejemplo del Type System (Manrope / Source Serif 4 / JetBrains Mono)
   se cargan en `src/styles/fonts.css`; vars `--font-brand` /
   `--font-brand-editorial`.

@@ -46,6 +46,7 @@ function add(label: string | undefined, categoryLabel: string, leafId: string | 
 add('Introducción', 'Sistema', 'introduccion', 'introduccion')
 add('Mis componentes', 'Sistema', 'mis-componentes', 'mis-componentes')
 add('Registro de completado', 'Sistema', 'registro', 'registro')
+add('Informe', 'Sistema', 'informe', 'informe')
 add('Ajustes', 'Sistema', 'ajustes', 'ajustes')
 
 /* ─── Todas las páginas del catálogo (nivel página) ─── */

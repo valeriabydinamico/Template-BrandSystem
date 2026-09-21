@@ -129,8 +129,8 @@ const GUIDE = [
   },
   {
     title: 'Token',
-    example: 'color/text/brand-primary',
-    description: 'Identificador estable que describe el uso del color, no su valor HEX.',
+    example: 'color_system/semantic/text_colors/brand/brand_primary',
+    description: 'Ruta estable que describe dónde vive el rol dentro del sitio, no su valor HEX.',
   },
   {
     title: 'Color Reference',

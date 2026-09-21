@@ -22,6 +22,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   ClipboardList,
+  FileText,
   Search,
   X,
   Target,
@@ -58,6 +59,7 @@ import {
 
 import { MisComponentesPage } from './components/MisComponentesPage'
 import { RegistroPage } from './components/RegistroPage'
+import { InformePage } from './components/InformePage'
 import { PlaceholderPage } from './components/PlaceholderPage'
 import { Tooltip } from './components/Tooltip'
 import {
@@ -88,6 +90,7 @@ type SidebarPage =
   | 'folder'
   | 'mis-componentes'
   | 'registro'
+  | 'informe'
   | 'ajustes'
   | 'typography'
   | 'visual-styles'
@@ -789,6 +792,13 @@ function Sidebar({
           <ClipboardList className="size-[18px]" strokeWidth={1.75} />
         </IconButton>
         <IconButton
+          label="Informe"
+          active={activePage === 'informe'}
+          onClick={() => setActivePage('informe')}
+        >
+          <FileText className="size-[18px]" strokeWidth={1.75} />
+        </IconButton>
+        <IconButton
           label="Ajustes"
           active={activePage === 'ajustes'}
           onClick={() => setActivePage('ajustes')}
@@ -894,7 +904,13 @@ function AppShell() {
   // usa el sidebar para sus propios ids namespaced, más las 4 páginas meta
   // que no son un leaf de moduleConfig.ts.
   function navigateToLeaf(leafId: string) {
-    if (leafId === 'introduccion' || leafId === 'mis-componentes' || leafId === 'registro' || leafId === 'ajustes') {
+    if (
+      leafId === 'introduccion' ||
+      leafId === 'mis-componentes' ||
+      leafId === 'registro' ||
+      leafId === 'informe' ||
+      leafId === 'ajustes'
+    ) {
       setActivePage(leafId)
       return
     }
@@ -982,6 +998,8 @@ function AppShell() {
           <MisComponentesPage />
         ) : activePage === 'registro' ? (
           <RegistroPage enabled={enabled} />
+        ) : activePage === 'informe' ? (
+          <InformePage />
         ) : activePage === 'ajustes' ? (
           <AjustesPage enabled={enabled} toggle={toggle} applyPreset={applyPreset} />
         ) : activePage === 'placeholder' && activePlaceholderId ? (

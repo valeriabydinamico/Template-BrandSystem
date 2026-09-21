@@ -33,18 +33,18 @@ export const FORMAT_ROW_FIELDS: RequiredField<FormatRow>[] = [
 ]
 
 export const FORMATS: FormatRow[] = [
-  { channel: 'WEB', format: 'Desktop', size: '1440×1024', cols: 12, margin: 80, gutter: 24, safe: 'H:80 / V:80', token: 'Layout Grid / Reference / Web / Desktop', goal: 'Sitio web · layouts amplios' },
-  { channel: 'WEB', format: 'Tablet', size: '768×1024', cols: 8, margin: 32, gutter: 24, safe: 'H:32 / V:32', token: 'Layout Grid / Reference / Web / Tablet', goal: 'Web responsive · tablet' },
-  { channel: 'WEB', format: 'Mobile', size: '390×844', cols: 4, margin: 16, gutter: 16, safe: 'H:16 / V:16', token: 'Layout Grid / Reference / Web / Mobile', goal: 'Web responsive · mobile' },
-  { channel: 'SOCIAL', format: 'Feed Portrait', size: '1080×1350', cols: 6, margin: 64, gutter: 24, safe: 'H:64 / V:64', token: 'Layout Grid / Reference / Social / Feed Portrait', goal: 'Publicación vertical de feed' },
-  { channel: 'SOCIAL', format: 'Square', size: '1080×1080', cols: 6, margin: 64, gutter: 24, safe: 'H:64 / V:64', token: 'Layout Grid / Reference / Social / Square', goal: 'Publicación cuadrada' },
-  { channel: 'SOCIAL', format: 'Story', size: '1080×1920', cols: 6, margin: 64, gutter: 24, safe: 'H:64 / V:104', token: 'Layout Grid / Reference / Social / Story', goal: 'Story vertical full-screen' },
-  { channel: 'SOCIAL', format: 'Reels + TikTok', size: '1080×1920', cols: 6, margin: 64, gutter: 24, safe: 'H:64 / V:104', token: 'Layout Grid / Reference / Social / Reels + TikTok', goal: 'Video corto vertical' },
-  { channel: 'SOCIAL', format: 'LinkedIn Landscape', size: '1200×627', cols: 12, margin: 64, gutter: 24, safe: 'H:64 / V:64', token: 'Layout Grid / Reference / Social / LinkedIn Landscape', goal: 'Publicación horizontal profesional' },
-  { channel: 'VIDEO', format: 'YouTube Thumbnail', size: '1280×720', cols: 12, margin: 64, gutter: 24, safe: 'H:64 / V:64', token: 'Layout Grid / Reference / Video / YouTube Thumbnail', goal: 'Thumbnail / portada 16:9' },
-  { channel: 'EMAIL', format: 'Desktop', size: '600×variable', cols: 4, margin: 24, gutter: 16, safe: 'H:24 / V:24', token: 'Layout Grid / Reference / Email / Desktop', goal: 'Contenido de email base' },
-  { channel: 'DISPLAY', format: 'Landscape', size: '1920×1080', cols: 12, margin: 96, gutter: 24, safe: 'H:96 / V:96', token: 'Layout Grid / Reference / Display / Landscape', goal: 'Pantalla / display 16:9' },
-  { channel: 'DISPLAY', format: 'Portrait', size: '1080×1920', cols: 6, margin: 80, gutter: 24, safe: 'H:80 / V:96', token: 'Layout Grid / Reference / Display / Portrait', goal: 'Pantalla / display vertical' },
+  { channel: 'WEB', format: 'Desktop', size: '1440×1024', cols: 12, margin: 80, gutter: 24, safe: 'H:80 / V:80', token: 'layout_grids/application/reference/web/desktop', goal: 'Sitio web · layouts amplios' },
+  { channel: 'WEB', format: 'Tablet', size: '768×1024', cols: 8, margin: 32, gutter: 24, safe: 'H:32 / V:32', token: 'layout_grids/application/reference/web/tablet', goal: 'Web responsive · tablet' },
+  { channel: 'WEB', format: 'Mobile', size: '390×844', cols: 4, margin: 16, gutter: 16, safe: 'H:16 / V:16', token: 'layout_grids/application/reference/web/mobile', goal: 'Web responsive · mobile' },
+  { channel: 'SOCIAL', format: 'Feed Portrait', size: '1080×1350', cols: 6, margin: 64, gutter: 24, safe: 'H:64 / V:64', token: 'layout_grids/application/reference/social/feed_portrait', goal: 'Publicación vertical de feed' },
+  { channel: 'SOCIAL', format: 'Square', size: '1080×1080', cols: 6, margin: 64, gutter: 24, safe: 'H:64 / V:64', token: 'layout_grids/application/reference/social/square', goal: 'Publicación cuadrada' },
+  { channel: 'SOCIAL', format: 'Story', size: '1080×1920', cols: 6, margin: 64, gutter: 24, safe: 'H:64 / V:104', token: 'layout_grids/application/reference/social/story', goal: 'Story vertical full-screen' },
+  { channel: 'SOCIAL', format: 'Reels + TikTok', size: '1080×1920', cols: 6, margin: 64, gutter: 24, safe: 'H:64 / V:104', token: 'layout_grids/application/reference/social/reels_tiktok', goal: 'Video corto vertical' },
+  { channel: 'SOCIAL', format: 'LinkedIn Landscape', size: '1200×627', cols: 12, margin: 64, gutter: 24, safe: 'H:64 / V:64', token: 'layout_grids/application/reference/social/linkedin_landscape', goal: 'Publicación horizontal profesional' },
+  { channel: 'VIDEO', format: 'YouTube Thumbnail', size: '1280×720', cols: 12, margin: 64, gutter: 24, safe: 'H:64 / V:64', token: 'layout_grids/application/reference/video/youtube_thumbnail', goal: 'Thumbnail / portada 16:9' },
+  { channel: 'EMAIL', format: 'Desktop', size: '600×variable', cols: 4, margin: 24, gutter: 16, safe: 'H:24 / V:24', token: 'layout_grids/application/reference/email/desktop', goal: 'Contenido de email base' },
+  { channel: 'DISPLAY', format: 'Landscape', size: '1920×1080', cols: 12, margin: 96, gutter: 24, safe: 'H:96 / V:96', token: 'layout_grids/application/reference/display/landscape', goal: 'Pantalla / display 16:9' },
+  { channel: 'DISPLAY', format: 'Portrait', size: '1080×1920', cols: 6, margin: 80, gutter: 24, safe: 'H:80 / V:96', token: 'layout_grids/application/reference/display/portrait', goal: 'Pantalla / display vertical' },
 ]
 
 /** Formatos elegidos como referencia de wireframe (subset representativo,

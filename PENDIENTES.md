@@ -44,6 +44,15 @@ hasta que se pida explícitamente.
   `Badge`) — reusarlos en vez de inventar estilos nuevos cuando la página
   real de Photography necesite pills o banners de estado.
 
+## Color System
+
+- Consultar con el equipo si conviene empezar a trabajar con HSL como fuente
+  de verdad en vez de HEX, tanto en diseño (Figma) como en desarrollo — el
+  HEX es un redondeo aproximado del HSL definido en el picker de Figma, así
+  que documentar HEX pierde precisión respecto al valor original (se detectó
+  al comparar un tono definido en Figma como HSL 65°/90%/10% contra el HSL
+  recalculado desde su HEX exportado, que dio 65°/92%/10%).
+
 ## Visual Styles
 
 - Redistribuir el contenido de la página real "Visual Styles" (Spacing,

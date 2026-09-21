@@ -37,7 +37,7 @@ export const STYLE_TOKEN_FIELDS: RequiredField<StyleToken>[] = [
 
 export const BRAND_STYLES: StyleToken[] = [
   {
-    token: 'type/brand/display/lg',
+    token: 'typography_system/system/brand/display/lg',
     preview: 'Build trust.',
     family: 'Manrope',
     weight: 'Semi Bold',
@@ -47,7 +47,7 @@ export const BRAND_STYLES: StyleToken[] = [
     usage: 'Hero · Campaigns · Titulares de alto impacto',
   },
   {
-    token: 'type/brand/display/md',
+    token: 'typography_system/system/brand/display/md',
     preview: 'Clear ideas.',
     family: 'Manrope',
     weight: 'Semi Bold',
@@ -57,7 +57,7 @@ export const BRAND_STYLES: StyleToken[] = [
     usage: 'Headlines editoriales · Piezas institucionales',
   },
   {
-    token: 'type/brand/heading/lg',
+    token: 'typography_system/system/brand/heading/lg',
     preview: 'Section heading',
     family: 'Manrope',
     weight: 'Semi Bold',
@@ -67,7 +67,7 @@ export const BRAND_STYLES: StyleToken[] = [
     usage: 'Heading principal · Secciones destacadas',
   },
   {
-    token: 'type/brand/heading/md',
+    token: 'typography_system/system/brand/heading/md',
     preview: 'Section title',
     family: 'Manrope',
     weight: 'Medium',
@@ -77,7 +77,7 @@ export const BRAND_STYLES: StyleToken[] = [
     usage: 'Heading secundario · Módulos editoriales',
   },
   {
-    token: 'type/brand/subtitle',
+    token: 'typography_system/system/brand/subtitle',
     preview: 'Ideas deserve room to breathe.',
     family: 'Source Serif 4',
     weight: 'Medium',
@@ -87,7 +87,7 @@ export const BRAND_STYLES: StyleToken[] = [
     usage: 'Storytelling · Quotes · Apoyo editorial',
   },
   {
-    token: 'type/brand/label',
+    token: 'typography_system/system/brand/label',
     preview: 'FEATURED',
     family: 'Manrope',
     weight: 'Semi Bold',
@@ -136,24 +136,24 @@ export const DEVICE_GROUPS: Record<'desktop' | 'tablet' | 'mobile', { title: str
       {
         label: 'Titles',
         rows: [
-          t('type/desktop/title/lg', 'Build trust.', 32, 40, 600, 'Primary title · Inter · Semi Bold · 32/40 · -0.5%'),
-          t('type/desktop/title/md', 'Clear hierarchy', 28, 36, 600, 'Section title · Inter · Semi Bold · 28/36 · -0.25%'),
-          t('type/desktop/title/sm', 'Module title', 24, 32, 600, 'Module title · Inter · Semi Bold · 24/32 · 0%'),
+          t('typography_system/system/desktop/titles/lg', 'Build trust.', 32, 40, 600, 'Primary title · Inter · Semi Bold · 32/40 · -0.5%'),
+          t('typography_system/system/desktop/titles/md', 'Clear hierarchy', 28, 36, 600, 'Section title · Inter · Semi Bold · 28/36 · -0.25%'),
+          t('typography_system/system/desktop/titles/sm', 'Module title', 24, 32, 600, 'Module title · Inter · Semi Bold · 24/32 · 0%'),
         ],
       },
       {
         label: 'Body',
         rows: [
-          t('type/desktop/body/lg', 'Lead content for context.', 18, 28, 400, 'Lead / intro · Inter · Regular · 18/28 · 0%'),
-          t('type/desktop/body/md', 'Clear, readable content.', 16, 24, 400, 'Default body · Inter · Regular · 16/24 · 0%'),
-          t('type/desktop/body/sm', 'Supporting details.', 14, 20, 400, 'Supporting copy · Inter · Regular · 14/20 · 0%'),
+          t('typography_system/system/desktop/body/lg', 'Lead content for context.', 18, 28, 400, 'Lead / intro · Inter · Regular · 18/28 · 0%'),
+          t('typography_system/system/desktop/body/md', 'Clear, readable content.', 16, 24, 400, 'Default body · Inter · Regular · 16/24 · 0%'),
+          t('typography_system/system/desktop/body/sm', 'Supporting details.', 14, 20, 400, 'Supporting copy · Inter · Regular · 14/20 · 0%'),
         ],
       },
       {
         label: 'CTA',
         rows: [
-          t('type/desktop/cta/md', 'Continue', 16, 20, 600, 'Primary actions · Inter · Semi Bold · 16/20 · 0%'),
-          t('type/desktop/cta/sm', 'Learn more', 14, 18, 600, 'Compact actions · Inter · Semi Bold · 14/18 · 0%'),
+          t('typography_system/system/desktop/cta/md', 'Continue', 16, 20, 600, 'Primary actions · Inter · Semi Bold · 16/20 · 0%'),
+          t('typography_system/system/desktop/cta/sm', 'Learn more', 14, 18, 600, 'Compact actions · Inter · Semi Bold · 14/18 · 0%'),
         ],
       },
     ],
@@ -164,24 +164,24 @@ export const DEVICE_GROUPS: Record<'desktop' | 'tablet' | 'mobile', { title: str
       {
         label: 'Titles',
         rows: [
-          t('type/tablet/title/lg', 'Build trust.', 28, 36, 600, 'Primary title · Inter · Semi Bold · 28/36 · -0.25%'),
-          t('type/tablet/title/md', 'Clear hierarchy', 24, 32, 600, 'Section title · Inter · Semi Bold · 24/32 · -0.25%'),
-          t('type/tablet/title/sm', 'Module title', 20, 28, 600, 'Module title · Inter · Semi Bold · 20/28 · 0%'),
+          t('typography_system/system/tablet/titles/lg', 'Build trust.', 28, 36, 600, 'Primary title · Inter · Semi Bold · 28/36 · -0.25%'),
+          t('typography_system/system/tablet/titles/md', 'Clear hierarchy', 24, 32, 600, 'Section title · Inter · Semi Bold · 24/32 · -0.25%'),
+          t('typography_system/system/tablet/titles/sm', 'Module title', 20, 28, 600, 'Module title · Inter · Semi Bold · 20/28 · 0%'),
         ],
       },
       {
         label: 'Body',
         rows: [
-          t('type/tablet/body/lg', 'Lead content for context.', 18, 28, 400, 'Lead / intro · Inter · Regular · 18/28 · 0%'),
-          t('type/tablet/body/md', 'Clear, readable content.', 16, 24, 400, 'Default body · Inter · Regular · 16/24 · 0%'),
-          t('type/tablet/body/sm', 'Supporting details.', 14, 20, 400, 'Supporting copy · Inter · Regular · 14/20 · 0%'),
+          t('typography_system/system/tablet/body/lg', 'Lead content for context.', 18, 28, 400, 'Lead / intro · Inter · Regular · 18/28 · 0%'),
+          t('typography_system/system/tablet/body/md', 'Clear, readable content.', 16, 24, 400, 'Default body · Inter · Regular · 16/24 · 0%'),
+          t('typography_system/system/tablet/body/sm', 'Supporting details.', 14, 20, 400, 'Supporting copy · Inter · Regular · 14/20 · 0%'),
         ],
       },
       {
         label: 'CTA',
         rows: [
-          t('type/tablet/cta/md', 'Continue', 15, 20, 600, 'Primary actions · Inter · Semi Bold · 15/20 · 0%'),
-          t('type/tablet/cta/sm', 'Learn more', 14, 18, 600, 'Compact actions · Inter · Semi Bold · 14/18 · 0%'),
+          t('typography_system/system/tablet/cta/md', 'Continue', 15, 20, 600, 'Primary actions · Inter · Semi Bold · 15/20 · 0%'),
+          t('typography_system/system/tablet/cta/sm', 'Learn more', 14, 18, 600, 'Compact actions · Inter · Semi Bold · 14/18 · 0%'),
         ],
       },
     ],
@@ -192,24 +192,24 @@ export const DEVICE_GROUPS: Record<'desktop' | 'tablet' | 'mobile', { title: str
       {
         label: 'Titles',
         rows: [
-          t('type/mobile/title/lg', 'Build trust.', 24, 32, 600, 'Primary title · Inter · Semi Bold · 24/32 · 0%'),
-          t('type/mobile/title/md', 'Clear hierarchy', 22, 28, 600, 'Section title · Inter · Semi Bold · 22/28 · 0%'),
-          t('type/mobile/title/sm', 'Module title', 18, 24, 600, 'Module title · Inter · Semi Bold · 18/24 · 0%'),
+          t('typography_system/system/mobile/titles/lg', 'Build trust.', 24, 32, 600, 'Primary title · Inter · Semi Bold · 24/32 · 0%'),
+          t('typography_system/system/mobile/titles/md', 'Clear hierarchy', 22, 28, 600, 'Section title · Inter · Semi Bold · 22/28 · 0%'),
+          t('typography_system/system/mobile/titles/sm', 'Module title', 18, 24, 600, 'Module title · Inter · Semi Bold · 18/24 · 0%'),
         ],
       },
       {
         label: 'Body',
         rows: [
-          t('type/mobile/body/lg', 'Lead content for context.', 16, 24, 400, 'Lead / intro · Inter · Regular · 16/24 · 0%'),
-          t('type/mobile/body/md', 'Clear, readable content.', 14, 20, 400, 'Default body · Inter · Regular · 14/20 · 0%'),
-          t('type/mobile/body/sm', 'Supporting details.', 14, 18, 400, 'Supporting copy · Inter · Regular · 14/18 · 0%'),
+          t('typography_system/system/mobile/body/lg', 'Lead content for context.', 16, 24, 400, 'Lead / intro · Inter · Regular · 16/24 · 0%'),
+          t('typography_system/system/mobile/body/md', 'Clear, readable content.', 14, 20, 400, 'Default body · Inter · Regular · 14/20 · 0%'),
+          t('typography_system/system/mobile/body/sm', 'Supporting details.', 14, 18, 400, 'Supporting copy · Inter · Regular · 14/18 · 0%'),
         ],
       },
       {
         label: 'CTA',
         rows: [
-          t('type/mobile/cta/md', 'Continue', 16, 20, 600, 'Primary actions · Inter · Semi Bold · 16/20 · 0%'),
-          t('type/mobile/cta/sm', 'Learn more', 14, 18, 600, 'Compact actions · Inter · Semi Bold · 14/18 · 0%'),
+          t('typography_system/system/mobile/cta/md', 'Continue', 16, 20, 600, 'Primary actions · Inter · Semi Bold · 16/20 · 0%'),
+          t('typography_system/system/mobile/cta/sm', 'Learn more', 14, 18, 600, 'Compact actions · Inter · Semi Bold · 14/18 · 0%'),
         ],
       },
     ],
