@@ -146,6 +146,51 @@ desde Ajustes.
   Motion Principles de Foundations; Components completo; Templates completo;
   Brand Ops completo) son `PlaceholderPage` pendientes de contenido.
 
+## Buscador del sidebar
+
+`SidebarSearch` (en `App.tsx`, arriba del todo del sidebar, entre la marca y
+la navegación) busca por **nombre/título** en todo el catálogo — no busca
+texto de párrafo/descripción. Al elegir un resultado, navega a la página
+correspondiente y hace scroll + resalta el ítem exacto (o la página entera
+si es una `PlaceholderPage` sin ítems).
+
+- `src/app/lib/searchIndex.ts` — arma `SEARCH_ENTRIES` a partir de las
+  mismas fuentes que ya existen: `siteCompleteness.ts` (así un ítem oculto
+  por falta de datos tampoco aparece en la búsqueda — mismo criterio que el
+  resto del sitio), `moduleConfig.ts` (`ALL_LEAF_IDS` + `findLeafInfo` para
+  una entrada por página) y `SECTIONS` de `MisComponentesPage.tsx` (para los
+  componentes del handbook). Cada `SearchEntry` tiene `leafId` (a qué página
+  navegar) y `anchorId` (el `id` de DOM al que hacer scroll).
+- `src/app/lib/slug.ts` — `slugify()` genera los ids de anchor a partir del
+  nombre/token del ítem (minúsculas, sin acentos, con guiones).
+- **Cada ítem buscable necesita un `id` de DOM** en el nodo que lo
+  renderiza, con el mismo esquema de slug que usa `searchIndex.ts` (ej.
+  `brand-color-${slugify(name)}`, `semantic-color-${slugify(token)}`,
+  `visual-style-${slugify(token)}`, `grid-format-${slugify(channel-format)}`).
+  Al sumar un ítem nuevo a cualquier `src/app/data/*.ts`, agregar también su
+  entrada en `searchIndex.ts` **y** el `id` correspondiente en la página que
+  lo renderiza — si falta el `id`, el resultado de búsqueda navega a la
+  página pero no encuentra el ancla exacta.
+- Todas las páginas de contenido (reales y `PlaceholderPage`) tienen
+  `id={leafId}` en su contenedor raíz, para que la entrada de "página"
+  siempre tenga un ancla válida aunque el ítem específico no la tenga.
+- `AppShell.navigateToLeaf(leafId)` mapea un `leafId` a la combinación de
+  `setActivePage`/`setActiveColorPage`/`setColorOpen`/etc. necesaria — mismo
+  criterio que ya usaba `goToArea` para los 4 accesos de Introducción, pero
+  genérico para cualquier hoja del catálogo + las 4 páginas meta
+  (`introduccion`, `mis-componentes`, `registro`, `ajustes`, que no son un
+  leaf de `moduleConfig.ts`).
+- El resaltado (`.search-highlight` en `globals.css`, animación
+  `search-pulse`) se aplica **imperativamente** vía `classList` en un
+  `useEffect` de `AppShell` (`pendingAnchor` state) — no como prop de React,
+  para no tener que pasarle un flag de "resaltado" a cada card de cada
+  página del sitio.
+- El dropdown de resultados se porta a `body` (`createPortal`, mismo patrón
+  que el flyout de `NavGroup`) — el listener de "click afuera" chequea tanto
+  el wrapper del buscador como el dropdown portado (si solo chequeara el
+  wrapper, un click en un resultado se leería como "afuera" y cerraría el
+  dropdown antes de que el `onClick` del botón llegue a dispararse).
+
 ## Stack
 
 - React 18 + TypeScript
@@ -322,6 +367,8 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
 - `src/app/lib/contrast.ts` — helpers de contraste/accesibilidad WCAG
   compartidos (`relativeLuminance`, `accessibleTextColor`, `contrastRatio`,
   `wcagLevel`, `isNearWhite`, …). Los usan `ColorCard` y `SemanticColorCard`.
+- `src/app/lib/searchIndex.ts` / `src/app/lib/slug.ts` — índice y helper de
+  slugs del buscador del sidebar. Ver "Buscador del sidebar" arriba.
   - `components/ModuleBadge/` — eyebrow con icono del módulo
   - `components/GovernanceRule/` — fila numerada de regla de gobernanza
   - `components/GovernanceFooter/` — bloque completo de "Gobernanza" (header +

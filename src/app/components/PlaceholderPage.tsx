@@ -7,9 +7,9 @@ import { PageHeader } from './PageHeader'
  * otro módulo; cuando llegue su contenido definitivo, se reemplaza por una
  * página propia (mismo patrón que Brand Colors, Visual Styles, etc.).
  */
-export function PlaceholderPage({ module, title }: { module: string; title: string }) {
+export function PlaceholderPage({ id, module, title }: { id?: string; module: string; title: string }) {
   return (
-    <div className="flex w-full flex-col items-start bg-white">
+    <div id={id} className="flex w-full flex-col items-start bg-white">
       <PageHeader module={module} title={title} paragraphs={['[agregar descripción]']} />
     </div>
   )

@@ -85,7 +85,7 @@ function ModuleCard({
 
 export function IntroduccionPage({ onNavigate }: { onNavigate: (t: IntroTarget) => void }) {
   return (
-    <div className="flex w-full flex-col items-start bg-white">
+    <div id="introduccion" className="flex w-full flex-col items-start bg-white">
       <PageHeader
         module="Brand System"
         moduleIconSrc={brandSystemBadgeIcon}

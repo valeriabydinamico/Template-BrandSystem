@@ -5,6 +5,7 @@ import { MetaFooter } from './MetaFooter'
 import { SemanticColorCard } from './SemanticColorCard'
 import type { TokenRow } from '../data/semanticColors'
 import { semanticColorsReports } from '../lib/siteCompleteness'
+import { slugify } from '../lib/slug'
 
 /* ────────────────────────────────────────────────────────────────────────────
  * 03 Semantic Colors — documentación de tokens semánticos.
@@ -91,14 +92,15 @@ function CardGrid({ rows, maxCols = 4 }: { rows: TokenRow[]; maxCols?: 3 | 4 }) 
       }`}
     >
       {rows.map((r) => (
-        <SemanticColorCard
-          key={r.token}
-          variant={r.variant}
-          role={r.role!}
-          color={r.color!}
-          token={r.token!}
-          reference={r.reference!}
-        />
+        <div key={r.token} id={`semantic-color-${slugify(r.token!)}`}>
+          <SemanticColorCard
+            variant={r.variant}
+            role={r.role!}
+            color={r.color!}
+            token={r.token!}
+            reference={r.reference!}
+          />
+        </div>
       ))}
     </div>
   )
@@ -370,7 +372,7 @@ export function SemanticColorsPage() {
   const hasTextColors = [r.textBrand, r.textNeutral, r.textAccent, r.textSemantic].some((g) => g.visible.length > 0)
 
   return (
-    <div className="flex w-full flex-col items-start bg-white">
+    <div id="color.semantic-colors" className="flex w-full flex-col items-start bg-white">
       <PageHeader
         module="Color System"
         title="03 Semantic Colors"

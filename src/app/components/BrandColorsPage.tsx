@@ -6,6 +6,7 @@ import { GovernanceFooter } from './GovernanceFooter'
 import { MetaFooter } from './MetaFooter'
 import type { BrandColorEntry } from '../data/brandColors'
 import { brandColorsReports } from '../lib/siteCompleteness'
+import { slugify } from '../lib/slug'
 
 /* ────────────────────────────────────────────────────────────────────────────
  * Los datos viven en `src/app/data/brandColors.ts`. Acá solo queda el layout:
@@ -60,7 +61,7 @@ function CardGrid({ cards }: { cards: BrandColorEntry[] }) {
   if (cards.length === 1) {
     return (
       <div className="flex w-full min-[1600px]:justify-end">
-        <div className="w-full max-w-[500px]">
+        <div id={`brand-color-${slugify(cards[0].name!)}`} className="w-full max-w-[500px]">
           <BrandCard data={cards[0]} />
         </div>
       </div>
@@ -69,7 +70,11 @@ function CardGrid({ cards }: { cards: BrandColorEntry[] }) {
   return (
     <div className="flex w-full flex-wrap gap-[16px]">
       {cards.map((c, i) => (
-        <div key={c.name ?? i} className="w-[calc(50%_-_8px)] min-w-[280px] max-w-[500px]">
+        <div
+          key={c.name ?? i}
+          id={c.name ? `brand-color-${slugify(c.name)}` : undefined}
+          className="w-[calc(50%_-_8px)] min-w-[280px] max-w-[500px]"
+        >
           <BrandCard data={c} />
         </div>
       ))}
@@ -180,7 +185,7 @@ export function BrandColorsPage() {
   ].filter(Boolean) as SectionDef[]
 
   return (
-    <div className="flex w-full flex-col items-start bg-white">
+    <div id="color.brand-colors" className="flex w-full flex-col items-start bg-white">
       <PageHeader
         module="Color System"
         title="02 Brand Colors"

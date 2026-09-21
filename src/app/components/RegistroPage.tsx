@@ -132,7 +132,7 @@ export function RegistroPage({ enabled }: { enabled: ModuleState }) {
   const withoutContentByCategory = groupByCategory(withoutContent)
 
   return (
-    <div className="flex w-full flex-col items-start bg-white">
+    <div id="registro" className="flex w-full flex-col items-start bg-white">
       <PageHeader
         module="Sistema"
         title="Registro de completado"

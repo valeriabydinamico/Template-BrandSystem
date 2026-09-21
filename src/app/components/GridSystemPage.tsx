@@ -87,7 +87,7 @@ function BaselineCard() {
 
 export function GridSystemPage() {
   return (
-    <div className="flex w-full flex-col items-start bg-white">
+    <div id="grids.system" className="flex w-full flex-col items-start bg-white">
       <PageHeader
         module="Layout Grids"
         moduleIconSrc={layoutGridsBadgeIcon}

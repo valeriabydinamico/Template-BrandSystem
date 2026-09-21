@@ -5,6 +5,7 @@ import { MetaFooter } from './MetaFooter'
 import { TokenTag } from './TokenTag'
 import { DocNote, SectionHeader } from './docs/shared'
 import { visualStylesReports } from '../lib/siteCompleteness'
+import { slugify } from '../lib/slug'
 import visualStylesBadgeIcon from '@/assets/visual-styles-badge-icon.svg'
 
 /* ────────────────────────────────────────────────────────────────────────────
@@ -38,7 +39,10 @@ function TokenCard({
   usage: string
 }) {
   return (
-    <div className="flex w-full min-w-0 flex-col gap-[14px] overflow-clip rounded-[16px] border border-[#b9c3ce] bg-white p-[20px]">
+    <div
+      id={`visual-style-${slugify(token)}`}
+      className="flex w-full min-w-0 flex-col gap-[14px] overflow-clip rounded-[16px] border border-[#b9c3ce] bg-white p-[20px]"
+    >
       <div className="flex h-[72px] w-full items-center overflow-clip rounded-[10px] bg-[#f7f9fb] px-[16px]">
         {preview}
       </div>
@@ -90,7 +94,10 @@ function BorderPreview({ value }: { value: number }) {
 
 function ShadowCard({ name, token, spec, shadow, usage }: { name: string; token: string; spec: string; shadow: string; usage: string }) {
   return (
-    <div className="flex w-full min-w-0 flex-col gap-[12px] overflow-clip rounded-[16px] border border-[#b9c3ce] bg-white p-[20px]">
+    <div
+      id={`visual-style-${slugify(token)}`}
+      className="flex w-full min-w-0 flex-col gap-[12px] overflow-clip rounded-[16px] border border-[#b9c3ce] bg-white p-[20px]"
+    >
       <div className="flex h-[132px] w-full items-center justify-center rounded-[10px] bg-[#f7f9fb]">
         <span className="h-[80px] w-[180px] rounded-[14px] bg-white" style={{ boxShadow: shadow }} />
       </div>
@@ -143,7 +150,7 @@ export function VisualStylesPage() {
   const hasSizing = componentHeights.visible.length > 0 || ICON_SIZES.length > 0
 
   return (
-    <div className="flex w-full flex-col items-start bg-white">
+    <div id="visual-styles.page" className="flex w-full flex-col items-start bg-white">
       <PageHeader
         module="Visual Styles"
         moduleIconSrc={visualStylesBadgeIcon}
@@ -256,6 +263,7 @@ export function VisualStylesPage() {
                   {componentHeights.visible.map((h) => (
                     <div
                       key={h.token}
+                      id={h.token ? `visual-style-${slugify(h.token)}` : undefined}
                       className="flex w-full items-center gap-[20px] rounded-[10px] border border-[#e3e7ee] bg-white p-[16px] max-[720px]:flex-col max-[720px]:items-start max-[720px]:gap-[10px]"
                     >
                       <div className="flex shrink-0 items-center gap-[16px] max-[720px]:w-full">

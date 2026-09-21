@@ -7,6 +7,7 @@ import { WireframeCard } from './WireframeCard'
 import { DocNote, SectionHeader } from './docs/shared'
 import { gridApplicationReports } from '../lib/siteCompleteness'
 import { WIREFRAME_REFS, type FormatRow } from '../data/gridApplication'
+import { slugify } from '../lib/slug'
 import layoutGridsBadgeIcon from '@/assets/layout-grids-badge-icon.svg'
 
 /* ────────────────────────────────────────────────────────────────────────────
@@ -56,7 +57,11 @@ function FormatTable({ formats }: { formats: FormatRow[] }) {
           {formats.map((r, i) => {
             const sameChannel = i > 0 && formats[i - 1].channel === r.channel
             return (
-              <tr key={r.token} className="border-b border-[#e3e7ec] last:border-b-0">
+              <tr
+                key={r.token}
+                id={`grid-format-${slugify(`${r.channel}-${r.format}`)}`}
+                className="border-b border-[#e3e7ec] last:border-b-0"
+              >
                 <td className={`${TD} bg-[#f7f9fb] font-semibold text-[#3d5e87]`}>
                   {sameChannel ? <span className="text-[#a9b2c0]">·</span> : r.channel}
                 </td>
@@ -112,7 +117,7 @@ export function GridApplicationPage() {
   ).filter((f): f is FormatRow => f !== undefined)
 
   return (
-    <div className="flex w-full flex-col items-start bg-white">
+    <div id="grids.application" className="flex w-full flex-col items-start bg-white">
       <PageHeader
         module="Layout Grids"
         moduleIconSrc={layoutGridsBadgeIcon}

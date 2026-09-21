@@ -6,6 +6,7 @@ import { FONT } from './typography/shared'
 import { DocNote, SectionHeader } from './docs/shared'
 import { typographySystemReports, typographyDeviceReports } from '../lib/siteCompleteness'
 import { DEVICE_GROUPS, type StyleToken, type DeviceRow } from '../data/typographySystem'
+import { slugify } from '../lib/slug'
 import typeBadgeIcon from '@/assets/type-badge-icon.svg'
 
 /* ────────────────────────────────────────────────────────────────────────────
@@ -110,6 +111,7 @@ function BrandStyleTable({ styles }: { styles: StyleToken[] }) {
       {styles.map((s) => (
         <div
           key={s.token}
+          id={s.token ? `type-style-${slugify(s.token)}` : undefined}
           className={`grid items-center gap-x-[16px] max-[1180px]:grid-cols-1 max-[1180px]:gap-y-[12px] max-[1180px]:rounded-[12px] max-[1180px]:border max-[1180px]:border-[#e3e7ee] max-[1180px]:bg-white max-[1180px]:p-[16px] min-[1180px]:border-b min-[1180px]:border-[#eef2f8] min-[1180px]:py-[16px] ${TABLE_COLS}`}
         >
           <TokenTag fit>{s.token}</TokenTag>
@@ -152,6 +154,7 @@ function DeviceCard({ title, groups }: { title: string; groups: { label: string;
           {group.rows.map((r) => (
             <div
               key={r.token}
+              id={r.token ? `type-device-${slugify(r.token)}` : undefined}
               className="flex flex-col gap-[8px] rounded-[12px] border border-[#e3e7ee] bg-[#f7f9fb] p-[12px]"
             >
               <p
@@ -221,7 +224,7 @@ export function TypographySystemPage() {
   }).filter((device) => device.groups.length > 0)
 
   return (
-    <div className="flex w-full flex-col items-start bg-white">
+    <div id="typography.system" className="flex w-full flex-col items-start bg-white">
       <PageHeader
         module="Type System"
         moduleIconSrc={typeBadgeIcon}

@@ -104,7 +104,7 @@ function CardSlot({ children, width = 300 }: { children: React.ReactNode; width?
   )
 }
 
-const SECTIONS = [
+export const SECTIONS = [
   { id: 'page-header', name: 'PageHeader' },
   { id: 'module-badge', name: 'ModuleBadge' },
   { id: 'badge', name: 'Badge' },
@@ -154,7 +154,7 @@ export function MisComponentesPage() {
   }, [])
 
   return (
-    <div className="flex w-full flex-col items-start bg-white">
+    <div id="mis-componentes" className="flex w-full flex-col items-start bg-white">
       <PageHeader
         module="Handbook"
         title="Mis componentes"

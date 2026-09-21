@@ -24,3 +24,21 @@
 .sidebar-scroll::-webkit-scrollbar-thumb:hover {
   background-color: #4a5163;
 }
+
+/* Resaltado transitorio al saltar a un resultado del buscador del sidebar
+ * (ver `SEARCH_ENTRIES` en `src/app/lib/searchIndex.ts`) — se aplica
+ * imperativamente via classList, no por prop de React, para no tener que
+ * pasar un flag de "resaltado" a cada card de cada página. */
+@keyframes search-pulse {
+  0% {
+    box-shadow: 0 0 0 4px rgba(0, 76, 151, 0.35);
+  }
+  100% {
+    box-shadow: 0 0 0 4px rgba(0, 76, 151, 0);
+  }
+}
+
+.search-highlight {
+  animation: search-pulse 1.6s ease-out;
+  border-radius: 12px;
+}

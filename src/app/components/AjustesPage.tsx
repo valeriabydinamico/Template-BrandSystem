@@ -163,7 +163,7 @@ export function AjustesPage({
   })).filter(({ groups }) => groups.length > 0)
 
   return (
-    <div className="flex w-full flex-col items-start bg-white">
+    <div id="ajustes" className="flex w-full flex-col items-start bg-white">
       <PageHeader
         module="Sistema"
         title="Ajustes"

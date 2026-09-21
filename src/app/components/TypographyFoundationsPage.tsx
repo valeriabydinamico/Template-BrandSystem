@@ -5,6 +5,7 @@ import { MetaFooter } from './MetaFooter'
 import { FONT } from './typography/shared'
 import { DocNote, MetaRow, SectionHeader, TypePreview } from './docs/shared'
 import { typographyFoundationsReports } from '../lib/siteCompleteness'
+import { slugify } from '../lib/slug'
 import type { TypeSpecEntry } from '../data/typographyFoundations'
 import typeBadgeIcon from '@/assets/type-badge-icon.svg'
 
@@ -74,7 +75,10 @@ function TypeSpecCard({ spec, kind }: { spec: TypeSpecEntry; kind: 'brand' | 'ct
   ]
 
   return (
-    <div className="flex w-full min-w-0 flex-col gap-[16px] rounded-[16px] border border-[#b9c3ce] bg-white p-[28px]">
+    <div
+      id={spec.title ? `type-foundation-${slugify(spec.title)}` : undefined}
+      className="flex w-full min-w-0 flex-col gap-[16px] rounded-[16px] border border-[#b9c3ce] bg-white p-[28px]"
+    >
       <div className="flex flex-wrap items-center gap-[12px]">
         <h3 className="font-bold text-[22px] leading-[27px] text-[#2f3945]">{spec.title}</h3>
         {spec.optional && (
@@ -114,7 +118,7 @@ export function TypographyFoundationsPage() {
   const hasCta = ctaProduct.visible.length > 0 || ctaCommunication.visible.length > 0
 
   return (
-    <div className="flex w-full flex-col items-start bg-white">
+    <div id="typography.foundations" className="flex w-full flex-col items-start bg-white">
       <PageHeader
         module="Type System"
         moduleIconSrc={typeBadgeIcon}

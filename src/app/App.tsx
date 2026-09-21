@@ -22,6 +22,8 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   ClipboardList,
+  Search,
+  X,
   Target,
   Compass,
   ScrollText,
@@ -65,6 +67,7 @@ import {
   type ModuleGroupDef,
   type ModuleState,
 } from './lib/moduleConfig'
+import { SEARCH_ENTRIES, type SearchEntry } from './lib/searchIndex'
 import { IntroduccionPage, type IntroTarget } from './components/IntroduccionPage'
 import { GlobalColorsPage } from './components/GlobalColorsPage'
 import { BrandColorsPage } from './components/BrandColorsPage'
@@ -233,6 +236,134 @@ function NavEyebrow({ children }: { children: React.ReactNode }) {
     <p className="px-[12px] pb-[6px] pt-[10px] font-semibold text-[11px] uppercase leading-[14px] tracking-[0.6px] text-[#8a94a8]">
       {children}
     </p>
+  )
+}
+
+/**
+ * SidebarSearch — buscador global por nombre/título (no busca texto de
+ * párrafo, ver "Buscador del sidebar" en CLAUDE.md). Al elegir un resultado
+ * navega a la página correspondiente y pide un scroll + resaltado del ítem
+ * exacto (ver `onSelect` / `pendingAnchor` en `AppShell`).
+ */
+function SidebarSearch({
+  collapsed,
+  onExpand,
+  onSelect,
+}: {
+  collapsed: boolean
+  onExpand: () => void
+  onSelect: (entry: SearchEntry) => void
+}) {
+  const [query, setQuery] = useState('')
+  const [open, setOpen] = useState(false)
+  const wrapRef = useRef<HTMLDivElement>(null)
+  const resultsRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const onPointerDown = (e: PointerEvent) => {
+      const t = e.target as Node
+      // El dropdown de resultados vive en un portal a `body` — no es
+      // descendiente de `wrapRef` en el DOM real, hay que chequearlo aparte
+      // (mismo patrón que el flyout de `NavGroup`) o un click en un
+      // resultado se trataría como "click afuera" y cerraría el dropdown
+      // antes de que el onClick del botón llegue a dispararse.
+      if (!wrapRef.current?.contains(t) && !resultsRef.current?.contains(t)) setOpen(false)
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('pointerdown', onPointerDown)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('pointerdown', onPointerDown)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  if (collapsed) {
+    return (
+      <div className="flex w-full justify-center border-b border-[#262b35] px-[12px] py-[12px]">
+        <IconButton label="Buscar" active={false} onClick={onExpand}>
+          <Search className="size-[18px]" strokeWidth={1.75} />
+        </IconButton>
+      </div>
+    )
+  }
+
+  const q = query.trim().toLowerCase()
+  const results = q ? SEARCH_ENTRIES.filter((e) => e.label.toLowerCase().includes(q)).slice(0, 20) : []
+
+  return (
+    <div ref={wrapRef} className="relative w-full border-b border-[#262b35] px-[12px] py-[12px]">
+      <div className="relative flex items-center">
+        <Search className="pointer-events-none absolute left-[10px] size-[14px] text-[#8a94a8]" strokeWidth={2} />
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value)
+            setOpen(true)
+          }}
+          onFocus={() => setOpen(true)}
+          placeholder="Buscar en el sitio…"
+          className="w-full rounded-[10px] border border-[#262b35] bg-[#1c1f26] py-[8px] pl-[30px] pr-[26px] font-normal text-[13px] leading-[18px] text-[#e3e7ee] outline-none placeholder:text-[#8a94a8] focus:border-[#1677d8]"
+        />
+        {query && (
+          <button
+            type="button"
+            onClick={() => {
+              setQuery('')
+              setOpen(false)
+            }}
+            aria-label="Limpiar búsqueda"
+            className="absolute right-[8px] flex size-[18px] items-center justify-center text-[#8a94a8] hover:text-[#e3e7ee]"
+          >
+            <X className="size-[14px]" strokeWidth={2} />
+          </button>
+        )}
+      </div>
+
+      {open &&
+        q &&
+        createPortal(
+          <div
+            ref={resultsRef}
+            style={
+              wrapRef.current
+                ? {
+                    position: 'fixed',
+                    top: wrapRef.current.getBoundingClientRect().bottom + 6,
+                    left: wrapRef.current.getBoundingClientRect().left,
+                    width: wrapRef.current.getBoundingClientRect().width,
+                  }
+                : undefined
+            }
+            className="z-[70] max-h-[360px] overflow-y-auto rounded-[12px] border border-[#262b35] bg-[#1c1f26] p-[6px] shadow-[0_10px_30px_rgba(0,0,0,0.4)]"
+          >
+            {results.length === 0 ? (
+              <p className="px-[10px] py-[10px] font-normal text-[13px] text-[#8a94a8]">Sin resultados</p>
+            ) : (
+              results.map((r, i) => (
+                <button
+                  key={`${r.anchorId}-${i}`}
+                  type="button"
+                  onClick={() => {
+                    onSelect(r)
+                    setOpen(false)
+                    setQuery('')
+                  }}
+                  className="flex w-full flex-col items-start gap-[1px] rounded-[8px] px-[10px] py-[7px] text-left transition-colors hover:bg-white/[0.06]"
+                >
+                  <span className="font-medium text-[13px] leading-[18px] text-[#e3e7ee]">{r.label}</span>
+                  <span className="font-normal text-[11px] leading-[15px] text-[#8a94a8]">{r.categoryLabel}</span>
+                </button>
+              ))
+            )}
+          </div>,
+          document.body,
+        )}
+    </div>
   )
 }
 
@@ -416,6 +547,7 @@ function Sidebar({
   enabled,
   activePlaceholderId,
   setActivePlaceholderId,
+  onSearchSelect,
 }: {
   activePage: SidebarPage
   setActivePage: (p: SidebarPage) => void
@@ -424,6 +556,7 @@ function Sidebar({
   enabled: ModuleState
   activePlaceholderId: string | null
   setActivePlaceholderId: (id: string) => void
+  onSearchSelect: (entry: SearchEntry) => void
   colorOpen: boolean
   setColorOpen: (fn: (o: boolean) => boolean) => void
   activeTypographyPage: TypographyPageId
@@ -482,6 +615,8 @@ function Sidebar({
           </div>
         )}
       </div>
+
+      <SidebarSearch collapsed={collapsed} onExpand={() => setCollapsed(() => false)} onSelect={onSearchSelect} />
 
       {/* Navegación */}
       <nav
@@ -689,6 +824,7 @@ function AppShell() {
   const [activeGridPage, setActiveGridPage] = useState<GridPageId>('system')
   const [gridsOpen, setGridsOpen] = useState(false)
   const [activePlaceholderId, setActivePlaceholderId] = useState<string | null>(null)
+  const [pendingAnchor, setPendingAnchor] = useState<string | null>(null)
   const [collapsed, setCollapsed] = useState(() => {
     try {
       return localStorage.getItem('sidebar-collapsed') === '1'
@@ -754,6 +890,64 @@ function AppShell() {
     })
   }
 
+  // Navega a la página dueña de un `leafId` del buscador — mismo mapeo que
+  // usa el sidebar para sus propios ids namespaced, más las 4 páginas meta
+  // que no son un leaf de moduleConfig.ts.
+  function navigateToLeaf(leafId: string) {
+    if (leafId === 'introduccion' || leafId === 'mis-componentes' || leafId === 'registro' || leafId === 'ajustes') {
+      setActivePage(leafId)
+      return
+    }
+    if (leafId.startsWith('color.')) {
+      setActivePage('color')
+      setColorOpen(() => true)
+      setActiveColorPage(leafId.split('.')[1] as ColorPage)
+      return
+    }
+    if (leafId.startsWith('typography.')) {
+      setActivePage('typography')
+      setTypographyOpen(() => true)
+      setActiveTypographyPage(leafId.split('.')[1] as TypographyPageId)
+      return
+    }
+    if (leafId.startsWith('grids.')) {
+      setActivePage('grids')
+      setGridsOpen(() => true)
+      setActiveGridPage(leafId.split('.')[1] as GridPageId)
+      return
+    }
+    if (leafId === 'visual-styles.page') {
+      setActivePage('visual-styles')
+      return
+    }
+    setActivePage('placeholder')
+    setActivePlaceholderId(leafId)
+  }
+
+  function handleSearchSelect(entry: SearchEntry) {
+    navigateToLeaf(entry.leafId)
+    setPendingAnchor(entry.anchorId)
+  }
+
+  // Después de navegar desde el buscador, hace scroll al ítem exacto y lo
+  // resalta un momento. Se aplica imperativamente (classList), no como prop
+  // de React, para no tener que pasarle un flag de "resaltado" a cada card
+  // de cada página — ver `.search-highlight` en globals.css.
+  useEffect(() => {
+    if (!pendingAnchor) return
+    const id = pendingAnchor
+    const raf = requestAnimationFrame(() => {
+      const el = document.getElementById(id)
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        el.classList.add('search-highlight')
+        setTimeout(() => el.classList.remove('search-highlight'), 1600)
+      }
+      setPendingAnchor(null)
+    })
+    return () => cancelAnimationFrame(raf)
+  }, [pendingAnchor, activePage, activeColorPage, activeTypographyPage, activeGridPage, activePlaceholderId])
+
   return (
     <div className="flex h-screen overflow-hidden bg-[#f1f4f7]">
 
@@ -777,6 +971,7 @@ function AppShell() {
         enabled={enabled}
         activePlaceholderId={activePlaceholderId}
         setActivePlaceholderId={setActivePlaceholderId}
+        onSearchSelect={handleSearchSelect}
       />
 
       {/* Main content */}
@@ -792,7 +987,13 @@ function AppShell() {
         ) : activePage === 'placeholder' && activePlaceholderId ? (
           (() => {
             const info = findLeafInfo(activePlaceholderId)
-            return <PlaceholderPage module={info?.categoryLabel ?? 'Sistema'} title={info?.label ?? ''} />
+            return (
+              <PlaceholderPage
+                id={activePlaceholderId}
+                module={info?.categoryLabel ?? 'Sistema'}
+                title={info?.label ?? ''}
+              />
+            )
           })()
         ) : activePage === 'typography' ? (
           <div className="flex flex-col gap-xs">
