@@ -10,16 +10,16 @@ function CardHeader9() {
 }
 
 const lightBlueTones = [
-  { tone: '50',  hex: 'E5F9FF', rgb: { r: 229, g: 249, b: 255 }, hsl: { h: '194°', s: '100%', l: '95%' }, token: 'color/primitive/light-blue/50'  },
-  { tone: '100', hex: 'CCF1FF', rgb: { r: 204, g: 241, b: 255 }, hsl: { h: '196°', s: '100%', l: '90%' }, token: 'color/primitive/light-blue/100' },
-  { tone: '200', hex: '9AE3FF', rgb: { r: 154, g: 227, b: 255 }, hsl: { h: '198°', s: '100%', l: '82%' }, token: 'color/primitive/light-blue/200' },
-  { tone: '300', hex: '65D6FF', rgb: { r: 101, g: 214, b: 255 }, hsl: { h: '196°', s: '100%', l: '70%' }, token: 'color/primitive/light-blue/300' },
-  { tone: '400', hex: '35C7FF', rgb: { r: 53,  g: 199, b: 255 }, hsl: { h: '197°', s: '100%', l: '60%' }, token: 'color/primitive/light-blue/400' },
-  { tone: '500', hex: '15BFFF', rgb: { r: 21,  g: 191, b: 255 }, hsl: { h: '196°', s: '100%', l: '54%' }, token: 'color/primitive/light-blue/500' },
-  { tone: '600', hex: '00A3E1', rgb: { r: 0,   g: 163, b: 225 }, hsl: { h: '197°', s: '100%', l: '44%' }, token: 'color/primitive/light-blue/600' },
-  { tone: '700', hex: '007EAE', rgb: { r: 0,   g: 126, b: 174 }, hsl: { h: '197°', s: '100%', l: '34%' }, token: 'color/primitive/light-blue/700' },
-  { tone: '800', hex: '004A67', rgb: { r: 0,   g: 74,  b: 103 }, hsl: { h: '197°', s: '100%', l: '20%' }, token: 'color/primitive/light-blue/800' },
-  { tone: '900', hex: '002533', rgb: { r: 0,   g: 37,  b: 51  }, hsl: { h: '196°', s: '100%', l: '10%' }, token: 'color/primitive/light-blue/900' },
+  { tone: '50',  hex: 'E5F9FF', rgb: { r: 229, g: 249, b: 255 }, hsl: { h: '194°', s: '100%', l: '95%' }, token: 'color_system/global/secondary/50'  },
+  { tone: '100', hex: 'CCF1FF', rgb: { r: 204, g: 241, b: 255 }, hsl: { h: '196°', s: '100%', l: '90%' }, token: 'color_system/global/secondary/100' },
+  { tone: '200', hex: '9AE3FF', rgb: { r: 154, g: 227, b: 255 }, hsl: { h: '198°', s: '100%', l: '82%' }, token: 'color_system/global/secondary/200' },
+  { tone: '300', hex: '65D6FF', rgb: { r: 101, g: 214, b: 255 }, hsl: { h: '196°', s: '100%', l: '70%' }, token: 'color_system/global/secondary/300' },
+  { tone: '400', hex: '35C7FF', rgb: { r: 53,  g: 199, b: 255 }, hsl: { h: '197°', s: '100%', l: '60%' }, token: 'color_system/global/secondary/400' },
+  { tone: '500', hex: '15BFFF', rgb: { r: 21,  g: 191, b: 255 }, hsl: { h: '196°', s: '100%', l: '54%' }, token: 'color_system/global/secondary/500' },
+  { tone: '600', hex: '00A3E1', rgb: { r: 0,   g: 163, b: 225 }, hsl: { h: '197°', s: '100%', l: '44%' }, token: 'color_system/global/secondary/600' },
+  { tone: '700', hex: '007EAE', rgb: { r: 0,   g: 126, b: 174 }, hsl: { h: '197°', s: '100%', l: '34%' }, token: 'color_system/global/secondary/700' },
+  { tone: '800', hex: '004A67', rgb: { r: 0,   g: 74,  b: 103 }, hsl: { h: '197°', s: '100%', l: '20%' }, token: 'color_system/global/secondary/800' },
+  { tone: '900', hex: '002533', rgb: { r: 0,   g: 37,  b: 51  }, hsl: { h: '196°', s: '100%', l: '10%' }, token: 'color_system/global/secondary/900' },
 ]
 
 function Card01LightBlue() {

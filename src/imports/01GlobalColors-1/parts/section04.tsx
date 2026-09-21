@@ -19,29 +19,29 @@ function CardHeader5() {
 }
 
 const inkTones = [
-  { tone: '50',  hex: 'F1F2F4', rgb: { r: 241, g: 242, b: 244 }, hsl: { h: '220°', s: '12%', l: '95%' }, token: 'color/primitive/ink/50'  },
-  { tone: '100', hex: 'E3E4EA', rgb: { r: 227, g: 228, b: 234 }, hsl: { h: '231°', s: '14%', l: '90%' }, token: 'color/primitive/ink/100' },
-  { tone: '200', hex: 'C4C9D4', rgb: { r: 196, g: 201, b: 212 }, hsl: { h: '221°', s: '16%', l: '80%' }, token: 'color/primitive/ink/200' },
-  { tone: '300', hex: 'A8AFBE', rgb: { r: 168, g: 175, b: 190 }, hsl: { h: '221°', s: '14%', l: '70%' }, token: 'color/primitive/ink/300' },
-  { tone: '400', hex: '8A94A8', rgb: { r: 138, g: 148, b: 168 }, hsl: { h: '220°', s: '14%', l: '60%' }, token: 'color/primitive/ink/400' },
-  { tone: '500', hex: '6D7993', rgb: { r: 109, g: 121, b: 147 }, hsl: { h: '221°', s: '15%', l: '50%' }, token: 'color/primitive/ink/500' },
-  { tone: '600', hex: '576175', rgb: { r: 87,  g: 97,  b: 117 }, hsl: { h: '220°', s: '15%', l: '40%' }, token: 'color/primitive/ink/600' },
-  { tone: '700', hex: '42495B', rgb: { r: 66,  g: 73,  b: 91  }, hsl: { h: '223°', s: '16%', l: '31%' }, token: 'color/primitive/ink/700' },
-  { tone: '800', hex: '292E38', rgb: { r: 41,  g: 46,  b: 56  }, hsl: { h: '221°', s: '16%', l: '20%' }, token: 'color/primitive/ink/800' },
-  { tone: '900', hex: '16181D', rgb: { r: 22,  g: 24,  b: 29  }, hsl: { h: '223°', s: '14%', l: '10%' }, token: 'color/primitive/ink/900' },
+  { tone: '50',  hex: 'F1F2F4', rgb: { r: 241, g: 242, b: 244 }, hsl: { h: '220°', s: '12%', l: '95%' }, token: 'color_system/global/neutral/ink/50'  },
+  { tone: '100', hex: 'E3E4EA', rgb: { r: 227, g: 228, b: 234 }, hsl: { h: '231°', s: '14%', l: '90%' }, token: 'color_system/global/neutral/ink/100' },
+  { tone: '200', hex: 'C4C9D4', rgb: { r: 196, g: 201, b: 212 }, hsl: { h: '221°', s: '16%', l: '80%' }, token: 'color_system/global/neutral/ink/200' },
+  { tone: '300', hex: 'A8AFBE', rgb: { r: 168, g: 175, b: 190 }, hsl: { h: '221°', s: '14%', l: '70%' }, token: 'color_system/global/neutral/ink/300' },
+  { tone: '400', hex: '8A94A8', rgb: { r: 138, g: 148, b: 168 }, hsl: { h: '220°', s: '14%', l: '60%' }, token: 'color_system/global/neutral/ink/400' },
+  { tone: '500', hex: '6D7993', rgb: { r: 109, g: 121, b: 147 }, hsl: { h: '221°', s: '15%', l: '50%' }, token: 'color_system/global/neutral/ink/500' },
+  { tone: '600', hex: '576175', rgb: { r: 87,  g: 97,  b: 117 }, hsl: { h: '220°', s: '15%', l: '40%' }, token: 'color_system/global/neutral/ink/600' },
+  { tone: '700', hex: '42495B', rgb: { r: 66,  g: 73,  b: 91  }, hsl: { h: '223°', s: '16%', l: '31%' }, token: 'color_system/global/neutral/ink/700' },
+  { tone: '800', hex: '292E38', rgb: { r: 41,  g: 46,  b: 56  }, hsl: { h: '221°', s: '16%', l: '20%' }, token: 'color_system/global/neutral/ink/800' },
+  { tone: '900', hex: '16181D', rgb: { r: 22,  g: 24,  b: 29  }, hsl: { h: '223°', s: '14%', l: '10%' }, token: 'color_system/global/neutral/ink/900' },
 ]
 
 const grayTones = [
-  { tone: '50',  hex: 'FFFFFF', rgb: { r: 255, g: 255, b: 255 }, hsl: { h: '0°', s: '0%', l: '100%' }, token: 'color/primitive/gray/50'  },
-  { tone: '100', hex: 'F2F2F2', rgb: { r: 242, g: 242, b: 242 }, hsl: { h: '0°', s: '0%', l: '95%'  }, token: 'color/primitive/gray/100' },
-  { tone: '200', hex: 'D9D9D9', rgb: { r: 217, g: 217, b: 217 }, hsl: { h: '0°', s: '0%', l: '85%'  }, token: 'color/primitive/gray/200' },
-  { tone: '300', hex: 'BFBFBF', rgb: { r: 191, g: 191, b: 191 }, hsl: { h: '0°', s: '0%', l: '75%'  }, token: 'color/primitive/gray/300' },
-  { tone: '400', hex: 'A6A6A6', rgb: { r: 166, g: 166, b: 166 }, hsl: { h: '0°', s: '0%', l: '65%'  }, token: 'color/primitive/gray/400' },
-  { tone: '500', hex: '8C8C8C', rgb: { r: 140, g: 140, b: 140 }, hsl: { h: '0°', s: '0%', l: '55%'  }, token: 'color/primitive/gray/500' },
-  { tone: '600', hex: '737373', rgb: { r: 115, g: 115, b: 115 }, hsl: { h: '0°', s: '0%', l: '45%'  }, token: 'color/primitive/gray/600' },
-  { tone: '700', hex: '595959', rgb: { r: 89,  g: 89,  b: 89  }, hsl: { h: '0°', s: '0%', l: '35%'  }, token: 'color/primitive/gray/700' },
-  { tone: '800', hex: '404040', rgb: { r: 64,  g: 64,  b: 64  }, hsl: { h: '0°', s: '0%', l: '25%'  }, token: 'color/primitive/gray/800' },
-  { tone: '900', hex: '262626', rgb: { r: 38,  g: 38,  b: 38  }, hsl: { h: '0°', s: '0%', l: '15%'  }, token: 'color/primitive/gray/900' },
+  { tone: '50',  hex: 'FFFFFF', rgb: { r: 255, g: 255, b: 255 }, hsl: { h: '0°', s: '0%', l: '100%' }, token: 'color_system/global/neutral/gray/50'  },
+  { tone: '100', hex: 'F2F2F2', rgb: { r: 242, g: 242, b: 242 }, hsl: { h: '0°', s: '0%', l: '95%'  }, token: 'color_system/global/neutral/gray/100' },
+  { tone: '200', hex: 'D9D9D9', rgb: { r: 217, g: 217, b: 217 }, hsl: { h: '0°', s: '0%', l: '85%'  }, token: 'color_system/global/neutral/gray/200' },
+  { tone: '300', hex: 'BFBFBF', rgb: { r: 191, g: 191, b: 191 }, hsl: { h: '0°', s: '0%', l: '75%'  }, token: 'color_system/global/neutral/gray/300' },
+  { tone: '400', hex: 'A6A6A6', rgb: { r: 166, g: 166, b: 166 }, hsl: { h: '0°', s: '0%', l: '65%'  }, token: 'color_system/global/neutral/gray/400' },
+  { tone: '500', hex: '8C8C8C', rgb: { r: 140, g: 140, b: 140 }, hsl: { h: '0°', s: '0%', l: '55%'  }, token: 'color_system/global/neutral/gray/500' },
+  { tone: '600', hex: '737373', rgb: { r: 115, g: 115, b: 115 }, hsl: { h: '0°', s: '0%', l: '45%'  }, token: 'color_system/global/neutral/gray/600' },
+  { tone: '700', hex: '595959', rgb: { r: 89,  g: 89,  b: 89  }, hsl: { h: '0°', s: '0%', l: '35%'  }, token: 'color_system/global/neutral/gray/700' },
+  { tone: '800', hex: '404040', rgb: { r: 64,  g: 64,  b: 64  }, hsl: { h: '0°', s: '0%', l: '25%'  }, token: 'color_system/global/neutral/gray/800' },
+  { tone: '900', hex: '262626', rgb: { r: 38,  g: 38,  b: 38  }, hsl: { h: '0°', s: '0%', l: '15%'  }, token: 'color_system/global/neutral/gray/900' },
 ]
 
 function Card01Ink() {

@@ -37,27 +37,27 @@ function CardHeader3() {
 }
 
 const greenTones = [
-  { tone: 'Soft',    hex: 'ECFDF3', rgb: { r: 236, g: 253, b: 243 }, hsl: { h: '145°', s: '81%', l: '96%' }, token: 'color/primitive/green/soft'    },
-  { tone: 'Default', hex: '16A34A', rgb: { r: 22,  g: 163, b: 74  }, hsl: { h: '142°', s: '76%', l: '36%' }, token: 'color/primitive/green/default' },
-  { tone: 'Strong',  hex: '166534', rgb: { r: 22,  g: 101, b: 52  }, hsl: { h: '143°', s: '64%', l: '24%' }, token: 'color/primitive/green/strong'  },
+  { tone: 'Soft',    hex: 'ECFDF3', rgb: { r: 236, g: 253, b: 243 }, hsl: { h: '145°', s: '81%', l: '96%' }, token: 'color_system/global/functional/green/soft'    },
+  { tone: 'Default', hex: '16A34A', rgb: { r: 22,  g: 163, b: 74  }, hsl: { h: '142°', s: '76%', l: '36%' }, token: 'color_system/global/functional/green/default' },
+  { tone: 'Strong',  hex: '166534', rgb: { r: 22,  g: 101, b: 52  }, hsl: { h: '143°', s: '64%', l: '24%' }, token: 'color_system/global/functional/green/strong'  },
 ]
 
 const amberTones = [
-  { tone: 'Soft',    hex: 'FFFBEB', rgb: { r: 255, g: 251, b: 235 }, hsl: { h: '48°', s: '100%', l: '96%' }, token: 'color/primitive/amber/soft'    },
-  { tone: 'Default', hex: 'D97706', rgb: { r: 217, g: 119, b: 6   }, hsl: { h: '32°', s: '95%',  l: '44%' }, token: 'color/primitive/amber/default' },
-  { tone: 'Strong',  hex: '92400E', rgb: { r: 146, g: 64,  b: 14  }, hsl: { h: '23°', s: '83%',  l: '31%' }, token: 'color/primitive/amber/strong'  },
+  { tone: 'Soft',    hex: 'FFFBEB', rgb: { r: 255, g: 251, b: 235 }, hsl: { h: '48°', s: '100%', l: '96%' }, token: 'color_system/global/functional/amber/soft'    },
+  { tone: 'Default', hex: 'D97706', rgb: { r: 217, g: 119, b: 6   }, hsl: { h: '32°', s: '95%',  l: '44%' }, token: 'color_system/global/functional/amber/default' },
+  { tone: 'Strong',  hex: '92400E', rgb: { r: 146, g: 64,  b: 14  }, hsl: { h: '23°', s: '83%',  l: '31%' }, token: 'color_system/global/functional/amber/strong'  },
 ]
 
 const redTones = [
-  { tone: 'Soft',    hex: 'FEF2F2', rgb: { r: 254, g: 242, b: 242 }, hsl: { h: '0°', s: '86%', l: '97%' }, token: 'color/primitive/red/soft'    },
-  { tone: 'Default', hex: 'DC2626', rgb: { r: 220, g: 38,  b: 38  }, hsl: { h: '0°', s: '72%', l: '51%' }, token: 'color/primitive/red/default' },
-  { tone: 'Strong',  hex: '991B1B', rgb: { r: 153, g: 27,  b: 27  }, hsl: { h: '0°', s: '70%', l: '35%' }, token: 'color/primitive/red/strong'  },
+  { tone: 'Soft',    hex: 'FEF2F2', rgb: { r: 254, g: 242, b: 242 }, hsl: { h: '0°', s: '86%', l: '97%' }, token: 'color_system/global/functional/red/soft'    },
+  { tone: 'Default', hex: 'DC2626', rgb: { r: 220, g: 38,  b: 38  }, hsl: { h: '0°', s: '72%', l: '51%' }, token: 'color_system/global/functional/red/default' },
+  { tone: 'Strong',  hex: '991B1B', rgb: { r: 153, g: 27,  b: 27  }, hsl: { h: '0°', s: '70%', l: '35%' }, token: 'color_system/global/functional/red/strong'  },
 ]
 
 const blueTones = [
-  { tone: 'Soft',    hex: 'EFF6FF', rgb: { r: 239, g: 246, b: 255 }, hsl: { h: '214°', s: '100%', l: '97%' }, token: 'color/primitive/blue/soft'    },
-  { tone: 'Default', hex: '2563EB', rgb: { r: 37,  g: 99,  b: 235 }, hsl: { h: '221°', s: '83%',  l: '53%' }, token: 'color/primitive/blue/default' },
-  { tone: 'Strong',  hex: '1E40AF', rgb: { r: 30,  g: 64,  b: 175 }, hsl: { h: '226°', s: '71%',  l: '40%' }, token: 'color/primitive/blue/strong'  },
+  { tone: 'Soft',    hex: 'EFF6FF', rgb: { r: 239, g: 246, b: 255 }, hsl: { h: '214°', s: '100%', l: '97%' }, token: 'color_system/global/functional/blue/soft'    },
+  { tone: 'Default', hex: '2563EB', rgb: { r: 37,  g: 99,  b: 235 }, hsl: { h: '221°', s: '83%',  l: '53%' }, token: 'color_system/global/functional/blue/default' },
+  { tone: 'Strong',  hex: '1E40AF', rgb: { r: 30,  g: 64,  b: 175 }, hsl: { h: '226°', s: '71%',  l: '40%' }, token: 'color_system/global/functional/blue/strong'  },
 ]
 
 function CardFunctionalGreen() {

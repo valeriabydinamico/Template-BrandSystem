@@ -10,14 +10,14 @@ function SectionHeader() {
 }
 
 const gradients = [
-  { name: 'Gradiente 01', colorTop: '0067CC', colorBottom: '003366', token: 'style/gradient/01' },
-  { name: 'Gradiente 02', colorTop: '0067CC', colorBottom: '004C97', token: 'style/gradient/02' },
-  { name: 'Gradiente 03', colorTop: 'FF9233', colorBottom: 'E65719', token: 'style/gradient/03' },
-  { name: 'Gradiente 04', colorTop: 'FFA14D', colorBottom: 'FF7900', token: 'style/gradient/04' },
-  { name: 'Gradiente 05', colorTop: '85CC33', colorBottom: '6AA329', token: 'style/gradient/05' },
-  { name: 'Gradiente 06', colorTop: '00B9FF', colorBottom: '0094CC', token: 'style/gradient/06' },
-  { name: 'Gradiente 07', colorTop: '28C9D7', colorBottom: '20A1AC', token: 'style/gradient/07' },
-  { name: 'Gradiente 08', colorTop: 'FAFCFF', colorBottom: 'EBF5FF', token: 'style/gradient/08' },
+  { name: 'Gradiente 01', colorTop: '0067CC', colorBottom: '003366', token: 'color_system/global/gradients/01' },
+  { name: 'Gradiente 02', colorTop: '0067CC', colorBottom: '004C97', token: 'color_system/global/gradients/02' },
+  { name: 'Gradiente 03', colorTop: 'FF9233', colorBottom: 'E65719', token: 'color_system/global/gradients/03' },
+  { name: 'Gradiente 04', colorTop: 'FFA14D', colorBottom: 'FF7900', token: 'color_system/global/gradients/04' },
+  { name: 'Gradiente 05', colorTop: '85CC33', colorBottom: '6AA329', token: 'color_system/global/gradients/05' },
+  { name: 'Gradiente 06', colorTop: '00B9FF', colorBottom: '0094CC', token: 'color_system/global/gradients/06' },
+  { name: 'Gradiente 07', colorTop: '28C9D7', colorBottom: '20A1AC', token: 'color_system/global/gradients/07' },
+  { name: 'Gradiente 08', colorTop: 'FAFCFF', colorBottom: 'EBF5FF', token: 'color_system/global/gradients/08' },
 ]
 
 function GradientGrid() {

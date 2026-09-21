@@ -10,16 +10,16 @@ function ParagraphContainer() {
 }
 
 const blueScaleTones = [
-  { tone: '50',  hex: 'F2F8FF', rgb: { r: 242, g: 248, b: 255 }, hsl: { h: '212°', s: '100%', l: '97%'  }, token: 'color/primitive/blue/50'  },
-  { tone: '100', hex: 'E1F0FF', rgb: { r: 225, g: 240, b: 255 }, hsl: { h: '210°', s: '100%', l: '94%'  }, token: 'color/primitive/blue/100' },
-  { tone: '200', hex: 'BFDFFF', rgb: { r: 191, g: 223, b: 255 }, hsl: { h: '210°', s: '100%', l: '87%'  }, token: 'color/primitive/blue/200' },
-  { tone: '300', hex: '8FC7FF', rgb: { r: 143, g: 199, b: 255 }, hsl: { h: '210°', s: '100%', l: '78%'  }, token: 'color/primitive/blue/300' },
-  { tone: '400', hex: '5FAEFF', rgb: { r: 95,  g: 174, b: 255 }, hsl: { h: '210°', s: '100%', l: '69%'  }, token: 'color/primitive/blue/400' },
-  { tone: '500', hex: '1677D8', rgb: { r: 22,  g: 119, b: 216 }, hsl: { h: '210°', s: '82%',  l: '47%'  }, token: 'color/primitive/blue/500' },
-  { tone: '600', hex: '0B5FB8', rgb: { r: 11,  g: 95,  b: 184 }, hsl: { h: '211°', s: '89%',  l: '38%'  }, token: 'color/primitive/blue/600' },
-  { tone: '700', hex: '004C97', rgb: { r: 0,   g: 76,  b: 151 }, hsl: { h: '210°', s: '100%', l: '30%'  }, token: 'color/primitive/blue/700' },
-  { tone: '800', hex: '003882', rgb: { r: 0,   g: 56,  b: 130 }, hsl: { h: '214°', s: '100%', l: '25%'  }, token: 'color/primitive/blue/800' },
-  { tone: '900', hex: '001F3F', rgb: { r: 0,   g: 31,  b: 63  }, hsl: { h: '210°', s: '100%', l: '12%'  }, token: 'color/primitive/blue/900' },
+  { tone: '50',  hex: 'F2F8FF', rgb: { r: 242, g: 248, b: 255 }, hsl: { h: '212°', s: '100%', l: '97%'  }, token: 'color_system/global/primary/50'  },
+  { tone: '100', hex: 'E1F0FF', rgb: { r: 225, g: 240, b: 255 }, hsl: { h: '210°', s: '100%', l: '94%'  }, token: 'color_system/global/primary/100' },
+  { tone: '200', hex: 'BFDFFF', rgb: { r: 191, g: 223, b: 255 }, hsl: { h: '210°', s: '100%', l: '87%'  }, token: 'color_system/global/primary/200' },
+  { tone: '300', hex: '8FC7FF', rgb: { r: 143, g: 199, b: 255 }, hsl: { h: '210°', s: '100%', l: '78%'  }, token: 'color_system/global/primary/300' },
+  { tone: '400', hex: '5FAEFF', rgb: { r: 95,  g: 174, b: 255 }, hsl: { h: '210°', s: '100%', l: '69%'  }, token: 'color_system/global/primary/400' },
+  { tone: '500', hex: '1677D8', rgb: { r: 22,  g: 119, b: 216 }, hsl: { h: '210°', s: '82%',  l: '47%'  }, token: 'color_system/global/primary/500' },
+  { tone: '600', hex: '0B5FB8', rgb: { r: 11,  g: 95,  b: 184 }, hsl: { h: '211°', s: '89%',  l: '38%'  }, token: 'color_system/global/primary/600' },
+  { tone: '700', hex: '004C97', rgb: { r: 0,   g: 76,  b: 151 }, hsl: { h: '210°', s: '100%', l: '30%'  }, token: 'color_system/global/primary/700' },
+  { tone: '800', hex: '003882', rgb: { r: 0,   g: 56,  b: 130 }, hsl: { h: '214°', s: '100%', l: '25%'  }, token: 'color_system/global/primary/800' },
+  { tone: '900', hex: '001F3F', rgb: { r: 0,   g: 31,  b: 63  }, hsl: { h: '210°', s: '100%', l: '12%'  }, token: 'color_system/global/primary/900' },
 ]
 
 function InputForm() {

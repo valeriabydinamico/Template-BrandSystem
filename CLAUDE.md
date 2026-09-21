@@ -33,43 +33,48 @@ son lo mismo:
 
 - **UI** = los componentes propios y el lenguaje visual del dashboard
   (`PageHeader` → secciones → `GovernanceFooter` → `MetaFooter`, `ColorCard`,
-  patrón de completitud de datos, nomenclatura de tokens/rutas, etc.). **Se
-  mantiene en el 100% de los casos** — la única forma en que cambia es una
-  **decisión explícita y separada de cambiar la UI de la app**, nunca como
-  efecto secundario de incorporar contenido/documentación nueva. La fuente
-  del contenido (Figma, Notion, lo que sea) nunca dicta la UI.
+  patrón de completitud de datos, nomenclatura de tokens/rutas, etc.).
 - **Formato** = la forma de **agrupar y jerarquizar el contenido**: qué
   secciones/grupos existen, cómo se agrupan los ítems entre sí, qué orden o
-  jerarquía tienen. Esto sí puede variar según la fuente — es lo único que
-  entra en juego en las reglas de abajo.
+  jerarquía tienen.
 
-El contenido nunca se pega ni se traduce tal cual: siempre se aplica la UI
-del dashboard sobre el contenido recibido, sea cual sea su formato de origen.
+**Regla de UI (sin excepción por contenido):** la UI se mantiene en el
+**100% de los casos**, sea cual sea la fuente y sea cual sea el formato que
+se elija con las reglas de abajo — la fuente del contenido (Figma, Notion,
+lo que sea) nunca la dicta. El contenido nunca se pega ni se traduce tal
+cual: siempre se aplica la UI del dashboard encima. La única forma en que la
+UI cambia es una **decisión explícita y separada de cambiar la UI de la
+app**, nunca como efecto secundario de incorporar contenido nuevo.
 
-- **Página nueva (hoy `PlaceholderPage`, sin contenido real):** el brief
-  llega como una **estructura mínima de agrupación de información** (el
-  formato: qué secciones/grupos tiene, qué campos por ítem) — la tarea es
-  aplicar la UI y el patrón de completitud sobre ese formato dado, no
-  inventar una agrupación distinta a la acordada.
-- **Página que YA tiene contenido real documentado:**
-  - Si el contenido nuevo viene de **Figma** (trae su propio formato de
-    agrupación): **preguntar siempre**, antes de tocar nada, si se mantiene
-    el formato actual de la página o si se adopta el formato nuevo que trae
-    ese diseño. La UI se mantiene en ambos casos — lo que se pregunta es
-    solo el formato (agrupación/jerarquía), nunca la UI.
-  - Si el contenido nuevo viene de **Notion** (texto plano, sin formato
-    real): no hace falta preguntar — se adapta directamente imitando el
-    formato de agrupación de contenido de páginas ya documentadas similares
-    (mismos criterios de sección/card/campo que el resto del sitio).
+**Regla de formato — misma regla para Figma y para Notion, lo único que
+cambia es si la página ya tiene formato o no:**
+
+- **Página nueva/sin formato previo** (hoy `PlaceholderPage`, sin contenido
+  real): no hace falta preguntar — se usa directamente el formato que trae
+  la fuente.
+  - Si es una **estructura mínima de agrupación** acordada con el equipo
+    (con o sin Figma): se aplica la UI y el patrón de completitud sobre ese
+    formato dado, sin inventar una agrupación distinta a la acordada.
+  - Si es contenido de **Notion** (no trae diseño visual, pero sí trae su
+    propio formato): se **mantiene la jerarquía y estructura que ya trae
+    Notion** (niveles de título H1/H2/H3, acordeones/toggles, tablas,
+    listas, etc.) y se traduce cada una a su equivalente de UI del dashboard
+    (ej. un H2 → `Section`, un H3 → `Group`, un toggle → un bloque
+    colapsable, una tabla → una tabla o grid de cards según corresponda). No
+    se aplana el documento ni se le impone la agrupación de otra página del
+    sitio — solo se recurre a imitar una página similar cuando Notion no
+    deja clara la jerarquía de una parte puntual.
+- **Página que YA tiene contenido real documentado** (ya tiene un formato
+  propio, venga de donde venga): **preguntar siempre**, antes de tocar nada,
+  si se mantiene el formato actual o si se adopta el formato nuevo que trae
+  el contenido — sea que venga de Figma o de Notion.
 
 **Excepción (solo de formato):** todo lo anterior aplica siempre, **salvo
 que se indique explícitamente desde el principio** que hay que aplicar un
 formato nuevo — en ese caso se sigue esa instrucción directa en vez de
-preguntar o de mantener el formato actual. Esta excepción es exclusiva del
-**formato** (agrupación/jerarquía) — la UI del dashboard **no tiene
-excepción acá**: se mantiene igual sea cual sea el formato elegido, y solo
-cambia si en algún momento se decide explícitamente cambiar la UI de la app
-(una decisión aparte, no relacionada con incorporar contenido).
+preguntar o de mantener el formato actual. La excepción es exclusiva del
+formato: la UI **no tiene excepción acá**, sigue la regla de arriba en
+todos los casos.
 
 ## Nomenclatura de tokens/rutas
 
@@ -313,7 +318,13 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
   - `GlobalColorsPage` — renderiza `src/imports/01GlobalColors-1` (generado
     por Figma, colores del master template). Se probó migrarla a componentes
     propios con la paleta de un cliente ("Myntex"), pero se revirtió a
-    pedido — volver a intentarlo solo si se pide explícitamente.
+    pedido — volver a intentarlo solo si se pide explícitamente. Los `token`
+    hardcodeados en `src/imports/01GlobalColors-1/parts/section0{1..6}.tsx`
+    SÍ siguen la nomenclatura de tokens/rutas (`color_system/global/<sección>
+    /<paleta si tiene>/<tono>` — secciones: `primary` (Blue), `secondary`
+    (Light Blue), `tertiary` (Orange/Teal/Apple), `neutral` (Ink/Gray),
+    `functional` (Green/Amber/Red/Blue) y `gradients`) aunque el resto del
+    archivo sea código generado por Figma que normalmente no se edita a mano.
   - `BrandColorsPage` — documenta "02 Brand Colors" de Figma con Tailwind +
     componentes propios (hecho, sin Astra)
   - `SemanticColorsPage` — documentada (secciones + gobernanza + meta-footer)
