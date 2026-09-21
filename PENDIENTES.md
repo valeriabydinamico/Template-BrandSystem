@@ -43,3 +43,17 @@ hasta que se pida explícitamente.
 - `Badge` y `Note` ahora tienen tonos `error`/`success`(/`warning` en
   `Badge`) — reusarlos en vez de inventar estilos nuevos cuando la página
   real de Photography necesite pills o banners de estado.
+
+## Visual Styles
+
+- Redistribuir el contenido de la página real "Visual Styles" (Spacing,
+  Border Radius, Borders, Shadows, Sizing) a donde corresponde según
+  `BRAND-SYSTEM-ARQUITECTURA.md` — hoy Foundations ya tiene items propios
+  para esto como `PlaceholderPage` separados ("Spacing System", "Bordes &
+  Radius", "Elevation & Shadows"), y "Visual Styles" quedó como un módulo
+  aparte que en realidad no está en la arquitectura del cliente.
+- Una vez redistribuido, eliminar la página/módulo "Visual Styles"
+  (`visual-styles.page` en `moduleConfig.ts`, `VisualStylesPage.tsx`,
+  `visualStyles.ts`, su entrada en `siteCompleteness.ts`/`searchIndex.ts`,
+  el ícono del sidebar y las referencias en `App.tsx` — `IntroTarget`
+  incluido).
