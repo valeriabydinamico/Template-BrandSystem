@@ -15,8 +15,10 @@ hasta que se pida explícitamente.
 
 ## Photography
 
-- Módulo renombrado de "Photography & Image Direction" a "Photography"
-  (`foundations.photography` en `moduleConfig.ts`).
+- Módulo con id `foundations.photography` en `moduleConfig.ts`, label actual
+  "Photography & Direction" — pasó por "Photography", luego "Photography &
+  Image Direction" (para calzar con el nombre en Notion) y se acortó a este
+  último por preferencia de naming del sidebar.
 - Ya existen dos componentes con la arquitectura de info tomada de Figma
   (board "15 - Sistema Fotográfico"):
   - `PhotoCategoryCard` (nodo `16349:159`) — categoría fotográfica: foto +
