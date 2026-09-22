@@ -150,6 +150,13 @@ export const ALL_LEAF_IDS: string[] = CATEGORIES.flatMap((c) =>
  * una página nueva.
  */
 export const LEAVES_WITH_CONTENT = new Set<string>([
+  'strategy.publico-objetivo',
+  'strategy.enfoque-de-marca',
+  'strategy.principios-de-marca',
+  'strategy.posicionamiento',
+  'strategy.esencia-personalidad',
+  'strategy.concepto-creativo',
+  'strategy.verbal-identity',
   'color.global-colors',
   'color.brand-colors',
   'color.semantic-colors',
@@ -158,6 +165,28 @@ export const LEAVES_WITH_CONTENT = new Set<string>([
   'grids.system',
   'grids.application',
   'visual-styles.page',
+  'foundations.spacing-system',
+  'foundations.bordes-radius',
+  'foundations.elevation-shadows',
+  'foundations.photography',
+  'foundations.motion-principles',
+  'components.logos',
+  'components.buttons-ctas',
+  'components.content-blocks',
+  'components.navigation',
+  'components.cards',
+  'components.forms-inputs',
+  'components.tags-badges-labels',
+  'components.icons-illustrations',
+  'components.visual-system',
+  'templates.rrss',
+  'templates.web',
+  'templates.presentacion',
+  'templates.mailers',
+  'brand-ops.governance',
+  'brand-ops.training-adoption',
+  'brand-ops.requests-support',
+  'brand-ops.health-evolution',
 ])
 
 export interface EmptyLeaf {

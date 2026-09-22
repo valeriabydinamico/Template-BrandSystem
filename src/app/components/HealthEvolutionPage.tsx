@@ -2,16 +2,13 @@ import type { ReactNode } from 'react'
 import { PageHeader } from './PageHeader'
 import { MetaFooter } from './MetaFooter'
 import { SectionHeader } from './docs/shared'
-import layoutGridsBadgeIcon from '@/assets/layout-grids-badge-icon.svg'
 
 /* ────────────────────────────────────────────────────────────────────────────
- * Foundations · Layout & Grid — 02 Grid Application — plantilla en blanco
- * (master template).
+ * Brand Ops · Health & Evolution — plantilla en blanco (master template).
  *
- * Estructura tomada de "Foundations — Estructura de presentación v2" (sección
- * "Layout & Grid"): grids por contexto y reglas de composición. La parte
- * estructural (grid principal, breakpoints, responsive, jerarquía espacial)
- * vive en Grid System — ver `GridSystemPage.tsx`.
+ * Estructura tomada de "Brand Ops — Estructura de presentación" (sección
+ * "Health & Evolution"): métricas y seguimiento del sistema — todo en una
+ * sola página.
  * ────────────────────────────────────────────────────────────────────────── */
 
 const TH =
@@ -25,7 +22,7 @@ function Placeholder({ children }: { children: ReactNode }) {
 function Table({ headers, rows }: { headers: string[]; rows: ReactNode[][] }) {
   return (
     <div className="w-full overflow-x-auto rounded-[12px] border border-[#d5dadf]">
-      <table className="w-full min-w-[640px] border-collapse">
+      <table className="w-full min-w-[560px] border-collapse">
         <thead>
           <tr className="border-b border-[#d5dadf] bg-[#f4f5f7]">
             {headers.map((h) => (
@@ -51,45 +48,55 @@ function Table({ headers, rows }: { headers: string[]; rows: ReactNode[][] }) {
   )
 }
 
-const CONTEXTOS = ['Web', 'Producto', 'Presentación', 'RRSS']
+const METRICAS = ['Nivel de adopción', 'Consistencia de marca', 'Componentes más usados', 'Problemas recurrentes']
 
-export function GridApplicationPage() {
+const SEGUIMIENTO = [
+  'Auditorías de marca',
+  'Revisión de consistencia',
+  'Componentes más utilizados',
+  'Templates más utilizados',
+  'Problemas recurrentes',
+  'Nivel de adopción',
+  'Cambios realizados',
+  'Prioridades futuras',
+  'Roadmap de evolución',
+  'Reporte periódico de Brand Health',
+]
+
+export function HealthEvolutionPage() {
   return (
-    <div id="grids.application" className="flex w-full flex-col items-start bg-white">
+    <div id="brand-ops.health-evolution" className="flex w-full flex-col items-start bg-white">
       <PageHeader
-        module="Layout Grids"
-        moduleIconSrc={layoutGridsBadgeIcon}
-        title="02 Grid Application"
-        paragraphs={['Grids por contexto de uso y reglas de composición.']}
+        module="Brand Ops"
+        title="Health & Evolution"
+        paragraphs={['Cómo se mide si el sistema está vivo, sano y evolucionando correctamente.']}
       />
 
       <div className="flex w-full flex-col gap-[64px] px-[40px] py-[72px]">
         <section className="flex w-full flex-col gap-[16px]">
           <SectionHeader
-            title="Grids por contexto"
-            description="Los valores funcionan como placeholders hasta que exista información real del proyecto."
+            title="Métricas"
+            description="Los métodos y frecuencias funcionan como campos a completar con la información real del proyecto."
           />
           <Table
-            headers={['Contexto', 'Columnas', 'Gutter', 'Márgenes', 'Ancho máx.']}
-            rows={CONTEXTOS.map((c) => [
-              c,
-              <Placeholder key="c">—</Placeholder>,
-              <Placeholder key="g">—</Placeholder>,
-              <Placeholder key="m">—</Placeholder>,
-              <Placeholder key="a">—</Placeholder>,
-            ])}
+            headers={['Métrica', 'Cómo se mide', 'Frecuencia']}
+            rows={METRICAS.map((m) => [m, <Placeholder key="c">—</Placeholder>, <Placeholder key="f">—</Placeholder>])}
           />
         </section>
 
         <section className="flex w-full flex-col gap-[16px]">
-          <SectionHeader title="Reglas de composición" description="" />
-          <p className="text-[14px] leading-[21px]">
-            <Placeholder>Criterios de composición sobre la grilla definidos para el proyecto.</Placeholder>
-          </p>
+          <SectionHeader title="Seguimiento del sistema" description="" />
+          <div className="flex w-full flex-wrap gap-[8px]">
+            {SEGUIMIENTO.map((s) => (
+              <span key={s} className="rounded-[999px] border border-[#bac2cf] bg-white px-[14px] py-[8px] text-[13px]">
+                {s}
+              </span>
+            ))}
+          </div>
         </section>
       </div>
 
-      <MetaFooter label="v1 · 02 Grid Application · Layout & Grid · Master Template" />
+      <MetaFooter label="v1 · Health & Evolution · Brand Ops · Master Template" />
     </div>
   )
 }

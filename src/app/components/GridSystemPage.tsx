@@ -1,89 +1,36 @@
+import type { ReactNode } from 'react'
 import { PageHeader } from './PageHeader'
-import { GovernanceFooter } from './GovernanceFooter'
 import { MetaFooter } from './MetaFooter'
-import { TokenTag } from './TokenTag'
-import { DocNote, SectionHeader } from './docs/shared'
+import { SectionHeader } from './docs/shared'
 import layoutGridsBadgeIcon from '@/assets/layout-grids-badge-icon.svg'
 
 /* ────────────────────────────────────────────────────────────────────────────
- * 01 Grid System — Figma nodo 2162:33104.
+ * Foundations · Layout & Grid — 01 Grid System — plantilla en blanco (master
+ * template).
  *
- * Fundamentos estructurales: anatomía de la grilla (columns / margins / gutters
- * / baseline / safe zones) y el baseline global de 4px.
- * Reutiliza PageHeader / GovernanceFooter / MetaFooter / TokenTag.
- * Responsive: breakpoint 1600 del template.
+ * Estructura tomada de "Foundations — Estructura de presentación v2" (sección
+ * "Layout & Grid"): la parte estructural de la grilla — grid principal,
+ * contenedores y anchos máximos, breakpoints, responsive behavior y
+ * alineación/jerarquía espacial. Las tablas por contexto y las reglas de
+ * composición viven en Grid Application — ver `GridApplicationPage.tsx`.
  * ────────────────────────────────────────────────────────────────────────── */
 
-const ANATOMY = [
-  {
-    category: 'Estructura',
-    title: 'Columns',
-    description: 'Definen la estructura principal y el ancho útil disponible para organizar contenido.',
-  },
-  {
-    category: 'Respiración',
-    title: 'Margins',
-    description: 'Protegen el contenido del borde del formato y establecen el inicio de la grilla.',
-  },
-  {
-    category: 'Separación',
-    title: 'Gutters',
-    description: 'Mantienen distancia constante entre columnas y ayudan a sostener ritmo horizontal.',
-  },
-  {
-    category: 'Ritmo vertical',
-    title: 'Baseline',
-    description: 'Referencia micro para alinear texto, módulos y alturas con mayor precisión vertical.',
-  },
-  {
-    category: 'Área protegida',
-    title: 'Safe Zones',
-    description: 'Reservan zonas críticas para evitar cortes, UI nativa, legales o elementos de interfaz.',
-  },
-]
+function Placeholder({ children }: { children: ReactNode }) {
+  return <span className="font-normal italic text-[#8a94a8]">{children}</span>
+}
 
-const GOVERNANCE_RULES = [
-  'Columns, margins, gutters y safe zones definen estructura; no deben confundirse con decisiones de composición visual.',
-  'El baseline funciona como referencia micro y no sustituye la escala oficial de Spacing.',
-  'Las proporciones y cantidades de columnas son referencias configurables y deben adaptarse a cada formato real.',
-  'Los Grid Styles documentados en el master son puntos de partida, no especificaciones universales para todos los clientes.',
-  'Safe Zones deben responder a recortes, UI nativa, legibilidad y contexto de uso del formato.',
-  'Cualquier excepción estructural debe documentarse cuando cambie la lógica base del sistema.',
-  'Los valores finales se validan en el contexto real del formato antes de producción.',
-]
-
-function AnatomyCard({ data }: { data: (typeof ANATOMY)[number] }) {
+function Card({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <div className="flex w-full min-w-0 flex-col gap-[12px] overflow-clip rounded-[16px] border border-[#bac2cf] bg-white p-[20px]">
-      <span className="self-start rounded-[8px] bg-[#f1f4f7] px-[10px] py-[6px] font-semibold text-[11px] leading-[14px] text-[#3d5e87]">
-        {data.category}
-      </span>
-      <p className="font-bold text-[18px] leading-[22px] text-[#1c212b]">{data.title}</p>
-      <p className="font-normal text-[13px] leading-[20px] text-[#59667d]">{data.description}</p>
+    <div className="flex w-full flex-col gap-[8px] rounded-[16px] border border-[#bac2cf] bg-white p-[24px]">
+      <p className="font-bold text-[18px] leading-[22px] text-[#1c212b]">{title}</p>
+      <p className="text-[14px] leading-[21px]">
+        <Placeholder>{children}</Placeholder>
+      </p>
     </div>
   )
 }
 
-function BaselineCard() {
-  return (
-    <div className="flex w-full flex-col gap-[24px] rounded-[16px] border border-[#bac2cf] bg-white p-[24px]">
-      <p className="font-bold text-[20px] leading-[25px] text-[#1c212b]">Baseline base</p>
-      <div className="flex w-full flex-col gap-[8px] rounded-[10px] bg-[#f7f9fb] px-[16px] py-[16px]">
-        {[0, 1, 2, 3].map((i) => (
-          <span key={i} className="h-px w-[220px] max-w-full" style={{ backgroundColor: '#9cbfe8' }} />
-        ))}
-      </div>
-      <p className="font-semibold text-[13px] leading-[16px] text-[#3d5e87]">4 px</p>
-      <div className="flex w-full flex-wrap items-baseline gap-x-[32px] gap-y-[8px] rounded-[10px] bg-[#f1f4f7] p-[16px]">
-        <TokenTag fit>grid/baseline/base</TokenTag>
-        <p className="font-semibold text-[13px] leading-[18px] text-[#1c212b]">4 px</p>
-        <p className="min-w-[200px] flex-1 font-normal text-[13px] leading-[18px] text-[#59667d]">
-          Alineación vertical de textos, line-heights, módulos y bloques.
-        </p>
-      </div>
-    </div>
-  )
-}
+const BREAKPOINTS = ['Mobile', 'Tablet', 'Desktop']
 
 export function GridSystemPage() {
   return (
@@ -92,43 +39,46 @@ export function GridSystemPage() {
         module="Layout Grids"
         moduleIconSrc={layoutGridsBadgeIcon}
         title="01 Grid System"
-        paragraphs={[
-          'Fundamentos estructurales para organizar columnas, márgenes, gutters, baseline y zonas seguras de forma consistente.',
-          'La arquitectura define una lógica reusable antes de adaptarla a formatos, canales o necesidades específicas de cada cliente.',
-          null,
-          'El master conserva reglas estables y utiliza referencias configurables como punto de partida.',
-        ]}
+        paragraphs={['Estructura sobre la que se compone el sistema: grid principal, contenedores, breakpoints y comportamiento responsive.']}
       />
 
       <div className="flex w-full flex-col gap-[64px] px-[40px] py-[72px]">
-        <section className="flex w-full flex-col gap-[24px]">
-          <SectionHeader
-            title="01. Anatomía de la grilla"
-            description="Cinco elementos definen la estructura base. Se combinan según el formato, pero mantienen una intención consistente dentro del sistema."
-          />
-          <div className="grid grid-cols-1 gap-[16px] min-[560px]:grid-cols-2 min-[900px]:grid-cols-3 min-[1600px]:grid-cols-5">
-            {ANATOMY.map((a) => (
-              <AnatomyCard key={a.title} data={a} />
+        <section className="flex w-full flex-col gap-[16px]">
+          <SectionHeader title="Grid principal" description="" />
+          <Card title="Grid principal">Descripción del grid principal del sistema.</Card>
+        </section>
+
+        <section className="flex w-full flex-col gap-[16px]">
+          <SectionHeader title="Contenedores y anchos máximos" description="" />
+          <Card title="Contenedores y anchos máximos">Descripción de contenedores y sus anchos máximos.</Card>
+        </section>
+
+        <section className="flex w-full flex-col gap-[16px]">
+          <SectionHeader title="Breakpoints" description="" />
+          <div className="grid grid-cols-1 gap-[12px] min-[700px]:grid-cols-3">
+            {BREAKPOINTS.map((bp) => (
+              <div key={bp} className="flex flex-col gap-[4px] rounded-[16px] border border-[#bac2cf] bg-white p-[20px]">
+                <p className="font-bold text-[16px] leading-[20px] text-[#1c212b]">{bp}</p>
+                <p className="text-[13px]">
+                  <Placeholder>Ancho de referencia</Placeholder>
+                </p>
+              </div>
             ))}
           </div>
         </section>
 
-        <section className="flex w-full flex-col gap-[24px]">
-          <SectionHeader
-            title="02. Baseline global"
-            description="El baseline funciona como referencia micro de ritmo vertical. No sustituye la escala oficial de Spacing ni crea un sistema paralelo."
-          />
-          <BaselineCard />
-          <DocNote title="Relación con Spacing">
-            El baseline de 4 px puede utilizarse como referencia de precisión. Las separaciones
-            estructurales deben resolverse con la escala oficial de Spacing documentada en Visual
-            Styles.
-          </DocNote>
+        <section className="flex w-full flex-col gap-[16px]">
+          <SectionHeader title="Responsive behavior" description="" />
+          <Card title="Responsive behavior">Cómo se comporta la grilla al cambiar de breakpoint.</Card>
+        </section>
+
+        <section className="flex w-full flex-col gap-[16px]">
+          <SectionHeader title="Alineación y jerarquía espacial" description="" />
+          <Card title="Alineación y jerarquía espacial">Criterios de alineación y jerarquía espacial del sistema.</Card>
         </section>
       </div>
 
-      <GovernanceFooter title="Gobernanza de Grid System" rules={GOVERNANCE_RULES} />
-      <MetaFooter label="v1 · Grid System · Brand System Template · Master" />
+      <MetaFooter label="v1 · 01 Grid System · Layout & Grid · Master Template" />
     </div>
   )
 }

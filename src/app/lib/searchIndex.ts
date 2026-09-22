@@ -17,16 +17,7 @@
 import { slugify } from './slug'
 import { ALL_LEAF_IDS, findLeafInfo } from './moduleConfig'
 import { SECTIONS as HANDBOOK_SECTIONS } from '../components/MisComponentesPage'
-import {
-  brandColorsReports,
-  semanticColorsReports,
-  typographyFoundationsReports,
-  typographySystemReports,
-  typographyDeviceReports,
-  visualStylesReports,
-  gridApplicationReports,
-  REPORT_MODULE_TO_LEAF,
-} from './siteCompleteness'
+import { visualStylesReports, REPORT_MODULE_TO_LEAF } from './siteCompleteness'
 
 export interface SearchEntry {
   label: string
@@ -60,43 +51,6 @@ for (const s of HANDBOOK_SECTIONS) {
   add(s.name, 'Mis componentes', 'mis-componentes', s.id)
 }
 
-/* ─── Brand Colors ─── */
-const brandColorsLeaf = REPORT_MODULE_TO_LEAF['Brand Colors']
-for (const item of [
-  ...brandColorsReports.primary.visible,
-  ...brandColorsReports.secondary.visible,
-  ...brandColorsReports.accent.visible,
-]) {
-  add(item.name, 'Brand Colors', brandColorsLeaf, `brand-color-${slugify(item.name!)}`)
-}
-
-/* ─── Semantic Colors ─── */
-const semanticColorsLeaf = REPORT_MODULE_TO_LEAF['Semantic Colors']
-for (const report of Object.values(semanticColorsReports)) {
-  for (const item of report.visible) {
-    add(item.role, report.section, semanticColorsLeaf, `semantic-color-${slugify(item.token!)}`)
-  }
-}
-
-/* ─── Typography Foundations ─── */
-const typographyFoundationsLeaf = REPORT_MODULE_TO_LEAF['Typography Foundations']
-for (const report of Object.values(typographyFoundationsReports)) {
-  for (const item of report.visible) {
-    add(item.title, report.section, typographyFoundationsLeaf, `type-foundation-${slugify(item.title!)}`)
-  }
-}
-
-/* ─── Typography System ─── */
-const typographySystemLeaf = REPORT_MODULE_TO_LEAF['Typography System']
-for (const item of typographySystemReports.brandStyles.visible) {
-  add(item.token, typographySystemReports.brandStyles.section, typographySystemLeaf, `type-style-${slugify(item.token!)}`)
-}
-for (const report of Object.values(typographyDeviceReports)) {
-  for (const item of report.visible) {
-    add(item.token, report.section, typographySystemLeaf, `type-device-${slugify(item.token!)}`)
-  }
-}
-
 /* ─── Visual Styles ─── */
 const visualStylesLeaf = REPORT_MODULE_TO_LEAF['Visual Styles']
 for (const item of visualStylesReports.spacing.visible) {
@@ -113,17 +67,6 @@ for (const item of visualStylesReports.shadows.visible) {
 }
 for (const item of visualStylesReports.componentHeights.visible) {
   add(item.token, 'Sizing', visualStylesLeaf, `visual-style-${slugify(item.token!)}`)
-}
-
-/* ─── Grid Application ─── */
-const gridApplicationLeaf = REPORT_MODULE_TO_LEAF['Grid Application']
-for (const item of gridApplicationReports.formats.visible) {
-  add(
-    `${item.channel} ${item.format}`,
-    'Formatos de referencia',
-    gridApplicationLeaf,
-    `grid-format-${slugify(`${item.channel}-${item.format}`)}`,
-  )
 }
 
 export const SEARCH_ENTRIES: SearchEntry[] = entries

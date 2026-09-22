@@ -1,215 +1,267 @@
-import { Fragment } from 'react'
-import { ColorCard } from './ColorCard'
-import { Badge } from './Badge'
+import type { ReactNode } from 'react'
 import { PageHeader } from './PageHeader'
 import { GovernanceFooter } from './GovernanceFooter'
 import { MetaFooter } from './MetaFooter'
-import type { BrandColorEntry } from '../data/brandColors'
-import { brandColorsReports } from '../lib/siteCompleteness'
-import { slugify } from '../lib/slug'
+import { SectionHeader } from './docs/shared'
 
 /* ────────────────────────────────────────────────────────────────────────────
- * Los datos viven en `src/app/data/brandColors.ts`. Acá solo queda el layout:
- * qué secciones se arman con qué reporte de `brandColorsReports` (calculado en
- * `src/app/lib/siteCompleteness.ts`). Una sección sin colores completos NO se
- * renderiza — ver "Regla de completitud de datos" en CLAUDE.md.
+ * Foundations · Color System — 02 Brand Colors — plantilla en blanco
+ * (master template).
  *
- * Responsive — breakpoint único en 1600px de ancho de viewport (incluye sidebar):
- *   < 1600px  → apilado: contenido arriba, grilla de cards abajo
- *   ≥ 1600px  → horizontal: contenido a la izquierda (600), cards a la derecha
- * En ambos casos la grilla agrupa máximo 2 cards por fila.
- * (max-[1600px] / min-[1600px] son mutuamente excluyentes a propósito: evitan
- *  el problema de orden en la cascada entre `flex-col` y el variant responsive.)
+ * Estructura tomada de "Foundations — Estructura de presentación v2" (sección
+ * "Sistema de color"), secciones 02 (Escalas de tonos), 04 (Uso de color por
+ * etapa del journey) y 05 (Do/Don't) — mismo grupo del sidebar que Global
+ * Colors y Semantic Colors, pero centrado en los roles propios de marca
+ * (primario/secundario/acentos/neutros) y su aplicación. La parte de
+ * Gobernanza (06) referida a colores semánticos vive en Semantic Colors.
  * ────────────────────────────────────────────────────────────────────────── */
 
-const GOVERNANCE_RULES = [
-  'Los roles de Brand Colors deben construirse siempre a partir de primitives existentes; no se deben crear valores HEX aislados directamente en esta capa.',
-  'Primary debe mantener la mayor jerarquía de marca. Secondary y Accent funcionan como apoyo y no deben competir sistemáticamente con el rol principal.',
-  'Evitar el uso simultáneo de múltiples terciarios dentro de una misma pieza, salvo storytelling editorial o visualizaciones.',
-  'Cada rol debe documentar su referencia de color y conservar una relación trazable con Global Colors. Si cambia la primitive referenciada, el rol debe actualizarse mediante una referencia y no mediante duplicación manual del valor.',
-  'Los equivalentes RGB, CMYK y referencias Pantone funcionan como guía de implementación editorial, impresión y alineación cross-team con producto.',
-  'Los tokens de texto no deben redefinirse por canal.',
-]
+const TH =
+  'px-[14px] py-[12px] text-left font-semibold text-[12px] uppercase leading-[16px] tracking-[0.4px] text-[#59667d]'
+const TD = 'px-[14px] py-[12px] align-top text-[13px] leading-[19px] text-[#1c212b]'
 
-/* ────────────────────────────────────────────────────────────────────────────
- * Sub-componentes de página
- * ────────────────────────────────────────────────────────────────────────── */
-
-function BrandCard({ data }: { data: BrandColorEntry }) {
-  return (
-    <ColorCard
-      variant={data.name === 'Primary' ? 'primary' : 'secondary'}
-      color={`#${data.hex}`}
-      name={data.name!}
-      description={data.description}
-      hex={data.hex}
-      rgb={data.rgb}
-      cmyk={data.cmyk}
-      pantone={data.pantone}
-    />
-  )
+function Placeholder({ children }: { children: ReactNode }) {
+  return <span className="font-normal italic text-[#8a94a8]">{children}</span>
 }
 
-/**
- * Grilla de color cards.
- * - 1 card: ancho máx 500. Alineada a la izquierda en apilado; pegada a la
- *   derecha de su columna en ≥1600 (caso Primary).
- * - 2+ cards: 2 por fila, cada una `(100% − 16px) / 2`; el resto pasa a filas
- *   siguientes conservando ese ancho (la card suelta no se estira — caso Accent).
- */
-function CardGrid({ cards }: { cards: BrandColorEntry[] }) {
-  if (cards.length === 1) {
-    return (
-      <div className="flex w-full min-[1600px]:justify-end">
-        <div id={`brand-color-${slugify(cards[0].name!)}`} className="w-full max-w-[500px]">
-          <BrandCard data={cards[0]} />
-        </div>
-      </div>
-    )
-  }
+function Table({ headers, rows }: { headers: string[]; rows: ReactNode[][] }) {
   return (
-    <div className="flex w-full flex-wrap gap-[16px]">
-      {cards.map((c, i) => (
-        <div
-          key={c.name ?? i}
-          id={c.name ? `brand-color-${slugify(c.name)}` : undefined}
-          className="w-[calc(50%_-_8px)] min-w-[280px] max-w-[500px]"
-        >
-          <BrandCard data={c} />
-        </div>
-      ))}
+    <div className="w-full overflow-x-auto rounded-[12px] border border-[#d5dadf]">
+      <table className="w-full min-w-[560px] border-collapse">
+        <thead>
+          <tr className="border-b border-[#d5dadf] bg-[#f4f5f7]">
+            {headers.map((h) => (
+              <th key={h} className={TH}>
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, i) => (
+            <tr key={i} className="border-b border-[#e3e7ec] last:border-b-0">
+              {row.map((cell, j) => (
+                <td key={j} className={TD}>
+                  {cell}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   )
 }
 
-/** Sección de rol cromático: encabezado + lista de uso, y grilla de cards. */
-function BrandSection({
-  title,
-  paragraphs,
-  usage,
-  cards,
-}: {
-  title: string
-  paragraphs: string[]
-  usage: string[]
-  cards: BrandColorEntry[]
-}) {
-  return (
-    <section className="flex w-full items-start gap-[72px] max-[1600px]:flex-col min-[1600px]:flex-row">
-      {/* section-header */}
-      <div className="flex flex-col items-start gap-[24px] max-[1600px]:w-full min-[1600px]:w-[600px] min-[1600px]:shrink-0">
-        <h3 className="w-full font-bold text-[40px] leading-[44px] text-[#16181d]">{title}</h3>
-        <div className="w-full font-normal text-[16px] leading-[24px] text-[#576175]">
-          {paragraphs.map((p, i) => (
-            <p key={i} className={i < paragraphs.length - 1 ? 'mb-0' : ''}>
-              {p}
-            </p>
-          ))}
-        </div>
-        {/* usage-list */}
-        <div className="flex w-full flex-wrap items-start gap-[12px]">
-          {usage.map((u) => (
-            <Badge key={u}>{u}</Badge>
-          ))}
-        </div>
-      </div>
+const GOVERNANCE_RULES = [
+  'El color primario debe mantenerse como ancla principal de marca.',
+  'Los colores secundarios y terciarios deben reforzar la intención, no competir con la marca.',
+  'Los degradados funcionan como apoyo visual, no como fondo automático.',
+  'Los acentos deben aplicarse con intención narrativa o funcional.',
+  'Toda aplicación debe validar contraste, legibilidad y contexto de uso.',
+  'Las proporciones por journey orientan el peso visual, pero deben adaptarse según formato, canal, presencia de producto y necesidad de lectura.',
+]
 
-      {/* color-card-grid */}
-      <div className="max-[1600px]:w-full min-[1600px]:flex-1 min-[1600px]:min-w-0">
-        <CardGrid cards={cards} />
+/* ─── 02 · Escalas de tonos ─── */
+
+const FAMILIAS = ['Primaria', 'Secundaria', 'Acentos', 'Neutros']
+
+function ScaleCard({ familia }: { familia: string }) {
+  return (
+    <div className="flex w-full flex-col gap-[12px] rounded-[16px] border border-[#bac2cf] bg-white p-[24px]">
+      <p className="text-[18px] font-bold leading-[24px] text-[#1c212b]">{familia}</p>
+      <div className="flex w-full items-stretch gap-[4px]">
+        {['50', '100', '300', '500', '700', '900'].map((step) => (
+          <div
+            key={step}
+            className="flex h-[56px] flex-1 flex-col items-center justify-end gap-[4px] rounded-[8px] border border-dashed border-[#c4c9d4] bg-[#f7f8fa] pb-[6px]"
+          >
+            <span className="font-mono text-[10px] text-[#8a94a8]">{step}</span>
+          </div>
+        ))}
       </div>
-    </section>
+      <p className="text-[12px] leading-[18px] text-[#8a94a8]">
+        <Placeholder>50 = tono más claro · 900 = tono más profundo.</Placeholder>
+      </p>
+    </div>
   )
 }
 
-function Divider() {
-  return <div className="h-px w-full shrink-0 bg-[#eef2f8]" />
+/* ─── 4.1 · Etapas del journey ─── */
+
+const ETAPAS: { etapa: string; objetivo: string }[] = [
+  { etapa: 'Conciencia', objetivo: 'Dar a conocer y generar interés' },
+  { etapa: 'Consideración', objetivo: 'Informar y demostrar valor' },
+  { etapa: 'Adquisición', objetivo: 'Motivar la acción y facilitar la decisión' },
+  { etapa: 'Servicio', objetivo: 'Acompañar y generar confianza continua' },
+  { etapa: 'Lealtad', objetivo: 'Fidelizar y promover la recomendación' },
+]
+
+/* ─── 4.4 · Configuraciones ─── */
+
+const CONFIG_PRINCIPALES = [
+  'Institucional / Marca',
+  'Producto / Conversión',
+  'Informativa / Consideración',
+  'Promocional / Campaña',
+]
+
+const CONFIG_VARIABLES = [
+  'Espacio blanco / Lectura rápida',
+  'Producto / Variante limpia',
+  'Producto digital / Mockup',
+  'Lifestyle / Acento visual',
+]
+
+function ConfigCard({ nombre }: { nombre: string }) {
+  return (
+    <div className="flex w-full flex-col gap-[10px] rounded-[16px] border border-[#bac2cf] bg-white p-[20px]">
+      <p className="text-[15px] font-bold leading-[20px] text-[#1c212b]">{nombre}</p>
+      <div className="grid grid-cols-2 gap-[8px]">
+        {['Primario', 'Secundario', 'Neutral', 'Acento'].map((rol) => (
+          <div key={rol} className="rounded-[8px] bg-[#f7f9fb] p-[8px]">
+            <p className="text-[11px] uppercase tracking-[0.4px] text-[#8a94a8]">{rol}</p>
+            <p className="text-[13px]">
+              <Placeholder>[0%]</Placeholder>
+            </p>
+          </div>
+        ))}
+      </div>
+      <p className="text-[13px] leading-[19px]">
+        <Placeholder>Uso: en qué piezas o momentos se aplica esta configuración.</Placeholder>
+      </p>
+    </div>
+  )
 }
 
-/* ────────────────────────────────────────────────────────────────────────────
- * Página
- * ────────────────────────────────────────────────────────────────────────── */
+/* ─── Do / Don't (base fijo de la guía) ─── */
 
-interface SectionDef {
-  key: string
-  title: string
-  paragraphs: string[]
-  usage: string[]
-  cards: BrandColorEntry[]
-}
+const DO_DONT: [string, string][] = [
+  ['Usar el color primario como ancla principal de marca.', 'No usar acentos como protagonistas por defecto.'],
+  ['Usar el color secundario como apoyo visual.', 'No crear colores manuales fuera de la escala.'],
+  ['Usar neutrales para lectura, estructura y aire visual.', 'No usar colores semánticos como branding o decoración.'],
+  ['Usar acentos con intención clara.', 'No usar degradados detrás de texto sin validar contraste.'],
+  [
+    'Validar contraste en titulares, CTAs, legales y textos sobre fotografía.',
+    'No depender solo del color para comunicar estados.',
+  ],
+  [
+    'Aplicar proporciones como guía flexible.',
+    'No alterar proporciones sin revisar intención, canal y legibilidad.',
+  ],
+]
 
 export function BrandColorsPage() {
-  const sections: SectionDef[] = [
-    brandColorsReports.primary.visible.length > 0 && {
-      key: 'primary',
-      title: 'Color primario de marca',
-      paragraphs: [
-        'Rol cromático principal de la identidad.',
-        'Debe concentrar el mayor reconocimiento de marca y utilizarse como referencia para los momentos de mayor jerarquía visual. La familia y el tono asignados pueden cambiar según el proyecto.',
-      ],
-      usage: ['CTA’s', 'Headers', 'Hero surfaces', 'Logo', 'Elementos'],
-      cards: brandColorsReports.primary.visible,
-    },
-    brandColorsReports.secondary.visible.length > 0 && {
-      key: 'secondary',
-      title: 'Colores secundarios de marca',
-      paragraphs: [
-        'Roles cromáticos de apoyo que amplían la identidad sin competir con Primary.',
-        'Pueden utilizarse para construir jerarquía, profundidad, superficies auxiliares y diferenciación visual. La cantidad de roles secundarios puede variar según cada marca.',
-      ],
-      usage: [
-        'Backgrounds',
-        'Estados interactivos',
-        'Diferenciación modular',
-        'Apoyo Editorial',
-        'Iconos',
-      ],
-      cards: brandColorsReports.secondary.visible,
-    },
-    brandColorsReports.accent.visible.length > 0 && {
-      key: 'accent',
-      title: 'Colores de acento de marca',
-      paragraphs: [
-        'Roles cromáticos complementarios para ampliar el rango expresivo de la marca.',
-        'Se utilizan de forma intencional para campañas, categorías, storytelling o momentos específicos sin desplazar los roles Primary y Secondary. La cantidad de accents debe responder a las necesidades reales del proyecto.',
-      ],
-      usage: [
-        'Promociones',
-        'CTA’s',
-        'Contraste Visual',
-        'Información puntual',
-        'Bloques secundarios de contenido',
-      ],
-      cards: brandColorsReports.accent.visible,
-    },
-  ].filter(Boolean) as SectionDef[]
-
   return (
     <div id="color.brand-colors" className="flex w-full flex-col items-start bg-white">
       <PageHeader
         module="Color System"
         title="02 Brand Colors"
         paragraphs={[
-          'Roles cromáticos de marca construidos a partir de las primitives definidas en Global Colors.',
-          'Este board traduce familias cromáticas en decisiones de identidad como Primary, Secondary, Neutral y Accent sin duplicar valores base.',
-          null,
-          'Cada rol debe mantener una referencia de color clara hacia su primitive para facilitar consistencia, mantenimiento e implementación.',
+          'Escalas tonales y reglas de aplicación de los roles cromáticos de marca (primario, secundario, acentos y neutros), construidas a partir de las primitives de Global Colors.',
         ]}
       />
 
-      {/* Secciones de roles — solo las que tienen datos completos */}
-      <div className="flex w-full flex-col items-start gap-[64px] px-[40px] py-[80px]">
-        {sections.map((s) => (
-          <Fragment key={s.key}>
-            <Divider />
-            <BrandSection {...s} />
-          </Fragment>
-        ))}
+      <div className="flex w-full flex-col gap-[64px] px-[40px] py-[80px]">
+        {/* 02 · Escalas de tonos */}
+        <section className="flex w-full flex-col gap-[24px]">
+          <SectionHeader
+            title="02. Escalas de tonos"
+            description="Permiten crear profundidad, contraste, jerarquía y estados sin generar colores fuera del sistema aprobado. Por cada tono se documentan los datos que existan en el proyecto (HEX, muestra, token, RGB, HSL, rol, uso, estado); ninguno es obligatorio salvo lo que el proyecto provea."
+          />
+          <div className="grid grid-cols-1 gap-[16px] min-[1100px]:grid-cols-2">
+            {FAMILIAS.map((f) => (
+              <ScaleCard key={f} familia={f} />
+            ))}
+          </div>
+        </section>
+
+        {/* 04 · Uso de color por etapa del journey */}
+        <section className="flex w-full flex-col gap-[32px]">
+          <SectionHeader
+            title="04. Uso de color por etapa del journey"
+            description="Cómo se ajusta la proporción de color según el objetivo de cada etapa, manteniendo los atributos generales de marca."
+          />
+
+          {/* 4.1 Etapas */}
+          <div className="flex w-full flex-col gap-[12px]">
+            <p className="text-[15px] font-semibold text-[#1c212b]">4.1 Etapas</p>
+            <Table
+              headers={['Etapa', 'Objetivo', 'Intención cromática']}
+              rows={ETAPAS.map((e) => [
+                e.etapa,
+                e.objetivo,
+                <Placeholder key="i">Intención cromática para esta etapa.</Placeholder>,
+              ])}
+            />
+          </div>
+
+          {/* 4.2 Cómo leer las proporciones */}
+          <div className="flex w-full flex-col gap-[12px]">
+            <p className="text-[15px] font-semibold text-[#1c212b]">4.2 Cómo leer las proporciones</p>
+            <Table
+              headers={['Color', 'Rol']}
+              rows={[
+                [<Placeholder key="p">Primario</Placeholder>, 'Color principal de marca'],
+                [<Placeholder key="s">Secundario</Placeholder>, 'Color secundario de marca'],
+                ['Neutral', 'Fondos claros, superficies y aire visual'],
+                ['Acentos', 'Colores flexibles por intención'],
+              ]}
+            />
+          </div>
+
+          {/* 4.3 Acentos disponibles */}
+          <div className="flex w-full flex-col gap-[12px]">
+            <p className="text-[15px] font-semibold text-[#1c212b]">4.3 Acentos disponibles</p>
+            <Table
+              headers={['Token / ID', 'Nombre', 'HEX', 'Rol', 'Uso', 'Estado']}
+              rows={[1, 2].map((i) => [
+                <Placeholder key="t">accent_{i}</Placeholder>,
+                <Placeholder key="n">Nombre del acento {i}</Placeholder>,
+                <Placeholder key="h">#HEXHEX</Placeholder>,
+                <Placeholder key="r">Rol</Placeholder>,
+                <Placeholder key="u">Uso</Placeholder>,
+                <Placeholder key="e">Estado</Placeholder>,
+              ])}
+            />
+          </div>
+
+          {/* 4.4 Proporciones y configuraciones */}
+          <div className="flex w-full flex-col gap-[16px]">
+            <p className="text-[15px] font-semibold text-[#1c212b]">4.4 Proporciones y configuraciones</p>
+            <div className="flex flex-col gap-[12px]">
+              <p className="text-[13px] font-semibold uppercase tracking-[0.4px] text-[#59667d]">Principales</p>
+              <div className="grid grid-cols-1 gap-[12px] min-[1100px]:grid-cols-2">
+                {CONFIG_PRINCIPALES.map((c) => (
+                  <ConfigCard key={c} nombre={c} />
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-col gap-[12px]">
+              <p className="text-[13px] font-semibold uppercase tracking-[0.4px] text-[#59667d]">Variables</p>
+              <div className="grid grid-cols-1 gap-[12px] min-[1100px]:grid-cols-2">
+                {CONFIG_VARIABLES.map((c) => (
+                  <ConfigCard key={c} nombre={c} />
+                ))}
+              </div>
+            </div>
+            <p className="text-[13px] italic leading-[19px] text-[#8a94a8]">
+              Las proporciones son referenciales y consideran el uso de colores del sistema, no el peso total de
+              la fotografía.
+            </p>
+          </div>
+        </section>
+
+        {/* 05 · Do / Don't */}
+        <section className="flex w-full flex-col gap-[16px]">
+          <SectionHeader title="05. Do / Don't" description="" />
+          <Table headers={['Do', "Don't"]} rows={DO_DONT.map(([d, dn]) => [d, dn])} />
+        </section>
       </div>
 
       <GovernanceFooter title="Gobernanza del color de marca" rules={GOVERNANCE_RULES} />
 
-      <MetaFooter label="v1 · 02 Brand Colors · Master Template" />
+      <MetaFooter label="v1 · 02 Brand Colors · Color System · Master Template" />
     </div>
   )
 }

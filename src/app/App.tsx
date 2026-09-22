@@ -61,6 +61,35 @@ import { MisComponentesPage } from './components/MisComponentesPage'
 import { RegistroPage } from './components/RegistroPage'
 import { InformePage } from './components/InformePage'
 import { PlaceholderPage } from './components/PlaceholderPage'
+import { PublicoObjetivoPage } from './components/PublicoObjetivoPage'
+import { EnfoqueDeMarcaPage } from './components/EnfoqueDeMarcaPage'
+import { PrincipiosDeMarcaPage } from './components/PrincipiosDeMarcaPage'
+import { PosicionamientoPage } from './components/PosicionamientoPage'
+import { EsenciaYPersonalidadPage } from './components/EsenciaYPersonalidadPage'
+import { ConceptoCreativoPage } from './components/ConceptoCreativoPage'
+import { VerbalIdentityPage } from './components/VerbalIdentityPage'
+import { SpacingSystemPage } from './components/SpacingSystemPage'
+import { BordesRadiusPage } from './components/BordesRadiusPage'
+import { ElevationShadowsPage } from './components/ElevationShadowsPage'
+import { PhotographyDirectionPage } from './components/PhotographyDirectionPage'
+import { MotionPrinciplesPage } from './components/MotionPrinciplesPage'
+import { LogosPage } from './components/LogosPage'
+import { ButtonsCtasPage } from './components/ButtonsCtasPage'
+import { ContentBlocksPage } from './components/ContentBlocksPage'
+import { NavigationPage } from './components/NavigationPage'
+import { CardsPage } from './components/CardsPage'
+import { FormsInputsPage } from './components/FormsInputsPage'
+import { TagsBadgesLabelsPage } from './components/TagsBadgesLabelsPage'
+import { IconsIllustrationsPage } from './components/IconsIllustrationsPage'
+import { VisualSystemPage } from './components/VisualSystemPage'
+import { RRSSPage } from './components/RRSSPage'
+import { WebPage } from './components/WebPage'
+import { PresentacionPage } from './components/PresentacionPage'
+import { MailersPage } from './components/MailersPage'
+import { GovernancePage } from './components/GovernancePage'
+import { TrainingAdoptionPage } from './components/TrainingAdoptionPage'
+import { RequestsSupportPage } from './components/RequestsSupportPage'
+import { HealthEvolutionPage } from './components/HealthEvolutionPage'
 import { Tooltip } from './components/Tooltip'
 import {
   CATEGORIES,
@@ -1002,6 +1031,64 @@ function AppShell() {
           <InformePage />
         ) : activePage === 'ajustes' ? (
           <AjustesPage enabled={enabled} toggle={toggle} applyPreset={applyPreset} />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'strategy.publico-objetivo' ? (
+          <PublicoObjetivoPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'strategy.enfoque-de-marca' ? (
+          <EnfoqueDeMarcaPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'strategy.principios-de-marca' ? (
+          <PrincipiosDeMarcaPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'strategy.posicionamiento' ? (
+          <PosicionamientoPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'strategy.esencia-personalidad' ? (
+          <EsenciaYPersonalidadPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'strategy.concepto-creativo' ? (
+          <ConceptoCreativoPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'strategy.verbal-identity' ? (
+          <VerbalIdentityPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'foundations.spacing-system' ? (
+          <SpacingSystemPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'foundations.bordes-radius' ? (
+          <BordesRadiusPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'foundations.elevation-shadows' ? (
+          <ElevationShadowsPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'foundations.photography' ? (
+          <PhotographyDirectionPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'foundations.motion-principles' ? (
+          <MotionPrinciplesPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'components.logos' ? (
+          <LogosPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'components.buttons-ctas' ? (
+          <ButtonsCtasPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'components.content-blocks' ? (
+          <ContentBlocksPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'components.navigation' ? (
+          <NavigationPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'components.cards' ? (
+          <CardsPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'components.forms-inputs' ? (
+          <FormsInputsPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'components.tags-badges-labels' ? (
+          <TagsBadgesLabelsPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'components.icons-illustrations' ? (
+          <IconsIllustrationsPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'components.visual-system' ? (
+          <VisualSystemPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'templates.rrss' ? (
+          <RRSSPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'templates.web' ? (
+          <WebPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'templates.presentacion' ? (
+          <PresentacionPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'templates.mailers' ? (
+          <MailersPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'brand-ops.governance' ? (
+          <GovernancePage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'brand-ops.training-adoption' ? (
+          <TrainingAdoptionPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'brand-ops.requests-support' ? (
+          <RequestsSupportPage />
+        ) : activePage === 'placeholder' && activePlaceholderId === 'brand-ops.health-evolution' ? (
+          <HealthEvolutionPage />
         ) : activePage === 'placeholder' && activePlaceholderId ? (
           (() => {
             const info = findLeafInfo(activePlaceholderId)

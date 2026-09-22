@@ -140,15 +140,19 @@ calcula solo (ej. ratio de contraste y nivel WCAG en `ColorCard` /
   `ALL_HIDDEN_ENTRIES` (usado por `RegistroPage`). Única fuente de verdad:
   tanto la página como el registro leen de acá, así el registro no depende de
   haber visitado la página.
-- La página de documentación (`BrandColorsPage`, `SemanticColorsPage`, …)
-  importa su reporte de `siteCompleteness.ts` y renderiza solo `.visible`;
+- La página de documentación (ej. `VisualStylesPage`) importa su reporte de
+  `siteCompleteness.ts` y renderiza solo `.visible`;
   una sección/`Group` sin nada visible retorna `null` (o no se agrega al
   array de secciones a renderizar).
-- **Hoy implementado en:** Brand Colors, Semantic Colors, Typography
-  Foundations, Typography System, Visual Styles, Grid Application. **Sin
-  implementar:** Global Colors (sigue con el import crudo de Figma, ver
-  "Estructura" abajo) y Grid System (no tiene datos de marca configurables,
-  es contenido estructural/educativo).
+- **Hoy implementado en:** Visual Styles (es la única página de Foundations
+  que sigue documentando una configuración de ejemplo con datos hardcodeados
+  en `src/app/data/`). **Sin implementar:** el resto de Foundations —
+  Global/Brand/Semantic Colors, Typography Foundations/System, Grid
+  System/Application y las 5 páginas nuevas (Spacing System, Bordes & Radius,
+  Elevation & Shadows, Photography & Direction, Motion Principles) son ahora
+  plantillas en blanco (mismo patrón que Strategy, ver más abajo) y no pasan
+  por este motor: no hay datos de marca que ocultar todavía, solo contenido
+  placeholder entre corchetes a la espera del brief real del proyecto.
 - **Regla en vigor desde ahora:** cuando se complete el contenido real de
   cualquier página nueva del catálogo (las que hoy son `PlaceholderPage`),
   seguir siempre este mismo patrón — nunca hardcodear los datos directo en
@@ -222,13 +226,18 @@ desde Ajustes.
 - Íconos de sidebar para páginas placeholder: `LEAF_ICONS` en `App.tsx`
   (mapa `leaf id → LucideIcon`). Al construir el contenido real de una
   página, está bien mantener el mismo ícono o cambiarlo si el diseño lo pide.
-- **Hoy con contenido real**: Color System (Global/Brand/Semantic),
-  Typography System (Foundations/System), Visual Styles, Layout & Grid
-  (System/Application) — todas dentro de Foundations. **Todo el resto de
-  `BRAND-SYSTEM-ARQUITECTURA.md`** (Strategy completo; Spacing System,
-  Bordes & Radius, Elevation & Shadows, Photography,
-  Motion Principles de Foundations; Components completo; Templates completo;
-  Brand Ops completo) son `PlaceholderPage` pendientes de contenido.
+- **Hoy con contenido real: el catálogo completo** — las 7 páginas de
+  Strategy, las 8 de Foundations (Color System, Typography System, Layout &
+  Grid, Spacing System, Bordes & Radius, Elevation & Shadows, Photography &
+  Direction, Motion Principles), las 9 de Components (Logos, Buttons & CTAs,
+  Content Blocks, Navigation, Cards, Forms & Inputs, Tags/Badges & Labels,
+  Icons & Illustrations, Visual System), las 4 de Templates (RRSS, Web,
+  Presentación, Mailers) y las 4 de Brand Ops (Governance, Training &
+  Adoption, Requests & Support, Health & Evolution) — todas como plantilla
+  en blanco (master template) salvo Visual Styles (Foundations), que sigue
+  documentando una configuración de ejemplo con datos hardcodeados. Ya no
+  quedan `PlaceholderPage` en `BRAND-SYSTEM-ARQUITECTURA.md` (el Registro de
+  completado lo confirma: "Todo completo").
 
 ## Buscador del sidebar
 
@@ -315,31 +324,30 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
     este sistema" (principios) + "Cómo está organizado" (4 module cards
     clicables → `onNavigate` cablea a color / typography / visual-styles / grids).
     En Tailwind puro. Icono en `src/assets/brand-system-badge-icon.svg`.
-  - `GlobalColorsPage` — renderiza `src/imports/01GlobalColors-1` (generado
-    por Figma, colores del master template). Se probó migrarla a componentes
-    propios con la paleta de un cliente ("Myntex"), pero se revirtió a
-    pedido — volver a intentarlo solo si se pide explícitamente. Los `token`
-    hardcodeados en `src/imports/01GlobalColors-1/parts/section0{1..6}.tsx`
-    SÍ siguen la nomenclatura de tokens/rutas (`color_system/global/<sección>
-    /<paleta si tiene>/<tono>` — secciones: `primary` (Blue), `secondary`
-    (Light Blue), `tertiary` (Orange/Teal/Apple), `neutral` (Ink/Gray),
-    `functional` (Green/Amber/Red/Blue) y `gradients`) aunque el resto del
-    archivo sea código generado por Figma que normalmente no se edita a mano.
-  - `BrandColorsPage` — documenta "02 Brand Colors" de Figma con Tailwind +
-    componentes propios (hecho, sin Astra)
-  - `SemanticColorsPage` — documentada (secciones + gobernanza + meta-footer)
+  - `GlobalColorsPage` / `BrandColorsPage` / `SemanticColorsPage` — grupo
+    "Color System" del sidebar. Reescritas como **plantilla en blanco** (mismo
+    patrón que Strategy, ver más abajo) siguiendo
+    "Foundations — Estructura de presentación v2": Global Colors documenta
+    grupos/familias + colores puntuales (Nombre + HEX); Brand Colors reúne
+    las escalas de tonos (primaria/secundaria/acentos/neutros), el uso de
+    color por etapa del journey (4.1–4.4) y el Do/Don't; Semantic Colors
+    documenta las funciones semánticas (texto/fondos/bordes/iconos/focus/
+    estados/superficies) y su regla principal. La Gobernanza del `.md` se
+    repartió entre Brand Colors (reglas de primario/secundario/acentos) y
+    Semantic Colors (regla de colores semánticos). Ya NO pasan por el motor
+    de completitud (`siteCompleteness.ts`) ni por `data/brandColors.ts` /
+    `data/semanticColors.ts` — esos archivos se borraron. `GlobalColorsPage`
+    ya no renderiza `src/imports/01GlobalColors-1` (import crudo de Figma).
   - `TypographyFoundationsPage` / `TypographySystemPage` — grupo "Typography
-    System" del sidebar (icono `Type`). Traídas de Figma (nodos 196:6664 /
-    154:8196). Documentan la **configuración de ejemplo** del Type System
-    (Manrope / Source Serif 4 / Inter). Reutilizan `PageHeader`,
-    `GovernanceFooter`, `MetaFooter`, `TokenTag` + los helpers de
-    `components/docs/shared.tsx`. Datos de marca en `src/app/data/`
-    (`typographyFoundations.ts`, `typographySystem.ts`) + reporte de
-    completitud — renderizan solo `.visible`. `GUIDE`/`RECOMMENDATIONS`
-    (System) y las labels de fila `ROW_LABELS`/`PREVIEW` (Foundations) son
-    estructurales, no datos de marca. Icono de módulo en
-    `src/assets/type-badge-icon.svg`. Responsive con breakpoint 1600 (+ la
-    tabla de jerarquía colapsa a cards por debajo de 1180).
+    System" del sidebar (icono `Type`). Reescritas como plantilla en blanco
+    siguiendo el `.md` v2: Foundations documenta las Familias (principal/
+    secundaria/sustitución); System documenta la Escala (tabla Display/H1/H2/
+    Body/Caption) y el Uso por contexto (interfaces/campañas/presentaciones/
+    documentos/compatibilidad digital/accesibilidad/usos incorrectos). Ya no
+    pasan por el motor de completitud ni por `data/typographyFoundations.ts`
+    / `data/typographySystem.ts` (borrados); `components/typography/shared.tsx`
+    conserva solo `FONT` (lo sigue usando `MisComponentesPage`). Icono de
+    módulo en `src/assets/type-badge-icon.svg`.
   - `VisualStylesPage` — ítem "Visual Styles" del sidebar (icono `Shapes`).
     Traída de Figma (nodo 214:2446). Documenta spacing / border radius /
     borders / shadows / sizing con token cards (preview + valor + `TokenTag`
@@ -348,18 +356,56 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
     (`ICON_SIZES`) quedan estructurales (escala técnica fija, no decisión de
     marca por ítem). Reutiliza `PageHeader` / `GovernanceFooter` /
     `MetaFooter` / `TokenTag`. Icono de módulo en
-    `src/assets/visual-styles-badge-icon.svg`. Responsive 1600.
+    `src/assets/visual-styles-badge-icon.svg`. Responsive 1600. **Es la única
+    página de Foundations que sigue el patrón de completitud** (ver "Regla de
+    completitud de datos" arriba) — el resto ya es plantilla en blanco.
   - `GridSystemPage` / `GridApplicationPage` — grupo "Layout & Grid" del
-    sidebar (icono `Grid3x3`). Traídas de Figma (nodos 2162:33104 /
-    2162:33595). System = anatomía de la grilla + baseline global (contenido
-    estructural/educativo, sin datos de marca configurables, no pasa por el
-    motor de completitud). Application = tabla de formatos de referencia
-    (scroll-x en su contenedor), wireframes por familia y reglas de
-    alineación (`GovernanceRule`); datos de marca en
-    `src/app/data/gridApplication.ts` + reporte de completitud — los
-    wireframes se derivan de los formatos visibles (`WIREFRAME_REFS`), no son
-    una lista de datos aparte. Icono de módulo en
-    `src/assets/layout-grids-badge-icon.svg`. Responsive 1600.
+    sidebar (icono `Grid3x3`). Reescritas como plantilla en blanco siguiendo
+    el `.md` v2: System documenta la parte estructural (grid principal,
+    contenedores y anchos máximos, breakpoints, responsive behavior,
+    alineación y jerarquía espacial); Application documenta la tabla de
+    grids por contexto (Web/Producto/Presentación/RRSS) y las reglas de
+    composición. Ya no pasan por el motor de completitud ni por
+    `data/gridApplication.ts` (borrado); `WireframeCard` sigue existiendo y
+    documentado en el handbook aunque ninguna página lo use por ahora.
+    Icono de módulo en `src/assets/layout-grids-badge-icon.svg`.
+  - `SpacingSystemPage` / `BordesRadiusPage` / `ElevationShadowsPage` /
+    `PhotographyDirectionPage` / `MotionPrinciplesPage` — resto de
+    Foundations, construidas como plantilla en blanco siguiendo el `.md` v2
+    (una página cada una, sin sub-páginas, tal como pide el documento). Cada
+    una vive bajo su propio leaf id de `moduleConfig.ts`
+    (`foundations.spacing-system`, `foundations.bordes-radius`,
+    `foundations.elevation-shadows`, `foundations.photography`,
+    `foundations.motion-principles`).
+  - `LogosPage` / `ButtonsCtasPage` / `ContentBlocksPage` / `NavigationPage` /
+    `CardsPage` / `FormsInputsPage` / `TagsBadgesLabelsPage` /
+    `IconsIllustrationsPage` / `VisualSystemPage` — las 9 páginas de
+    Components, construidas como plantilla en blanco siguiendo
+    "Components — Estructura de presentación v2" (mismo criterio que
+    Foundations v2: cada guía de Notion = una sola página del dashboard, sin
+    fragmentar en sub-páginas). Cada una vive bajo su propio leaf id
+    (`components.logos`, `components.buttons-ctas`,
+    `components.content-blocks`, `components.navigation`,
+    `components.cards`, `components.forms-inputs`,
+    `components.tags-badges-labels`, `components.icons-illustrations`,
+    `components.visual-system`).
+  - `RRSSPage` / `WebPage` / `PresentacionPage` / `MailersPage` — las 4
+    páginas de Templates, construidas como plantilla en blanco siguiendo
+    "Templates — Estructura de presentación" (mismo criterio: cada guía de
+    Notion = una sola página del dashboard). Reglas dadas como cita literal
+    en el `.md` (ej. "Un solo CTA principal por pantalla" en Web, "Un solo
+    CTA principal" en Mailers) se muestran tal cual, no como placeholder.
+    Cada una vive bajo su propio leaf id (`templates.rrss`, `templates.web`,
+    `templates.presentacion`, `templates.mailers`).
+  - `GovernancePage` / `TrainingAdoptionPage` / `RequestsSupportPage` /
+    `HealthEvolutionPage` — las 4 páginas de Brand Ops (última categoría del
+    catálogo), construidas como plantilla en blanco siguiendo
+    "Brand Ops — Estructura de presentación" (mismo criterio: cada guía de
+    Notion = una sola página del dashboard). Cada una vive bajo su propio
+    leaf id (`brand-ops.governance`, `brand-ops.training-adoption`,
+    `brand-ops.requests-support`, `brand-ops.health-evolution`). Con estas 4
+    páginas, **el catálogo completo del dashboard tiene contenido** (real o
+    plantilla en blanco) — el Registro de completado muestra "Todo completo".
   - `components/docs/shared.tsx` — helpers de layout de TODAS las páginas de
     documentación (NO son componentes del sistema): `SectionHeader`, `DocNote`
     (callout aclaratorio), `TypePreview`, `MetaRow`. En el handbook bajo
@@ -542,7 +588,7 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
 - Si en algún momento se quiere sacar Astra del todo: falta reescribir el
   `ThemeProvider`/`ForceLightTheme` y la rama de demos de `App.tsx`, quitar el
   import de `@figma/astraui/styles.css`, y migrar
-  `IntroduccionPage`, `SemanticColorsPage`, `MisComponentesPage` y los 7
+  `IntroduccionPage`, `MisComponentesPage` y los 7
   `components/demo/` (todos usan clases de tokens de Astra: `bg-brand-*`,
   `text-text-*`, `gap-xl`, `rounded-corner-md`…). Los demos hoy no se enrutan.
 - NO agregar reglas `@source` para `@figma/astraui` en Tailwind: su CSS ya viene
@@ -574,16 +620,17 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
 
 ## Trabajo en curso
 
-- Documentadas con contenido real: Global / Brand / Semantic Colors,
-  Typography (×2), Visual Styles, Grids (×2), Introducción, handbook. Todo lo
-  demás de `BRAND-SYSTEM-ARQUITECTURA.md` (Strategy, resto de Foundations,
-  Components, Templates, Brand Ops) son `PlaceholderPage` — ver
-  "Arquitectura del catálogo".
-- Regla de completitud de datos (ver sección arriba) implementada en Brand
-  Colors, Semantic Colors, Typography Foundations, Typography System, Visual
-  Styles y Grid Application. Grid System queda afuera a propósito (sin datos
-  de marca configurables). Este es el patrón a seguir para cualquier página
-  nueva que se complete de acá en adelante.
+- **Catálogo completo**: las 7 páginas de Strategy, las 8 de Foundations,
+  las 9 de Components, las 4 de Templates y las 4 de Brand Ops tienen
+  contenido real (todas como plantilla en blanco / master template, ver
+  "Cómo incorporar documentación/contenido nuevo"), más Introducción y el
+  handbook. Ya no quedan `PlaceholderPage` — ver "Arquitectura del
+  catálogo".
+- Regla de completitud de datos (ver sección arriba): hoy solo la usa Visual
+  Styles. El resto de Foundations pasó a plantilla en blanco (mismo patrón
+  que Strategy) y ya no depende de `siteCompleteness.ts` ni de datos
+  hardcodeados en `src/app/data/` — se completará con el brief real de cada
+  proyecto más adelante, no antes.
 - `AjustesPage` ya tiene el panel de módulos (presets Large/Light + switches
   por sub-página). Pendiente: definir el set real del preset Light (hoy es
   representativo).

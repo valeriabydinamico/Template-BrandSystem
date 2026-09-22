@@ -2,16 +2,14 @@ import type { ReactNode } from 'react'
 import { PageHeader } from './PageHeader'
 import { MetaFooter } from './MetaFooter'
 import { SectionHeader } from './docs/shared'
-import layoutGridsBadgeIcon from '@/assets/layout-grids-badge-icon.svg'
 
 /* ────────────────────────────────────────────────────────────────────────────
- * Foundations · Layout & Grid — 02 Grid Application — plantilla en blanco
- * (master template).
+ * Foundations · Elevation & Shadows — plantilla en blanco (master template).
  *
  * Estructura tomada de "Foundations — Estructura de presentación v2" (sección
- * "Layout & Grid"): grids por contexto y reglas de composición. La parte
- * estructural (grid principal, breakpoints, responsive, jerarquía espacial)
- * vive en Grid System — ver `GridSystemPage.tsx`.
+ * "Elevation & Shadows"): niveles de elevación y el resto del contenido
+ * (blur, opacidad, offset, superficies, cuándo no usar sombras) — todo en una
+ * sola página, sin subpáginas.
  * ────────────────────────────────────────────────────────────────────────── */
 
 const TH =
@@ -25,7 +23,7 @@ function Placeholder({ children }: { children: ReactNode }) {
 function Table({ headers, rows }: { headers: string[]; rows: ReactNode[][] }) {
   return (
     <div className="w-full overflow-x-auto rounded-[12px] border border-[#d5dadf]">
-      <table className="w-full min-w-[640px] border-collapse">
+      <table className="w-full min-w-[560px] border-collapse">
         <thead>
           <tr className="border-b border-[#d5dadf] bg-[#f4f5f7]">
             {headers.map((h) => (
@@ -51,45 +49,62 @@ function Table({ headers, rows }: { headers: string[]; rows: ReactNode[][] }) {
   )
 }
 
-const CONTEXTOS = ['Web', 'Producto', 'Presentación', 'RRSS']
+const NIVELES = ['elevation/1', 'elevation/2', 'elevation/3']
+const NIVEL_USO: Record<string, string> = {
+  'elevation/1': 'Cards',
+  'elevation/2': 'Dropdowns',
+  'elevation/3': 'Modals',
+}
 
-export function GridApplicationPage() {
+const SUPERFICIES = ['Cards', 'Modals', 'Dropdowns', 'Floating elements']
+
+export function ElevationShadowsPage() {
   return (
-    <div id="grids.application" className="flex w-full flex-col items-start bg-white">
+    <div id="foundations.elevation-shadows" className="flex w-full flex-col items-start bg-white">
       <PageHeader
-        module="Layout Grids"
-        moduleIconSrc={layoutGridsBadgeIcon}
-        title="02 Grid Application"
-        paragraphs={['Grids por contexto de uso y reglas de composición.']}
+        module="Foundations"
+        title="Elevation & Shadows"
+        paragraphs={['Cómo se expresa la profundidad y la jerarquía de superficies.']}
       />
 
       <div className="flex w-full flex-col gap-[64px] px-[40px] py-[72px]">
         <section className="flex w-full flex-col gap-[16px]">
           <SectionHeader
-            title="Grids por contexto"
-            description="Los valores funcionan como placeholders hasta que exista información real del proyecto."
+            title="Niveles de elevación"
+            description="Los niveles y valores deben corresponder al sistema real del proyecto."
           />
           <Table
-            headers={['Contexto', 'Columnas', 'Gutter', 'Márgenes', 'Ancho máx.']}
-            rows={CONTEXTOS.map((c) => [
-              c,
-              <Placeholder key="c">—</Placeholder>,
-              <Placeholder key="g">—</Placeholder>,
-              <Placeholder key="m">—</Placeholder>,
-              <Placeholder key="a">—</Placeholder>,
+            headers={['Nivel', 'Blur', 'Offset', 'Opacidad', 'Se aplica en']}
+            rows={NIVELES.map((n) => [
+              n,
+              <Placeholder key="b">00</Placeholder>,
+              <Placeholder key="o">00</Placeholder>,
+              <Placeholder key="p">00%</Placeholder>,
+              NIVEL_USO[n],
             ])}
           />
         </section>
 
         <section className="flex w-full flex-col gap-[16px]">
-          <SectionHeader title="Reglas de composición" description="" />
+          <SectionHeader title="Aplicación por superficie" description="" />
+          <div className="flex w-full flex-wrap gap-[8px]">
+            {SUPERFICIES.map((s) => (
+              <span key={s} className="rounded-[999px] border border-[#bac2cf] bg-white px-[14px] py-[8px] text-[13px]">
+                {s}
+              </span>
+            ))}
+          </div>
+        </section>
+
+        <section className="flex w-full flex-col gap-[16px]">
+          <SectionHeader title="Cuándo no usar sombras" description="" />
           <p className="text-[14px] leading-[21px]">
-            <Placeholder>Criterios de composición sobre la grilla definidos para el proyecto.</Placeholder>
+            <Placeholder>Criterio documentado para el proyecto.</Placeholder>
           </p>
         </section>
       </div>
 
-      <MetaFooter label="v1 · 02 Grid Application · Layout & Grid · Master Template" />
+      <MetaFooter label="v1 · Elevation & Shadows · Foundations · Master Template" />
     </div>
   )
 }

@@ -2,16 +2,13 @@ import type { ReactNode } from 'react'
 import { PageHeader } from './PageHeader'
 import { MetaFooter } from './MetaFooter'
 import { SectionHeader } from './docs/shared'
-import layoutGridsBadgeIcon from '@/assets/layout-grids-badge-icon.svg'
 
 /* ────────────────────────────────────────────────────────────────────────────
- * Foundations · Layout & Grid — 02 Grid Application — plantilla en blanco
- * (master template).
+ * Templates · RRSS — plantilla en blanco (master template).
  *
- * Estructura tomada de "Foundations — Estructura de presentación v2" (sección
- * "Layout & Grid"): grids por contexto y reglas de composición. La parte
- * estructural (grid principal, breakpoints, responsive, jerarquía espacial)
- * vive en Grid System — ver `GridSystemPage.tsx`.
+ * Estructura tomada de "Templates — Estructura de presentación" (sección
+ * "RRSS"): templates de social, archivo fuente, reglas de copy y ejemplos
+ * aprobados — todo en una sola página.
  * ────────────────────────────────────────────────────────────────────────── */
 
 const TH =
@@ -51,45 +48,53 @@ function Table({ headers, rows }: { headers: string[]; rows: ReactNode[][] }) {
   )
 }
 
-const CONTEXTOS = ['Web', 'Producto', 'Presentación', 'RRSS']
+const TEMPLATES = ['Posts estáticos', 'Carruseles', 'Stories', 'Reels', 'Portadas de video', 'Lanzamientos']
 
-export function GridApplicationPage() {
+export function RRSSPage() {
   return (
-    <div id="grids.application" className="flex w-full flex-col items-start bg-white">
-      <PageHeader
-        module="Layout Grids"
-        moduleIconSrc={layoutGridsBadgeIcon}
-        title="02 Grid Application"
-        paragraphs={['Grids por contexto de uso y reglas de composición.']}
-      />
+    <div id="templates.rrss" className="flex w-full flex-col items-start bg-white">
+      <PageHeader module="Templates" title="RRSS" paragraphs={['Plantillas de social listas para adaptar contenido.']} />
 
       <div className="flex w-full flex-col gap-[64px] px-[40px] py-[72px]">
         <section className="flex w-full flex-col gap-[16px]">
           <SectionHeader
-            title="Grids por contexto"
-            description="Los valores funcionan como placeholders hasta que exista información real del proyecto."
+            title="Templates"
+            description="Los valores mostrados funcionan como campos a completar con la información real del proyecto."
           />
           <Table
-            headers={['Contexto', 'Columnas', 'Gutter', 'Márgenes', 'Ancho máx.']}
-            rows={CONTEXTOS.map((c) => [
-              c,
-              <Placeholder key="c">—</Placeholder>,
-              <Placeholder key="g">—</Placeholder>,
-              <Placeholder key="m">—</Placeholder>,
-              <Placeholder key="a">—</Placeholder>,
+            headers={['Template', 'Formato', 'Qué se edita', 'Qué no se toca']}
+            rows={TEMPLATES.map((t) => [
+              t,
+              <Placeholder key="f">—</Placeholder>,
+              <Placeholder key="e">—</Placeholder>,
+              <Placeholder key="n">—</Placeholder>,
             ])}
           />
         </section>
 
         <section className="flex w-full flex-col gap-[16px]">
-          <SectionHeader title="Reglas de composición" description="" />
+          <SectionHeader title="Archivo fuente enlazado" description="" />
           <p className="text-[14px] leading-[21px]">
-            <Placeholder>Criterios de composición sobre la grilla definidos para el proyecto.</Placeholder>
+            <Placeholder>Link al archivo fuente correspondiente.</Placeholder>
+          </p>
+        </section>
+
+        <section className="flex w-full flex-col gap-[16px]">
+          <SectionHeader title="Reglas de copy por formato" description="" />
+          <p className="text-[14px] leading-[21px]">
+            <Placeholder>Reglas documentadas para cada formato.</Placeholder>
+          </p>
+        </section>
+
+        <section className="flex w-full flex-col gap-[16px]">
+          <SectionHeader title="Ejemplos aprobados" description="" />
+          <p className="text-[14px] leading-[21px]">
+            <Placeholder>Ejemplos reales aprobados para el proyecto.</Placeholder>
           </p>
         </section>
       </div>
 
-      <MetaFooter label="v1 · 02 Grid Application · Layout & Grid · Master Template" />
+      <MetaFooter label="v1 · RRSS · Templates · Master Template" />
     </div>
   )
 }
