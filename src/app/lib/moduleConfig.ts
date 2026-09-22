@@ -143,13 +143,23 @@ export const ALL_LEAF_IDS: string[] = CATEGORIES.flatMap((c) =>
 )
 
 /**
- * Hojas con contenido real (una página propia, no `PlaceholderPage`). El
- * resto de `ALL_LEAF_IDS` se renderiza con `PlaceholderPage` (solo
- * `PageHeader` + "[agregar descripción]") — ver "Arquitectura del catálogo"
- * en `CLAUDE.md`. Actualizar esta lista al construir el contenido real de
- * una página nueva.
+ * Hojas con contenido real de DOCUMENTACIÓN — valores concretos y completos
+ * (del brief de un proyecto, hoy Myntex, o de los primitives reales del
+ * master), no la plantilla en blanco genérica ("[agregar contenido]" /
+ * componente local `Placeholder` con texto tipo "Cómo se aplica X en este
+ * caso"). Lo que importa es si la página está efectivamente completada, no
+ * si el dato es específico de Myntex — Global Colors y Semantic Colors, por
+ * ejemplo, están 100% completas con primitives reales del master (no usan
+ * `Placeholder` en absoluto) aunque no vengan del brief de Myntex.
+ *
+ * Se verifica por ausencia del componente local `Placeholder` en el archivo
+ * de la página (grep `function Placeholder` en `src/app/components/*.tsx` —
+ * si no aparece, la página está completa). Distinta de si la hoja tiene un
+ * componente propio (`PlaceholderPage` ya no se usa en ningún leaf activo,
+ * así que esa distinción quedó vacía) — esto mide si el CONTENIDO es real,
+ * no si la página existe.
  */
-export const LEAVES_WITH_CONTENT = new Set<string>([
+export const LEAVES_WITH_REAL_CONTENT = new Set<string>([
   'strategy.publico-objetivo',
   'strategy.enfoque-de-marca',
   'strategy.principios-de-marca',
@@ -158,36 +168,20 @@ export const LEAVES_WITH_CONTENT = new Set<string>([
   'strategy.concepto-creativo',
   'strategy.verbal-identity',
   'color.global-colors',
-  'color.brand-colors',
   'color.semantic-colors',
   'typography.foundations',
   'typography.system',
-  'grids.system',
-  'grids.application',
   'visual-styles.page',
-  'foundations.spacing-system',
-  'foundations.bordes-radius',
-  'foundations.elevation-shadows',
-  'foundations.photography',
-  'foundations.motion-principles',
-  'components.logos',
-  'components.buttons-ctas',
-  'components.content-blocks',
-  'components.navigation',
-  'components.cards',
-  'components.forms-inputs',
-  'components.tags-badges-labels',
-  'components.icons-illustrations',
-  'components.visual-system',
-  'templates.rrss',
-  'templates.web',
-  'templates.presentacion',
-  'templates.mailers',
-  'brand-ops.governance',
-  'brand-ops.training-adoption',
-  'brand-ops.requests-support',
-  'brand-ops.health-evolution',
 ])
+
+/**
+ * Hojas que mezclan plantilla en blanco con alguna sección de contenido
+ * real. Vacío por ahora — actualizar si una página nueva queda a mitad de
+ * camino (algunas secciones completas, otras con `Placeholder` genérico).
+ * Se reportan aparte en `RegistroPage` (🟡, no 🔴) — no se ocultan del todo
+ * como "sin contenido real" porque parte de la página sí lo tiene.
+ */
+export const LEAVES_WITH_PARTIAL_REAL_CONTENT = new Set<string>([])
 
 export interface EmptyLeaf {
   id: string
@@ -195,23 +189,27 @@ export interface EmptyLeaf {
   categoryLabel: string
 }
 
-/** Hojas prendidas (`enabled`) que hoy no tienen contenido real — ver
- *  `LEAVES_WITH_CONTENT`. El `PageHeader` no cuenta como contenido: una
- *  página con solo `PageHeader` sigue "sin contenido". Usado por
- *  `RegistroPage`. */
-export function emptyLeaves(enabled: ModuleState): EmptyLeaf[] {
-  const result: EmptyLeaf[] = []
+/** Hojas prendidas (`enabled`) que hoy NO tienen contenido real de
+ *  documentación — separadas en `missing` (plantilla en blanco / master
+ *  template completa) y `partial` (mezcla plantilla + alguna sección real,
+ *  ver `LEAVES_WITH_PARTIAL_REAL_CONTENT`). El `PageHeader` no cuenta como
+ *  contenido. Usado por `RegistroPage`. */
+export function leavesWithoutRealContent(enabled: ModuleState): { missing: EmptyLeaf[]; partial: EmptyLeaf[] } {
+  const missing: EmptyLeaf[] = []
+  const partial: EmptyLeaf[] = []
   for (const category of CATEGORIES) {
     for (const group of category.groups) {
       const leaves = group.leaves ?? [{ id: group.id, label: group.label }]
       for (const leaf of leaves) {
-        if (LEAVES_WITH_CONTENT.has(leaf.id)) continue
         if (enabled[leaf.id] === false) continue
-        result.push({ id: leaf.id, label: leaf.label, categoryLabel: category.label })
+        if (LEAVES_WITH_REAL_CONTENT.has(leaf.id)) continue
+        const entry: EmptyLeaf = { id: leaf.id, label: leaf.label, categoryLabel: category.label }
+        if (LEAVES_WITH_PARTIAL_REAL_CONTENT.has(leaf.id)) partial.push(entry)
+        else missing.push(entry)
       }
     }
   }
-  return result
+  return { missing, partial }
 }
 
 /** Info de una hoja (dato de la categoría/grupo, usado por `PlaceholderPage` y
