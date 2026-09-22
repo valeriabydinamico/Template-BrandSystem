@@ -6,10 +6,7 @@ import {
   contrastRatio as getContrastRatio,
   wcagLevel,
   formatRatio,
-  normalizeHex,
 } from '../../lib/contrast'
-
-export type CombinationBadgeTone = 'success' | 'fail' | 'conflict'
 
 function getGradientTextColor(hexTop: string, hexBottom: string): string {
   const avg = (relativeLuminance(hexTop) + relativeLuminance(hexBottom)) / 2
@@ -18,18 +15,15 @@ function getGradientTextColor(hexTop: string, hexBottom: string): string {
 
 export interface ColorCardProps {
   /**
-   * primary     — fondo sólido, badges WCAG en extremos. Para tonos individuales.
-   * secondary   — fondo sólido, badges agrupados a la izquierda. Para paletas multi-color.
-   * tertiary    — swatch compacto con número de tono, HEX/RGB/HSL y token. Para escalas de tonos.
-   * gradient    — fondo degradado con colores superior/inferior, ángulo y uso. Para degradados.
-   * combination — swatch con muestra de texto real (fondo + color de texto) y
-   *               badge de contraste calculado, o badge manual "fail"/"conflict"
-   *               para pares no recomendados. Para combinaciones aprobadas.
+   * primary   — fondo sólido, badges WCAG en extremos. Para tonos individuales.
+   * secondary — fondo sólido, badges agrupados a la izquierda. Para paletas multi-color.
+   * tertiary  — swatch compacto con número de tono, HEX/RGB/HSL y token. Para escalas de tonos.
+   * gradient  — fondo degradado con colores superior/inferior, ángulo y uso. Para degradados.
    */
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'gradient' | 'combination'
-  /** Color CSS de fondo (sólido para primary/secondary/tertiary/combination, CSS gradient string para gradient) */
+  variant?: 'primary' | 'secondary' | 'tertiary' | 'gradient'
+  /** Color CSS de fondo (sólido para primary/secondary/tertiary, CSS gradient string para gradient) */
   color: string
-  /** Nombre del color, degradado o combinación (e.g. "Combination/01") */
+  /** Nombre del color o degradado */
   name: string
   /** Descripción del token (primary/secondary) o texto de uso (gradient) */
   description?: string
@@ -41,7 +35,7 @@ export interface ColorCardProps {
   cmyk?: { c: number; m: number; y: number; k: number }
   /** Valores HSL (tertiary) */
   hsl?: { h: string; s: string; l: string }
-  /** Ruta del design token (tertiary/combination) */
+  /** Ruta del design token (tertiary) */
   token?: string
   /** Referencia Pantone (primary/secondary) */
   pantone?: string
@@ -51,19 +45,6 @@ export interface ColorCardProps {
   colorBottom?: string
   /** Ángulo del degradado, e.g. "180°" (gradient) */
   angle?: string
-  /** combination: color del texto de muestra sobre `color` */
-  textColor?: string
-  /** combination: texto de muestra mostrado sobre el swatch, e.g. "Texto / Label" */
-  sampleText?: string
-  /**
-   * combination: tono del badge — `success` calcula el ratio real entre
-   * `color` y `textColor` (AA/AAA/Fail); `fail`/`conflict` muestran
-   * `badgeText` tal cual, para pares no recomendados (falla de contraste o
-   * choque de marca que no es un problema de contraste).
-   */
-  badgeTone?: CombinationBadgeTone
-  /** combination: texto del badge cuando `badgeTone` es `fail` o `conflict` */
-  badgeText?: string
   className?: string
 }
 
@@ -81,57 +62,11 @@ export function ColorCard({
   colorTop,
   colorBottom,
   angle,
-  textColor: sampleTextColor,
-  sampleText,
-  badgeTone,
-  badgeText,
   className = '',
 }: ColorCardProps) {
   const bareHex = hex.replace(/^#/, '')
   const textColor = accessibleTextColor(hex)
   const autoStroke = isNearWhite(bareHex || color) ? 'border border-[#DADCDE]' : ''
-
-  /* ─── Combination ─── */
-  if (variant === 'combination') {
-    const bg = normalizeHex(color)
-    const sample = normalizeHex(sampleTextColor ?? accessibleTextColor(bg))
-    const pillText = accessibleTextColor(sample)
-    const showsRatio = badgeTone === 'success' || !badgeTone
-    const ratio = showsRatio ? getContrastRatio(bg, sample) : null
-    const level = ratio !== null ? wcagLevel(ratio) : null
-    const failed = badgeTone === 'fail' || (showsRatio && level === 'Fail')
-    const isConflict = badgeTone === 'conflict'
-
-    const badgeClass = isConflict
-      ? 'bg-[#fef3c7] text-[#92400e]'
-      : failed
-        ? 'bg-[#fee2e2] text-[#991b1b]'
-        : 'bg-[#1fad8a] text-white'
-    const badgeLabel = isConflict || badgeTone === 'fail' ? (badgeText ?? '') : `${formatRatio(ratio ?? 0)} ${level}`
-
-    return (
-      <div className={`flex w-full flex-col overflow-clip rounded-[16px] border border-[#e3e7ee] bg-white ${className}`}>
-        <div className="flex h-[80px] w-full items-center justify-center" style={{ backgroundColor: bg }}>
-          <span
-            className="rounded-[8px] px-[16px] py-[8px] font-semibold text-[14px] leading-[20px]"
-            style={{ color: pillText, backgroundColor: sample }}
-          >
-            {sampleText ?? 'Texto / Label'}
-          </span>
-        </div>
-        <div className="flex w-full flex-col gap-[8px] p-[12px]">
-          <div className="flex w-full flex-wrap items-center justify-between gap-[8px]">
-            <p className="font-bold text-[14px] leading-[18px] text-[#16181d]">{name}</p>
-            <span className={`shrink-0 rounded-[999px] px-[10px] py-[3px] font-semibold text-[11px] leading-[14px] whitespace-nowrap ${badgeClass}`}>
-              {badgeLabel}
-            </span>
-          </div>
-          {description && <p className="text-[12px] leading-[17px] text-[#576175]">{description}</p>}
-          {token && <TokenTag fit>{token}</TokenTag>}
-        </div>
-      </div>
-    )
-  }
 
   /* ─── Gradient ─── */
   if (variant === 'gradient') {

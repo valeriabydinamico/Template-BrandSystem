@@ -338,35 +338,16 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
     de completitud (`siteCompleteness.ts`) ni por `data/brandColors.ts` /
     `data/semanticColors.ts` — esos archivos se borraron. `GlobalColorsPage`
     ya no renderiza `src/imports/01GlobalColors-1` (import crudo de Figma).
-  - `TypographyFoundationsPage` — grupo "Typography System" del sidebar
-    (icono `Type`). Reescrita con datos reales de Myntex desde el frame de
-    Figma "Typography Global" (nodo 182:7687, archivo **distinto**
-    `byVt6mFiP9ODnvbaEi5fEH` "Myntex - Brand Definition (Limpio)", no el
-    master `muVJlf3hw1JM155GJlUnTd` usado por Global/Semantic Colors):
-    Font Family (Primary Funnel Sans / Details·Contrast Geist Mono), Font
-    Weight (Regular 400 / Medium 500), Letter Spacing (Narrow -3% / Narrower
-    -4% / Narrowest -5%) y Font Size (escala completa de 24 pasos, 10px a
-    144px, con line-height real por paso). Fuentes cargadas en
-    `src/styles/fonts.css` como `--font-myntex-primary` /
-    `--font-myntex-details`, sin tocar `--font-brand`/`--font-brand-editorial`
-    (siguen siendo el ejemplo del master, en uso por `MisComponentesPage`).
-    Ya no pasa por el motor de completitud (era plantilla en blanco antes de
-    esto). `TypographySystemPage` — grupo "Typography System" del sidebar,
-    también reescrita con datos reales de Myntex desde el frame "Typography
-    Specific" (mismo archivo Figma, nodo 152:2668): 7 categorías de estilos
-    de uso construidos sobre los primitivos de Foundations — Body (3),
-    Detail (2), Button (2), Link (2), Heading (7), Heading Mono (7) y
-    Display (7) — cada una con familia/peso/tamaño/interlineado/tracking y
-    muestra en vivo. Reemplaza la tabla genérica Display/H1/H2/Body/Caption.
-    Usa como fuente de verdad los *named text styles* de Figma en vez del
-    texto descriptivo de cada card (varios no coincidían: Detail M, Link S,
-    Heading 2XS, Display L/XL). Documenta sin corregir una anomalía del
-    archivo fuente: Display XL (104px) es más grande que Display 2XL
-    (96px) — nota visible en la página en vez de reordenar el valor.
-    `data/typographyFoundations.ts` / `data/typographySystem.ts`
-    (borrados); `components/typography/shared.tsx` conserva solo `FONT` (lo
-    sigue usando `MisComponentesPage`). Icono de módulo en
-    `src/assets/type-badge-icon.svg`.
+  - `TypographyFoundationsPage` / `TypographySystemPage` — grupo "Typography
+    System" del sidebar (icono `Type`). Reescritas como plantilla en blanco
+    siguiendo el `.md` v2: Foundations documenta las Familias (principal/
+    secundaria/sustitución); System documenta la Escala (tabla Display/H1/H2/
+    Body/Caption) y el Uso por contexto (interfaces/campañas/presentaciones/
+    documentos/compatibilidad digital/accesibilidad/usos incorrectos). Ya no
+    pasan por el motor de completitud ni por `data/typographyFoundations.ts`
+    / `data/typographySystem.ts` (borrados); `components/typography/shared.tsx`
+    conserva solo `FONT` (lo sigue usando `MisComponentesPage`). Icono de
+    módulo en `src/assets/type-badge-icon.svg`.
   - `VisualStylesPage` — ítem "Visual Styles" del sidebar (icono `Shapes`).
     Traída de Figma (nodo 214:2446). Documenta spacing / border radius /
     borders / shadows / sizing con token cards (preview + valor + `TokenTag`
@@ -438,49 +419,23 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
     (`PageNav`, ≥1080px) con scrollspy (IntersectionObserver); click = scroll a
     esa sección. Se entra por el icon button (Layers) del pie del sidebar.
   - `RegistroPage` — **Registro de completado**: historial de lo que se ocultó
-    por falta de datos de marca (ver "Regla de completitud de datos") y de
-    qué páginas todavía no tienen su brief real cargado. Dividido en 2 tabs
-    (`TabBar`, estado local `useState`, sin persistir — mismo patrón que
-    `InformePage`):
-    - **Por documentar**: 📄 "Páginas sin contenido real de documentación"
-      (módulos prendidos cuya página, aunque existe — ya no hay
-      `PlaceholderPage` en ningún leaf activo —, todavía muestra la
-      plantilla en blanco del master) + 🔴 "Sin datos" (ítems de
-      `ALL_HIDDEN_ENTRIES` sin ningún campo).
-    - **Contenido parcial**: 🟡 "Contenido real parcial" (páginas que
-      mezclan plantilla + alguna sección real, ver
-      `LEAVES_WITH_PARTIAL_REAL_CONTENT`) + 🟡 "Datos parciales" (ítems de
-      `ALL_HIDDEN_ENTRIES` con algunos campos pero no todos).
-    Las páginas usan `leavesWithoutRealContent()` de
-    `src/app/lib/moduleConfig.ts` (separa `ALL_LEAF_IDS` en missing/partial
-    contra `LEAVES_WITH_REAL_CONTENT` / `LEAVES_WITH_PARTIAL_REAL_CONTENT`);
-    los ítems usan `ALL_HIDDEN_ENTRIES` de `src/app/lib/siteCompleteness.ts`.
-    Actualizar esos sets (y `RESUMENES` de `InformePage.tsx`) al completar el
-    brief real de una página nueva. Se entra por el icon button
-    (ClipboardList) del pie del sidebar, entre "Mis componentes" e "Informe".
-  - `InformePage` — **Informe**: historial de trabajo sobre el dashboard,
-    dividido en 3 tabs (`TabBar`, estado local `useState`, sin persistir):
-    **Mejoras** (cambios estructurales/funcionales del dashboard en sí —
-    sidebar, buscador, Ajustes, convenciones de datos…), **Pendientes**
-    (trabajo del dashboard todavía no ejecutado) y **Resúmenes** (por cada
-    página de contenido de marca completada con datos reales de un proyecto,
-    ej. Myntex: qué se hizo y qué se dejó deliberadamente afuera, para poder
-    auditar el criterio sin releer la página ni el Notion fuente). Las tres
-    listas (`MEJORAS`/`PENDIENTES`/`RESUMENES`) están hardcodeadas en el
-    propio componente y se actualizan a mano cada vez que se cierra un
-    cambio relevante — no se calculan de ningún reporte, a diferencia de
-    `RegistroPage` (que reporta completitud de datos, no features ni
-    resúmenes de contenido). Se entra por el icon button (FileText) del pie
-    del sidebar, entre "Registro de completado" y "Ajustes". **Regla en
-    vigor:** cada vez que se complete o modifique el contenido de una página
-    con datos reales de un proyecto (como Público Objetivo → Myntex),
-    registrar qué se hizo y qué se dejó afuera y por qué en `RESUMENES` —
-    **si la página ya tiene una entrada, sumar el cambio nuevo a esa misma
-    entrada** (nuevos ítems en `hecho`/`afuera`, actualizando `fecha` a la
-    del cambio más reciente) en vez de crear una entrada aparte; una página
-    solo tiene más de una entrada en `RESUMENES` si corresponde a una
-    categoría/proyecto distinto (ej. "Semantic Colors" vs. "Semantic Colors
-    — Combinaciones aprobadas").
+    por falta de datos de marca (ver "Regla de completitud de datos"), separado
+    en Datos parciales / Sin datos con el detalle de qué falta. Lee
+    `ALL_HIDDEN_ENTRIES` de `src/app/lib/siteCompleteness.ts`. También lista
+    **Páginas sin contenido** — módulos prendidos en Ajustes que hoy son
+    `PlaceholderPage` (el `PageHeader` no cuenta como contenido); usa
+    `emptyLeaves()` de `src/app/lib/moduleConfig.ts`, que compara
+    `ALL_LEAF_IDS` contra `LEAVES_WITH_CONTENT` (actualizar ese set al sumarle
+    contenido real a una página). Se entra por el icon button (ClipboardList)
+    del pie del sidebar, entre "Mis componentes" e "Informe".
+  - `InformePage` — **Informe**: historial de mejoras estructurales/
+    funcionales del dashboard en sí (sidebar, buscador, Ajustes, convenciones
+    de datos…) — separado del contenido de marca que documenta cada página y
+    de `RegistroPage` (que reporta completitud de datos, no features). Lista
+    hardcodeada en el propio componente (`MEJORAS`/`PENDIENTES`), se
+    actualiza a mano cada vez que se cierra un cambio relevante — no se
+    calcula de ningún reporte. Se entra por el icon button (FileText) del
+    pie del sidebar, entre "Registro de completado" y "Ajustes".
   - `AjustesPage` — panel de control de módulos (ver "Ajustes — prender/apagar
     módulos"). Se entra por el icon button (cog) del pie del sidebar.
   - `PlaceholderPage` — página genérica para cualquier módulo del catálogo sin
