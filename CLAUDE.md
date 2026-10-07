@@ -27,91 +27,32 @@ https://www.figma.com/design/i8FTndoqsyBd5GyaRme2nR/Template---BrandSystem
 
 ## Cómo incorporar documentación/contenido nuevo
 
-**Regla global, aplica siempre que llegue documentación nueva** (con o sin
-formato, desde Figma, Notion o cualquier otra fuente). Dos conceptos que NO
-son lo mismo:
+Las reglas (UI vs formato, completitud, nomenclatura de tokens/rutas, cómo
+se pasa el contenido) viven en un solo lugar y se importan acá:
 
-- **UI** = los componentes propios y el lenguaje visual del dashboard
-  (`PageHeader` → secciones → `GovernanceFooter` → `MetaFooter`, `ColorCard`,
-  patrón de completitud de datos, nomenclatura de tokens/rutas, etc.).
-- **Formato** = la forma de **agrupar y jerarquizar el contenido**: qué
-  secciones/grupos existen, cómo se agrupan los ítems entre sí, qué orden o
-  jerarquía tienen.
+@GUIDELINES-DE-TRABAJO.md
 
-**Regla de UI (sin excepción por contenido):** la UI se mantiene en el
-**100% de los casos**, sea cual sea la fuente y sea cual sea el formato que
-se elija con las reglas de abajo — la fuente del contenido (Figma, Notion,
-lo que sea) nunca la dicta. El contenido nunca se pega ni se traduce tal
-cual: siempre se aplica la UI del dashboard encima. La única forma en que la
-UI cambia es una **decisión explícita y separada de cambiar la UI de la
-app**, nunca como efecto secundario de incorporar contenido nuevo.
+Resumen operativo para la IA:
 
-**Regla de formato — misma regla para Figma y para Notion, lo único que
-cambia es si la página ya tiene formato o no:**
-
-- **Página nueva/sin formato previo** (hoy `PlaceholderPage`, sin contenido
-  real): no hace falta preguntar — se usa directamente el formato que trae
-  la fuente.
-  - Si es una **estructura mínima de agrupación** acordada con el equipo
-    (con o sin Figma): se aplica la UI y el patrón de completitud sobre ese
-    formato dado, sin inventar una agrupación distinta a la acordada.
-  - Si es contenido de **Notion** (no trae diseño visual, pero sí trae su
-    propio formato): se **mantiene la jerarquía y estructura que ya trae
-    Notion** (niveles de título H1/H2/H3, acordeones/toggles, tablas,
-    listas, etc.) y se traduce cada una a su equivalente de UI del dashboard
-    (ej. un H2 → `Section`, un H3 → `Group`, un toggle → un bloque
-    colapsable, una tabla → una tabla o grid de cards según corresponda). No
-    se aplana el documento ni se le impone la agrupación de otra página del
-    sitio — solo se recurre a imitar una página similar cuando Notion no
-    deja clara la jerarquía de una parte puntual.
-- **Página que YA tiene contenido real documentado** (ya tiene un formato
-  propio, venga de donde venga): **preguntar siempre**, antes de tocar nada,
-  si se mantiene el formato actual o si se adopta el formato nuevo que trae
-  el contenido — sea que venga de Figma o de Notion.
-
-**Excepción (solo de formato):** todo lo anterior aplica siempre, **salvo
-que se indique explícitamente desde el principio** que hay que aplicar un
-formato nuevo — en ese caso se sigue esa instrucción directa en vez de
-preguntar o de mantener el formato actual. La excepción es exclusiva del
-formato: la UI **no tiene excepción acá**, sigue la regla de arriba en
-todos los casos.
-
-## Nomenclatura de tokens/rutas
-
-**Todo `token` (o campo equivalente: "Dónde encontrarlo" en Grid
-Application) sigue el esquema:**
-
-```
-<página>/<subpágina>/<sección>/<paleta si tiene>/<tono>
-```
-
-- Un solo separador entre niveles: `/`. Dentro de cada segmento, palabras
-  unidas con `_` (snake_case) — nunca guion medio ni mezclar los dos.
-- `<página>` = el grupo del sidebar en snake_case (`color_system`,
-  `typography_system`, `layout_grids`, `visual_styles`). `<subpágina>` = la
-  sub-página concreta (`global`, `brand`, `semantic`, `foundations`,
-  `system`, `application`) — se omite si la página no tiene sub-páginas
-  (Visual Styles).
-- `<sección>` = la sección visible en la página (ej. `state`, `action_support`,
-  `spacing`). `<paleta>` = la familia/grupo dentro de esa sección si existe
-  más de una (ej. `cta_primary`, `brand_primary`); se omite si la sección ya
-  es una única familia (ej. Focus en Semantic Colors).
-- `<tono>` = el ítem puntual (el paso de escala, el rol, el tamaño…).
-- **Dónde se genera:** en Semantic Colors, Typography System, Visual Styles y
-  Grid Application el token sigue siendo un campo obligatorio hardcodeado en
-  `src/app/data/*.ts` (cae bajo la regla de completitud de abajo), pero su
-  *valor* debe construirse siguiendo este mismo esquema en vez de un nombre
-  de token de diseño libre — ver esos archivos para el patrón exacto por
-  sección. Si algún módulo nuevo termina generando el token en código en vez
-  de pedirlo como dato, seguir el mismo esquema ahí también.
-- Los `id` de DOM para el buscador del sidebar (`slugify(token)`) se derivan
-  automáticamente del token, así que cambiar el token también cambia el
-  ancla — no hace falta tocarlos por separado.
+- **Fuentes:** depende de cada cliente. Links de **Notion** y **Figma** (se
+  leen por MCP, ver "Traer contenido" en Estilado) y/o **documentos
+  adjuntos** (PDF, Word, Markdown…). No hay un formulario intermedio: el
+  contenido se traduce directo a la página.
+- **UI siempre la del dashboard**; el formato lo dicta la fuente si la
+  página es nueva, y se **pregunta** si la página ya tiene contenido real.
+- **Tokens/rutas:** `<página>/<subpágina>/<sección>/<paleta si tiene>/<tono>`
+  en snake_case. Los `id` de DOM del buscador se derivan con
+  `slugify(token)`, así que cambiar un token cambia su ancla.
+- **Al terminar una página real:** sumar su entrada a `RESUMENES` en
+  `InformePage.tsx` (o ampliar la que ya existe) y actualizar
+  `LEAVES_WITH_REAL_CONTENT` en `moduleConfig.ts`.
+- Para qué hace cada herramienta del dashboard desde el punto de vista de
+  quien lo usa: `MANUAL-DE-FUNCIONALIDADES.md`.
 
 ## Regla de completitud de datos (dinámico por brief de marca)
 
 **Regla super importante, nunca pasarla por alto:** el sitio se completa con
-los datos de un `.md` de intake (ver `BRAND-SYSTEM-INTAKE.md`) por proyecto.
+el contenido de cada proyecto (links de Notion/Figma o documentos adjuntos).
 **Todo campo hardcodeado hoy en el master es un dato obligatorio** para que
 ese ítem se muestre — lo único exento son los campos que un componente
 calcula solo (ej. ratio de contraste y nivel WCAG en `ColorCard` /
@@ -153,13 +94,17 @@ calcula solo (ej. ratio de contraste y nivel WCAG en `ColorCard` /
   plantillas en blanco (mismo patrón que Strategy, ver más abajo) y no pasan
   por este motor: no hay datos de marca que ocultar todavía, solo contenido
   placeholder entre corchetes a la espera del brief real del proyecto.
-- **Regla en vigor desde ahora:** cuando se complete el contenido real de
-  cualquier página nueva del catálogo (las que hoy son `PlaceholderPage`),
-  seguir siempre este mismo patrón — nunca hardcodear los datos directo en
-  el componente de la página. Ver el ejemplo completo en
-  `src/app/data/gridApplication.ts` + `GridApplicationPage.tsx` (incluye el
-  caso de datos derivados: los wireframes se calculan desde los formatos
-  visibles, no son una lista aparte).
+- **Regla en vigor:** la separación en `src/app/data/<pagina>.ts` aplica
+  **solo a contenido con campos obligatorios por ítem** (un color con su
+  HEX, una fila de token, un tamaño…): ahí sí se separan los datos de la
+  página, con campos opcionales + `RequiredField`, para que el motor pueda
+  ocultar el ítem incompleto y reportarlo en el Registro. El contenido sin
+  campos obligatorios (texto narrativo, secciones de Strategy…) **no** se
+  separa: va dentro del componente de la página, no se reporta por ítem en
+  el Registro (sí a nivel de página, "Por documentar" / "Contenido
+  parcial") y su trazabilidad queda en el Informe → Resúmenes. Ejemplo
+  vigente del patrón con datos: `src/app/data/visualStyles.ts` +
+  `VisualStylesPage.tsx`.
 
 ### Ajustes — prender/apagar módulos (capa manual, separada de la anterior)
 
@@ -418,24 +363,34 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
     rendereado en vivo. Índice de navegación fijo (`sticky`) a la derecha
     (`PageNav`, ≥1080px) con scrollspy (IntersectionObserver); click = scroll a
     esa sección. Se entra por el icon button (Layers) del pie del sidebar.
-  - `RegistroPage` — **Registro de completado**: historial de lo que se ocultó
-    por falta de datos de marca (ver "Regla de completitud de datos"), separado
-    en Datos parciales / Sin datos con el detalle de qué falta. Lee
-    `ALL_HIDDEN_ENTRIES` de `src/app/lib/siteCompleteness.ts`. También lista
-    **Páginas sin contenido** — módulos prendidos en Ajustes que hoy son
-    `PlaceholderPage` (el `PageHeader` no cuenta como contenido); usa
-    `emptyLeaves()` de `src/app/lib/moduleConfig.ts`, que compara
-    `ALL_LEAF_IDS` contra `LEAVES_WITH_CONTENT` (actualizar ese set al sumarle
-    contenido real a una página). Se entra por el icon button (ClipboardList)
-    del pie del sidebar, entre "Mis componentes" e "Informe".
-  - `InformePage` — **Informe**: historial de mejoras estructurales/
-    funcionales del dashboard en sí (sidebar, buscador, Ajustes, convenciones
-    de datos…) — separado del contenido de marca que documenta cada página y
-    de `RegistroPage` (que reporta completitud de datos, no features). Lista
-    hardcodeada en el propio componente (`MEJORAS`/`PENDIENTES`), se
-    actualiza a mano cada vez que se cierra un cambio relevante — no se
-    calcula de ningún reporte. Se entra por el icon button (FileText) del
-    pie del sidebar, entre "Registro de completado" y "Ajustes".
+  - `RegistroPage` — **Registro de completado**: qué se ocultó por falta de
+    datos de marca (ver "Regla de completitud de datos") y qué páginas todavía
+    no tienen contenido real. Dividido en 2 tabs (`TabBar`, estado local
+    `useState`, sin persistir):
+    - **Por documentar**: 📄 páginas sin contenido real (su página existe —
+      ya no hay `PlaceholderPage` en ningún leaf activo — pero muestra la
+      plantilla en blanco del master) + 🔴 "Sin datos" (ítems de
+      `ALL_HIDDEN_ENTRIES` sin ningún campo).
+    - **Contenido parcial**: 🟡 páginas que mezclan plantilla + contenido
+      real (`LEAVES_WITH_PARTIAL_REAL_CONTENT`) + 🟡 "Datos parciales" (ítems
+      con algunos campos pero no todos).
+    Las páginas salen de `leavesWithoutRealContent()` en
+    `src/app/lib/moduleConfig.ts` (separa `ALL_LEAF_IDS` contra
+    `LEAVES_WITH_REAL_CONTENT` / `LEAVES_WITH_PARTIAL_REAL_CONTENT`); los
+    ítems, de `ALL_HIDDEN_ENTRIES` en `src/app/lib/siteCompleteness.ts`.
+    Actualizar esos sets al completar el contenido real de una página. Se
+    entra por el icon button (ClipboardList) del pie del sidebar, entre "Mis
+    componentes" e "Informe".
+  - `InformePage` — **Informe**: historial de trabajo sobre el dashboard,
+    dividido en 3 tabs (`TabBar`, estado local): **Mejoras** (funcionalidades
+    del dashboard en sí, con fecha), **Pendientes** y **Resúmenes** (por cada
+    página completada con contenido real: qué se hizo y qué se dejó afuera;
+    si la página ya tiene resumen, se suma a esa misma entrada). Las tres
+    listas (`MEJORAS`/`PENDIENTES`/`RESUMENES`) están hardcodeadas en el
+    propio componente y se actualizan a mano — no se calculan de ningún
+    reporte, a diferencia de `RegistroPage`. Se entra por el icon button
+    (FileText) del pie del sidebar, entre "Registro de completado" y
+    "Ajustes".
   - `AjustesPage` — panel de control de módulos (ver "Ajustes — prender/apagar
     módulos"). Se entra por el icon button (cog) del pie del sidebar.
   - `PlaceholderPage` — página genérica para cualquier módulo del catálogo sin
@@ -594,15 +549,25 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
 - NO agregar reglas `@source` para `@figma/astraui` en Tailwind: su CSS ya viene
   pre-compilado.
 - Para leer archivos dentro de `node_modules/@figma/*` (pnpm/symlinks): no usar
-  `find`/glob, usar `ls`, `cat`, lectura por ruta exacta.
+  `find`/glob, usar `ls`, `cat`, lectura por ruta exacta. Si se va a escribir
+  código con el kit de Astra, leer antes por ruta exacta
+  `node_modules/@figma/astraui-kit/guidelines/Guidelines.md` y `setup.md`.
 
-### Traer diseños de Figma
+### Traer contenido (Figma, Notion y documentos)
 
-- MCP local **Figma Dev Mode** (`figma-dev-mode`, `http://127.0.0.1:3845/mcp`)
-  conectado. Requiere la app de escritorio de Figma abierta con el archivo.
-- Flujo: seleccionar el nodo en Figma (o pasar link) → `get_design_context` /
-  `get_metadata` / `get_variable_defs` / `get_screenshot` → adaptar a Tailwind +
-  componentes propios (no pegar el código crudo) → verificar en el navegador.
+La fuente depende de cada cliente — ver `GUIDELINES-DE-TRABAJO.md` §5.
+
+- **Figma:** MCP local **Figma Dev Mode** (`figma-dev-mode`,
+  `http://127.0.0.1:3845/mcp`). Requiere la app de escritorio de Figma
+  abierta con el archivo. Flujo: link o nodo seleccionado → `get_metadata`
+  (estructura barata) → `get_design_context` / `get_variable_defs` /
+  `get_screenshot` → adaptar a Tailwind + componentes propios (no pegar el
+  código crudo) → verificar en el navegador. Si el resultado es muy grande,
+  primero `get_metadata` y después pedir sub-nodos puntuales.
+- **Notion:** MCP de Notion (`notion-fetch` sobre el link de la página). Se
+  respeta su jerarquía (ver reglas de formato en las guidelines).
+- **Documentos adjuntos** (PDF, Word, Markdown…): se leen completos y se
+  aplican las mismas reglas.
 - Assets (iconos/imágenes) exportados de Figma se descargan y commitean en
   `src/assets/` (las URLs `localhost:3845/assets/...` expiran en ~7 días).
 
