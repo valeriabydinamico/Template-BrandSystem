@@ -38,7 +38,7 @@ export function GridSystemPage() {
       <PageHeader
         module="Layout Grids"
         moduleIconSrc={layoutGridsBadgeIcon}
-        title="01 Grid System"
+        title="Grid System"
         paragraphs={['Estructura sobre la que se compone el sistema: grid principal, contenedores, breakpoints y comportamiento responsive.']}
       />
 
@@ -78,7 +78,7 @@ export function GridSystemPage() {
         </section>
       </div>
 
-      <MetaFooter label="v1 · 01 Grid System · Layout & Grid · Master Template" />
+      <MetaFooter label="v1 · Grid System · Layout & Grid · Master Template" />
     </div>
   )
 }

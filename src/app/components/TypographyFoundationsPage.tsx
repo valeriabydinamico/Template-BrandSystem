@@ -44,7 +44,7 @@ export function TypographyFoundationsPage() {
       <PageHeader
         module="Type System"
         moduleIconSrc={typeBadgeIcon}
-        title="01 Typography Foundations"
+        title="Typography Foundations"
         paragraphs={['Familias tipográficas de la marca: qué tipografías usa y con qué función.']}
       />
 
@@ -67,7 +67,7 @@ export function TypographyFoundationsPage() {
         </section>
       </div>
 
-      <MetaFooter label="v1 · 01 Typography Foundations · Typography System · Master Template" />
+      <MetaFooter label="v1 · Typography Foundations · Typography System · Master Template" />
     </div>
   )
 }

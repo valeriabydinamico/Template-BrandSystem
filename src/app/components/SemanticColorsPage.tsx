@@ -41,7 +41,7 @@ export function SemanticColorsPage() {
     <div id="color.semantic-colors" className="flex w-full flex-col items-start bg-white">
       <PageHeader
         module="Color System"
-        title="03 Semantic Colors"
+        title="Semantic Colors"
         paragraphs={['Colores semánticos que conectan la paleta con funciones específicas de interfaz.']}
       />
 
@@ -66,7 +66,7 @@ export function SemanticColorsPage() {
 
       <GovernanceFooter title="Gobernanza del color semántico" rules={GOVERNANCE_RULES} />
 
-      <MetaFooter label="v1 · 03 Semantic Colors · Color System · Master Template" />
+      <MetaFooter label="v1 · Semantic Colors · Color System · Master Template" />
     </div>
   )
 }

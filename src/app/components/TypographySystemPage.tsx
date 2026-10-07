@@ -79,7 +79,7 @@ export function TypographySystemPage() {
       <PageHeader
         module="Type System"
         moduleIconSrc={typeBadgeIcon}
-        title="02 Typography System"
+        title="Typography System"
         paragraphs={['Escala tipográfica y uso según contexto de aplicación.']}
       />
 
@@ -128,7 +128,7 @@ export function TypographySystemPage() {
         </section>
       </div>
 
-      <MetaFooter label="v1 · 02 Typography System · Typography System · Master Template" />
+      <MetaFooter label="v1 · Typography System · Typography System · Master Template" />
     </div>
   )
 }

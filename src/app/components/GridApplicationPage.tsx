@@ -59,7 +59,7 @@ export function GridApplicationPage() {
       <PageHeader
         module="Layout Grids"
         moduleIconSrc={layoutGridsBadgeIcon}
-        title="02 Grid Application"
+        title="Grid Application"
         paragraphs={['Grids por contexto de uso y reglas de composición.']}
       />
 
@@ -89,7 +89,7 @@ export function GridApplicationPage() {
         </section>
       </div>
 
-      <MetaFooter label="v1 · 02 Grid Application · Layout & Grid · Master Template" />
+      <MetaFooter label="v1 · Grid Application · Layout & Grid · Master Template" />
     </div>
   )
 }

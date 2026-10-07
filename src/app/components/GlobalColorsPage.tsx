@@ -98,7 +98,7 @@ export function GlobalColorsPage() {
     <div id="color.global-colors" className="flex w-full flex-col items-start bg-white">
       <PageHeader
         module="Color System"
-        title="01 Global Colors"
+        title="Global Colors"
         paragraphs={[
           'Los colores globales son los colores base del sistema: primario, secundarios, terciarios/acentos, neutros, estados semánticos y degradados, según lo documentado para cada proyecto.',
         ]}
@@ -134,7 +134,7 @@ export function GlobalColorsPage() {
         </section>
       </div>
 
-      <MetaFooter label="v1 · 01 Global Colors · Color System · Master Template" />
+      <MetaFooter label="v1 · Global Colors · Color System · Master Template" />
     </div>
   )
 }

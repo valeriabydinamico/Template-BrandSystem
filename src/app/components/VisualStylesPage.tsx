@@ -154,7 +154,7 @@ export function VisualStylesPage() {
       <PageHeader
         module="Visual Styles"
         moduleIconSrc={visualStylesBadgeIcon}
-        title="01 Visual Styles"
+        title="Visual Styles"
         paragraphs={[
           'Escalas y propiedades visuales reutilizables para construir interfaces y piezas de marca con consistencia.',
           'Spacing funciona como escala base para separación, padding y gap; radius, borders, shadows y sizing cubren decisiones complementarias.',

@@ -1,5 +1,5 @@
 export interface MetaFooterProps {
-  /** Texto de versión/página, e.g. "v1 · 03 Semantic Colors · Master Template" */
+  /** Texto de versión/página, e.g. "v1 · Semantic Colors · Master Template" */
   label: string
   /** Texto de la pastilla de estado (por defecto "Master") */
   status?: string

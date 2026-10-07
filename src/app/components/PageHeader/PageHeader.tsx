@@ -3,7 +3,7 @@ import { ModuleBadge } from '../ModuleBadge'
 export interface PageHeaderProps {
   /** Etiqueta del módulo en el eyebrow, e.g. "Color System" */
   module: string
-  /** Título de la página, e.g. "01 Global Colors" */
+  /** Título de la página, e.g. "Global Colors" */
   title: string
   /**
    * Párrafos de la introducción. Un item vacío (`null` o `''`) renderiza una

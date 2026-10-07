@@ -176,7 +176,7 @@ export function MisComponentesPage() {
             <div className="w-full max-w-[720px] rounded-[12px] border border-[#e3e7ee] bg-white">
               <PageHeader
                 module="Color System"
-                title="01 Global Colors"
+                title="Global Colors"
                 paragraphs={[
                   'Escalas primitivas de color que forman la base del sistema.',
                   null,
@@ -268,7 +268,7 @@ export function MisComponentesPage() {
         >
           <Example label="label + status">
             <div className="w-full max-w-[860px] overflow-hidden rounded-[12px] border border-[#e3e7ee]">
-              <MetaFooter label="v1 · 03 Semantic Colors · Master Template" />
+              <MetaFooter label="v1 · Semantic Colors · Master Template" />
             </div>
           </Example>
         </Section>

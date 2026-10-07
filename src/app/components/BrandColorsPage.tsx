@@ -156,7 +156,7 @@ export function BrandColorsPage() {
     <div id="color.brand-colors" className="flex w-full flex-col items-start bg-white">
       <PageHeader
         module="Color System"
-        title="02 Brand Colors"
+        title="Brand Colors"
         paragraphs={[
           'Escalas tonales y reglas de aplicación de los roles cromáticos de marca (primario, secundario, acentos y neutros), construidas a partir de las primitives de Global Colors.',
         ]}
@@ -261,7 +261,7 @@ export function BrandColorsPage() {
 
       <GovernanceFooter title="Gobernanza del color de marca" rules={GOVERNANCE_RULES} />
 
-      <MetaFooter label="v1 · 02 Brand Colors · Color System · Master Template" />
+      <MetaFooter label="v1 · Brand Colors · Color System · Master Template" />
     </div>
   )
 }
