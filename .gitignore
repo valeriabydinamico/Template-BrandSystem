@@ -28,3 +28,6 @@ Thumbs.db
 *.sw?
 .vscode/*
 !.vscode/extensions.json
+
+# Config local de Codex
+.codex/

@@ -48,6 +48,100 @@ Resumen operativo para la IA:
   `LEAVES_WITH_REAL_CONTENT` en `moduleConfig.ts`.
 - Para qué hace cada herramienta del dashboard desde el punto de vista de
   quien lo usa: `MANUAL-DE-FUNCIONALIDADES.md`.
+- **Comandos del proyecto** (`/documentar`, `/paginanueva`, `/revisar`,
+  `/verificar`, `/pendiente`, `/guardar`), listados en el manual.
+  Los archivos de `.claude/commands/` son punteros mínimos; el proceso vive
+  acá: `/documentar` → `GUIDELINES-DE-TRABAJO.md` §6, `/paginanueva` → "Alta
+  de una página nueva", `/verificar` → "Verificar un cambio", `/guardar` →
+  "Cómo guardar", `/pendiente` → "Anotar en el Informe" (abajo).
+  Si cambia un proceso, actualizarlo en su sección. **`/revisar` es modo
+  solo-chat:** no modificar nada del repo, solo leer y responder.
+
+### Anotar en el Informe (registro automático y comando `/pendiente`)
+
+**Regla automática, sin que nadie la pida:** cada vez que se hace un cambio
+en el dashboard (funcionalidad, componente, UI, estructura, catálogo), en el
+mismo turno y antes de dar la tarea por terminada, se registra en el Informe:
+un cambio del dashboard en sí → entrada en **Cambios**; una página
+documentada con contenido de marca → entrada en **Resúmenes**. Una entrada
+por cambio lógico (no por archivo); varios ajustes chicos del mismo trabajo se
+agrupan en una sola. No hay comando para esto: se hace siempre solo. Si el
+usuario pide anotar algo que quedó sin registrar, se hace a mano con estas
+mismas reglas.
+
+Quedan fuera de Cambios los cambios que no son del dashboard: los `.md` de
+documentación y los archivos de `.claude/commands/`.
+
+Se edita `src/app/components/InformePage.tsx`; `fecha` es la de hoy
+(`YYYY-MM-DD`).
+
+- **Cambio** (tab Cambios; en el código sigue llamándose `MEJORAS`, "Mejora" y el trailer `Mejora: <id>`) → `MEJORAS`: `{ id, title, status: 'done', fecha, description }`,
+  funcionalidades del dashboard (no contenido de marca); la descripción dice
+  qué se hizo y cómo funciona. **`id` es obligatorio**: un slug estable
+  (`informe-orden-reciente`) que usa el botón "Revertir cambio" (abajo).
+- **Orden: siempre de la más reciente a la más antigua.** Las entradas nuevas
+  se agregan **al principio** del array, y `InformePage.tsx` además ordena las
+  tres listas por `fecha` (`masRecientesPrimero`), así el orden se mantiene
+  aunque una entrada quede mal ubicada. A igual fecha manda el orden del
+  array.
+- **Pendiente** → `PENDIENTES`: `{ id, title, status: 'pending', fecha,
+  description }` (`id` = slug obligatorio, lo usa el botón "Marcar como
+  listo"). **Solo se anota, no se ejecuta** hasta que el usuario lo pida. Si
+  necesita detalle técnico largo (nodos de Figma, nombres de archivos),
+  además una nota en `PENDIENTES.md` bajo su sección, sin duplicar el texto
+  completo. Al marcarlo como listo (botón en la tab, solo con `npm run dev`)
+  el plugin cambia `status` a `'done'` y agrega `completada: 'YYYY-MM-DD'`;
+  "Reabrir" lo deshace. Ese botón lo atiende `POST /__dev/pendiente` en
+  `tools/revertMejoraPlugin.ts` (mismas protecciones que el revert). Si el
+  usuario pide que se marque uno como listo por chat, hacer el mismo cambio
+  a mano en `InformePage.tsx`.
+- **Buscador:** cada tab del Informe (Cambios, Pendientes, Resúmenes) tiene su
+  propio campo de búsqueda: ignora mayúsculas y acentos y exige todas las
+  palabras (en cualquier orden). Busca en título, descripción y fecha (y en
+  Resúmenes, en todos los ítems de "qué se hizo / qué quedó afuera").
+- **Resumen** → `RESUMENES`: `{ pagina, categoria, proyecto, fecha, hecho[],
+  afuera[] }`. Si la página ya tiene entrada, **ampliar esa**.
+- **Comillas:** los textos van entre comillas simples; no usar comillas
+  simples ni acentos graves (`) dentro de un texto, rompen el archivo (usar
+  comillas dobles).
+
+**Botón "Revertir cambio" (solo Cambios, solo con `npm run dev`).** Cada
+tarjeta de Cambios tiene un botón con un modal de confirmación que muestra
+qué se va a deshacer. Lo atiende `tools/revertMejoraPlugin.ts` (plugin de Vite
+que solo existe en dev, `POST /__dev/revert`); en el sitio publicado el botón
+aparece deshabilitado. La idea: si el usuario está trabajando y algo no le
+gustó, se deshace ese cambio **aunque no esté commiteado, o ya esté
+commiteado, o ya esté pusheado**. Dos mecanismos, en este orden:
+
+1. **Foto de la mejora (modo `patch`)** — la que se usa por defecto. Al
+   registrar una mejora se guarda una foto del árbol de trabajo
+   (`refs/mejoras/<id>`, refs locales, nunca se suben); su parche es la
+   diferencia con la foto anterior. Revertir = aplicar ese parche **al revés**
+   sobre los archivos actuales: deshace solo ese cambio y conserva el resto del
+   trabajo, haya o no commit. No crea commit (los archivos quedan modificados
+   para revisar), guarda antes una copia de seguridad
+   (`refs/mejoras/backup/…`) y quita la entrada de la lista. Si cambios
+   posteriores tocan las mismas líneas lo detecta y no modifica nada.
+2. **Commits (modo `commits`)** — para mejoras sin foto pero con commits
+   (trailer `Mejora: <id>` o campo `commits: ['hash']` en la entrada). Hace
+   `git revert` en un commit nuevo (no borra historial; sirve aunque ya esté
+   subido). Se permite con trabajo sin guardar mientras no toque los mismos
+   archivos que el commit; ante conflicto se cancela sin tocar nada.
+
+**Paso obligatorio al registrar una mejora:** después de agregar la entrada a
+`MEJORAS` (y con los cambios ya hechos), correr
+`node tools/mejoraCheckpoint.mjs <id>` — guarda la foto. Hacerlo **una vez por
+mejora, justo al terminar ese cambio** (la foto abarca todo lo que cambió
+desde la anterior, así que registrar a tiempo es lo que mantiene cada
+mejora separada). `node tools/mejoraCheckpoint.mjs --baseline` marca el
+estado actual como punto de partida (lo anterior queda "sin registro"). Las
+mejoras anteriores a esta función no tienen foto: solo se pueden revertir si
+tienen commits asociados. Además, todo commit que incluya una mejora nueva
+lleva el trailer `Mejora: <id>` (ver "Cómo guardar").
+
+Es una puerta que corre `git` desde el navegador: **no ampliar** lo que acepta
+(solo `id` validado; Origin y header propios; solo loopback; archivos, parches
+y commits los resuelve el servidor) sin pensar la seguridad.
 
 ## Regla de completitud de datos (dinámico por brief de marca)
 
@@ -184,6 +278,35 @@ desde Ajustes.
   quedan `PlaceholderPage` en `BRAND-SYSTEM-ARQUITECTURA.md` (el Registro de
   completado lo confirma: "Todo completo").
 
+### Alta de una página nueva (comando `/paginanueva`)
+
+Preguntar lo mínimo: **nombre**, **tipo** (a. página única en una categoría
+existente · b. grupo con sub-páginas · c. sub-página en un grupo existente ·
+d. categoría nueva) y **categoría/grupo destino**; la fuente o estructura es
+opcional (sin ella queda plantilla en blanco). Si la página no figura en
+`BRAND-SYSTEM-ARQUITECTURA.md`, avisar y preguntar si se agrega ahí.
+
+Los tipos b, c y d son los más invasivos (los grupos con sub-páginas están
+cableados a mano en `Sidebar` de `App.tsx`: un `NavGroup` y un estado de
+sub-página activa por grupo): **mostrar el plan de archivos y esperar
+confirmación** antes de implementar. Alta de una página única (tipo a):
+
+1. `moduleConfig.ts`: grupo en `CATEGORIES` con id `<categoría>.<slug>`. Con
+   eso aparece solo en Ajustes, buscador y Registro. Si corresponde, sumarlo a
+   `LIGHT_PRESET_IDS`.
+2. Componente `src/app/components/<Nombre>Page.tsx` copiando una plantilla en
+   blanco (ej. `SpacingSystemPage.tsx`): `PageHeader` → secciones →
+   `GovernanceFooter` si corresponde → `MetaFooter` con
+   `v1 · <Nombre> · <Categoría> · Master Template`. El contenedor raíz lleva
+   `id="<leafId>"`.
+3. `App.tsx`: `import`, ícono en `LEAF_ICONS` y la rama de ruteo
+   `activePage === 'placeholder' && activePlaceholderId === '<leafId>'`.
+4. **No** agregarla a `LEAVES_WITH_REAL_CONTENT` (queda en "Por documentar"
+   hasta tener contenido real).
+5. Verificar (build + preview: sidebar, Ajustes, buscador, Registro), sumar
+   una entrada en Informe → Cambios y actualizar este archivo si enumera las
+   páginas por categoría.
+
 ## Buscador del sidebar
 
 `SidebarSearch` (en `App.tsx`, arriba del todo del sidebar, entre la marca y
@@ -249,6 +372,17 @@ Config del dev server para el panel Browser: `.claude/launch.json` (nombre `dev`
 
 `npm run build` genera el build de producción en `dist/`.
 
+### Verificar un cambio (comando `/verificar`)
+
+Solo reportar, sin modificar archivos: (1) `npm run build`, con el resultado
+o los errores exactos; (2) abrir la página en el preview `dev` del panel del
+navegador; (3) mirar logs del servidor y consola del navegador — tras
+cambios de branch o muchos cambios seguidos la consola puede mostrar errores
+viejos de recarga en caliente, así que recargar y volver a mirar antes de
+darlos por reales; (4) captura de la página (si cambia el layout, probar otro
+ancho; el breakpoint es 1600px); (5) reportar corto: build, errores y
+cualquier cosa rara (texto cortado, datos que no aparecen).
+
 ## Deploy
 
 Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-BrandSystem/
@@ -261,6 +395,11 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
 
 ## Estructura
 
+- `tools/` — herramientas del botón "Revertir cambio" del Informe (ver
+  "Anotar en el Informe"; no forman parte del build publicado):
+  `revertMejoraPlugin.ts` (plugin de Vite **solo para `npm run dev`**, cableado
+  en `vite.config.ts`), `mejoraSnapshots.mjs` (fotos/parches con git, compartido)
+  y `mejoraCheckpoint.mjs` (CLI que se corre al registrar cada mejora).
 - `src/main.tsx` — entry point, monta `<App />`, importa `src/styles/index.css`
 - `src/app/App.tsx` — shell: sidebar + área de contenido. La navegación entre
   páginas es `useState`, no URLs.
@@ -382,13 +521,19 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
     entra por el icon button (ClipboardList) del pie del sidebar, entre "Mis
     componentes" e "Informe".
   - `InformePage` — **Informe**: historial de trabajo sobre el dashboard,
-    dividido en 3 tabs (`TabBar`, estado local): **Mejoras** (funcionalidades
+    dividido en 3 tabs (`TabBar`, estado local): **Cambios** (funcionalidades
     del dashboard en sí, con fecha), **Pendientes** y **Resúmenes** (por cada
     página completada con contenido real: qué se hizo y qué se dejó afuera;
     si la página ya tiene resumen, se suma a esa misma entrada). Las tres
     listas (`MEJORAS`/`PENDIENTES`/`RESUMENES`) están hardcodeadas en el
-    propio componente y se actualizan a mano — no se calculan de ningún
-    reporte, a diferencia de `RegistroPage`. Se entra por el icon button
+    propio componente y se registran automáticamente con cada cambio (ver
+    "Anotar en el Informe"), siempre ordenadas de la más reciente a la más
+    antigua — no se calculan de ningún reporte, a diferencia de
+    `RegistroPage`. Cada tab tiene buscador; Cambios trae el botón "Revertir
+    cambio" y Pendientes "Marcar como listo"/"Reabrir" (ambos solo con `npm
+    run dev`, ver "Anotar en el Informe"). La tab se llama "Cambios" en la
+    UI, pero en el código el tab id y el array siguen siendo `mejoras` /
+    `MEJORAS` (y el trailer `Mejora:`), para no romper el revert. Se entra por el icon button
     (FileText) del pie del sidebar, entre "Registro de completado" y
     "Ajustes".
   - `AjustesPage` — panel de control de módulos (ver "Ajustes — prender/apagar
@@ -532,8 +677,8 @@ Publicado en **GitHub Pages**: https://valeriabydinamico.github.io/Template-Bran
   (neutro, funciona en claro y oscuro), activo = pastilla `#1677d8`/20 con
   texto `#8fc7ff` (blue/300 — token real de Brand/Semantic Colors para
   "on-dark"). `main` es `bg-white`. El pie del sidebar son icon buttons: "Mis
-  componentes" (Layers), "Registro de completado" (ClipboardList), "Ajustes"
-  (cog) y comprimir/expandir (`PanelLeftClose`/`Open`). Comprimido = rail de
+  componentes" (Layers), "Registro de completado" (ClipboardList), "Informe"
+  (FileText), "Ajustes" (cog) y comprimir/expandir (`PanelLeftClose`/`Open`). Comprimido = rail de
   64px (solo iconos); el estado se guarda en `localStorage` (`sidebar-collapsed`).
   Comprimido, los grupos (`NavGroup`: Color System / Typography System /
   Layout & Grid) abren un
@@ -582,6 +727,28 @@ La fuente depende de cada cliente — ver `GUIDELINES-DE-TRABAJO.md` §5.
   `pnpm-workspace.yaml` heredado de Figma).
 - Recordatorio: commitear **y** `git push` los cambios para respaldarlos en
   GitHub; si no, viven solo en el disco local.
+
+### Cómo guardar (comando `/guardar`)
+
+1. `git status` / `git diff --stat` y confirmar el branch. Sin cambios: avisar.
+2. Commit con **archivos puntuales**, nunca `git add -A` ni `git add .`. Dejar
+   afuera lo que no es del repo (`.codex/`) y cualquier cosa con secretos.
+3. Mensaje en español, breve, explicando el *por qué*, con la línea de
+   atribución que indique la sesión. **Si el commit incluye entradas nuevas de
+   Cambios, sumar al final del mensaje una línea `Mejora: <id>` por cada una**
+   (el `id` de la entrada en `InformePage.tsx`); es lo que permite que el botón
+   "Revertir cambio" encuentre los commits. Si una mejora se reparte en varios
+   commits, cada uno lleva la línea.
+4. Si el branch es **`main`**: avisar que el push **dispara el deploy a GitHub
+   Pages** y **pedir confirmación explícita**. En otros branches se puede
+   pushear directo.
+5. Nunca `--force` ni `--no-verify`.
+6. Si el push da 403 / permiso denegado: no cambiar credenciales ni config de
+   git por cuenta propia; correr `gh auth status`, contar qué cuenta está
+   activa vs. la dueña del repo (`valeriabydinamico`) y esperar instrucciones.
+   En este repo `git` pide las credenciales a `gh` (config local), así que
+   `gh` debe tener activa `valeriabydinamico`.
+7. Confirmar al final con `git status` y el hash del commit.
 
 ## Trabajo en curso
 

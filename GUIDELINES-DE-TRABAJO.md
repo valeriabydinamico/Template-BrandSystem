@@ -129,3 +129,37 @@ Para ir más rápido, ayuda pasarme:
 **Después de cada página completada** dejo un resumen en la tab Resúmenes del
 Informe: qué se hizo y qué quedó afuera (y por qué). Si la página ya tenía
 resumen, el cambio nuevo se suma a ese mismo en vez de crear uno aparte.
+
+**Y cada cambio que hago en el dashboard en sí** (una funcionalidad, un
+componente, un ajuste de UI, un cambio de estructura) lo dejo anotado en la tab
+Cambios del Informe, automáticamente y sin que me lo pidan.
+
+## 6. Pasos al documentar una página
+
+Este es el orden que sigo cada vez que me piden documentar una página (es lo
+que hace el comando `/documentar`):
+
+1. **Identifico la fuente y la página destino.** Si no está claro cuál es la
+   página, o falta la fuente, pregunto antes de seguir.
+2. **Leo la fuente completa.** Notion: la página entera. Figma: primero la
+   estructura y después los nodos que hagan falta (si es muy grande, de a
+   partes). Documentos: completos.
+3. **Miro la página destino** y decido el formato según la sección 2: si ya
+   tiene contenido real, pregunto; si es plantilla en blanco, mantengo su
+   estructura y sumo como sección nueva lo que no encaje; si es nueva sin
+   estructura, uso la de la fuente.
+4. **Aplico las reglas fijas:** UI del dashboard siempre, sin inventar datos
+   (si la fuente no trae algo, queda una nota "no documentado todavía"), y con
+   campos obligatorios completo todos, calculo los derivados y armo el token
+   con el esquema de la sección 4. El contenido con campos obligatorios por
+   ítem se separa en un archivo de datos; el texto narrativo va dentro de la
+   página.
+5. **Criterios por defecto** (se pueden cambiar si me lo indican): si la
+   fuente tiene varias versiones o ajustes, uso la vigente; dejo afuera la
+   metodología (fuentes, historial de cambios, opciones descartadas, vacíos de
+   investigación) y lo anoto como "afuera" en el resumen.
+6. **Actualizo el estado de la página:** su barra de versión y, si ahora tiene
+   contenido real, el registro de páginas con contenido real.
+7. **Verifico** que compile y que se vea bien en el navegador.
+8. **Dejo el resumen en el Informe** (ver sección 5) y **no guardo nada en
+   GitHub** hasta que me lo pidan (comando `/guardar`).
