@@ -53,6 +53,14 @@ interface Entry {
 
 const MEJORAS: Entry[] = [
   {
+    id: 'idioma-es-traductor',
+    title: 'El sitio declara que está en español (evita traducciones que deforman el texto)',
+    status: 'done',
+    fecha: '2026-10-08',
+    description:
+      'El HTML decía lang="en" y tenía una descripción en inglés, así que el traductor automático del navegador creía que el sitio estaba en inglés y "traducía" el español, deformando textos (por ejemplo "Pendientes" pasaba a "estar"). Ahora el sitio declara lang="es" y una descripción en español, por lo que el navegador ya no lo trata como inglés.',
+  },
+  {
     id: 'informe-tab-cambios',
     title: 'La tab "Mejoras" del Informe pasa a llamarse "Cambios"',
     status: 'done',
